@@ -42,7 +42,9 @@ export function evaluateDemo(grid, symbols) {
     if (run >= 3) {
       const symbol = symbols.find((s) => s.id === first.id);
       const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
-      wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "horizontal" });
+      const positions = [];
+      for (let r = 0; r < run; r++) positions.push({ reel: r, row });
+      wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "horizontal", positions });
     }
   }
 
@@ -58,7 +60,9 @@ export function evaluateDemo(grid, symbols) {
     if (run >= 3) {
       const symbol = symbols.find((s) => s.id === first.id);
       const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
-      wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "vertical" });
+      const positions = [];
+      for (let r = 0; r < run; r++) positions.push({ reel, row: r });
+      wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "vertical", positions });
     }
   }
 

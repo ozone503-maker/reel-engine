@@ -94,7 +94,7 @@ export function ReelGame({ theme }) {
                   }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
-                    const isWinning = !spinning && wins.some((w) => w.symbol.id === symbol.id);
+                    const isWinning = !spinning && wins.some((w) => w.positions?.some((p) => p.reel === reelIndex && p.row === rowIndex));
                     return <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} winning={isWinning} />;
                   })}
                 </div>
