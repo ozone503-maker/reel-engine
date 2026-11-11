@@ -1,7 +1,6 @@
 export const fruityPuppy = {
   id: "fruity-puppy",
   name: "FRUITY PUPPY",
-  subtitle: "KUDOKEN REELS",
   accent: "#ff4fb8",
   accent2: "#45c9ff",
   currency: "KDU",

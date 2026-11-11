@@ -54,7 +54,7 @@ export function ReelGame({ theme }) {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div className="brand-mark"><span className="paw">✿</span><div><strong>{theme.name}</strong><small>{theme.subtitle}</small></div></div>
+        <div className="brand-mark"><span className="paw">✿</span><strong>{theme.name}</strong></div>
         <div className="status-pill"><span className="live-dot" /> PROTOTYPE MODE</div>
       </header>
 
