@@ -4,7 +4,15 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
-  const randomSymbol = () => symbols[Math.floor(Math.random() * symbols.length)];
+  const randomSymbol = () => {
+    // Jar is super rare (~1.5% chance per cell)
+    if (Math.random() < 0.015) {
+      const jar = symbols.find((s) => s.id === "jar");
+      if (jar) return jar;
+    }
+    const pool = symbols.filter((s) => s.id !== "jar");
+    return pool[Math.floor(Math.random() * pool.length)];
+  };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
   const [grid, setGrid] = useState(makeGrid);
