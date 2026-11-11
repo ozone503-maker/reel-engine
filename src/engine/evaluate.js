@@ -1,4 +1,4 @@
-export export const PAYTABLE = {
+export const PAYTABLE = {
 /**
  * Horizontal rows only.
  * A win is 3, 4, or 5 identical symbols in a straight row (same row, left to right).
