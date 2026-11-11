@@ -13,12 +13,11 @@ export function ReelGame({ theme }) {
   const [credits, setCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
   const [spinning, setSpinning] = useState(false);
+  const [spinStrips, setSpinStrips] = useState(null); // temporary long strips while spinning
   const [lastWins, setLastWins] = useState([]);
   const [totalSpins, setTotalSpins] = useState(0);
   const wins = useMemo(() => lastWins, [lastWins]);
 
-  // Future injectable boundary (not implemented yet)
-  // onSpinRequest() would return { outcome, spinId, mode: "demo" }
   async function requestSpin() {
     const outcome = makeGrid();
     return { outcome, spinId: null, mode: "demo" };
@@ -30,17 +29,25 @@ export function ReelGame({ theme }) {
     if (bonusSpins > 0) setBonusSpins((n) => n - 1);
     else setSpins((n) => n - 1);
     setMessage("THE REELS ARE IN MOTION…");
+
+    // Build long strips so columns visually scroll
+    const strips = Array.from({ length: 5 }, () =>
+      Array.from({ length: 16 }, randomSymbol)
+    );
+    setSpinStrips(strips);
+
     window.setTimeout(async () => {
       const result = await requestSpin();
       const results = evaluateDemo(result.outcome, symbols);
       const payout = results.reduce((sum, win) => sum + win.reward, 0);
       setGrid(result.outcome);
+      setSpinStrips(null);
       setLastWins(results);
       setCredits((n) => n + payout);
       setTotalSpins((n) => n + 1);
       setMessage(payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!");
       setSpinning(false);
-    }, 650);
+    }, 1400);
   }
 
   function earnDemoSpin() {
@@ -67,7 +74,11 @@ export function ReelGame({ theme }) {
           <div className="reel-grid" aria-label="Five reels, four rows">
             {grid.map((reel, reelIndex) => (
               <div className="reel-column" key={reelIndex}>
-                {reel.map((symbol, rowIndex) => <SymbolTile key={`${reelIndex}-${rowIndex}`} symbol={symbol} />)}
+                <div className={`reel-strip ${spinning ? "rolling" : ""}`} style={{ animationDelay: `${reelIndex * 80}ms` }}>
+                  {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
+                    <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
+                  ))}
+                </div>
               </div>
             ))}
           </div>
