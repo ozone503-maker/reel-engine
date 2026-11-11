@@ -61,6 +61,7 @@ export function ReelGame({ theme }) {
       <section className="hero">
         <div className="eyebrow">{theme.heroEyebrow || "A NEW KIND OF ARCADE"}</div>
         <h1>{theme.heroTitle || theme.name}</h1>
+        <div className="hero-tagline">spin to win kudokens</div>
         <p>{theme.heroSubtitle || "Spin the reels."}</p>
       </section>
 
