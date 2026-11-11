@@ -74,6 +74,9 @@ export function ReelGame({ theme }) {
       } else if (wins.some((w) => w.symbol?.id === "cranberry-hibiscus")) {
         setWinVideo("/assets/videos/cranberry-hibiscus-win.mp4");
         setTimeout(() => setWinVideo(null), 10000);
+      } else if (wins.some((w) => w.symbol?.id === "papaya")) {
+        setWinVideo("/assets/videos/papaya-win.mp4");
+        setTimeout(() => setWinVideo(null), 10000);
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
