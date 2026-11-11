@@ -1,6 +1,7 @@
 /**
- * Left-to-right consecutive + free spin scatters.
- * High hit rate. WILD substitutes. Free spins are scatters (anywhere).
+ * Horizontal rows only.
+ * A win is 3, 4, or 5 identical symbols in a straight row (same row, left to right).
+ * WILD substitutes. Free spins are scatters (anywhere).
  */
 
 const PAYTABLE = {
@@ -20,7 +21,7 @@ const PAYTABLE = {
 };
 
 export function evaluateDemo(grid, symbols) {
-  const best = new Map();
+  const wins = [];
 
   function matches(cell, targetId) {
     if (!cell) return false;
@@ -28,27 +29,28 @@ export function evaluateDemo(grid, symbols) {
     return cell.id === targetId;
   }
 
-  // Left-to-right consecutive
+  // Check each of the 4 horizontal rows
   for (let row = 0; row < 4; row++) {
     const first = grid[0][row];
     if (!first || first.role === "WILD" || first.type === "wild" || first.type === "scatter") continue;
 
     let run = 1;
     for (let reel = 1; reel < 5; reel++) {
-      if (grid[reel].some((s) => matches(s, first.id))) run++;
+      if (matches(grid[reel][row], first.id)) run++;
       else break;
     }
+
     if (run >= 3) {
-      const prev = best.get(first.id) || 0;
-      if (run > prev) best.set(first.id, run);
+      const symbol = symbols.find((s) => s.id === first.id);
+      const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
+      wins.push({
+        symbol,
+        count: run,
+        reward: pay[run] || pay[3],
+        row,
+      });
     }
   }
-
-  const wins = [...best.entries()].map(([id, count]) => {
-    const symbol = symbols.find((s) => s.id === id);
-    const pay = PAYTABLE[id] || { 3: 5, 4: 12, 5: 30 };
-    return { symbol, count, reward: pay[count] || pay[3] };
-  });
 
   // Free spin scatters (anywhere)
   let freeSpinCount = 0;

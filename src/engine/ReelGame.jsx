@@ -100,7 +100,7 @@ export function ReelGame({ theme }) {
           </div>
           <div className="reel-glow" />
         </div>
-        <div className="machine-footnote">Win: 3+ matching symbols left-to-right, any row. One payout per symbol.</div>
+        <div className="machine-footnote">Win: 3, 4, or 5 in a row on the same horizontal line.</div>
 
         <div className="message-bar">{message}</div>
         <div className="control-row">
