@@ -103,7 +103,6 @@ export function ReelGame({ theme }) {
         <div className="symbol-roster">{characters.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
         <h3>THE BOTANICALS</h3>
         <div className="symbol-roster">{botanicals.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
-        <p className="placeholder-note">Artwork is temporary placeholder. Replace each symbol's image field with approved assets when ready.</p>
       </section>
 
       <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
