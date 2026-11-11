@@ -1,4 +1,3 @@
-export const PAYTABLE = {
 /**
  * Horizontal rows only.
  * A win is 3, 4, or 5 identical symbols in a straight row (same row, left to right).
@@ -31,7 +30,6 @@ export function evaluateDemo(grid, symbols) {
     return cell.id === targetId;
   }
 
-  // Check each of the 4 horizontal rows
   for (let row = 0; row < 4; row++) {
     const first = grid[0][row];
     if (!first || first.role === "WILD" || first.type === "wild" || first.type === "scatter") continue;
@@ -54,7 +52,6 @@ export function evaluateDemo(grid, symbols) {
     }
   }
 
-  // Free spin scatters (anywhere)
   let freeSpinCount = 0;
   for (const reel of grid) {
     for (const cell of reel) {
