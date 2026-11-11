@@ -223,3 +223,20 @@ body {
 footer { color: #6a5a80 !important; border-color: #ff4fb833 !important; }
 .symbol-library h2, .symbol-library h3 { color: #2a1848 !important; }
 .count-label { background: #fff; color: #ff2d8a; border-color: #ff4fb844; }
+
+/* Tropical background */
+body {
+  background: url("/assets/bg-tropical.jpg") center top / cover no-repeat fixed !important;
+}
+.app-shell {
+  background: transparent;
+}
+.hero-tagline strong {
+  color: #fff !important;
+  text-shadow: 0 2px 0 #ff2d8a, 0 4px 16px #0006 !important;
+  -webkit-text-stroke: 1px #ff2d8a;
+}
+.machine-panel {
+  background: linear-gradient(160deg, #ffffffee, #f8f0fffa) !important;
+  backdrop-filter: blur(4px);
+}
