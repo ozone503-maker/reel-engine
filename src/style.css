@@ -302,23 +302,24 @@ body {
   line-height: 1.4;
 }
 
-/* Fit-on-load layout */
-html, body { height: 100%; overflow: hidden; }
-.app-shell { height: 100vh; overflow: auto; padding: 4px 0 8px !important; }
-.hero { padding: 4px 0 2px !important; }
-.hero-tagline { font-size: 11px !important; margin: 0; }
-.hero-tagline strong { font: 800 16px Orbitron !important; }
-.machine-panel { padding: 8px !important; margin: 0 auto; max-width: 420px; }
-.reel-frame { padding: 4px !important; }
-.reel-grid { gap: 3px !important; }
-.reel-column { gap: 3px !important; }
-.symbol-tile { min-height: 0 !important; }
-.control-row { margin-top: 6px !important; gap: 6px !important; }
-.spin-button { padding: 8px !important; }
-.spin-button span { font-size: 16px !important; }
-.wallet-card { min-width: 90px !important; padding: 6px 8px !important; }
-.stats-row { margin-top: 6px !important; gap: 6px !important; }
-.stats-row div { padding: 6px !important; }
-.message-bar { margin: 6px 0 !important; padding: 6px !important; font-size: 12px !important; }
-.machine-footnote { font-size: 10px !important; margin: 4px 0 !important; }
-.symbol-library, .paytable, footer, .topbar { display: none; }
+
+/* Proper fit layout — keeps cell and control sizes */
+html, body { height: 100%; }
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 12px !important;
+}
+.hero { padding: 8px 0 4px !important; }
+.machine-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px !important;
+}
+.reel-frame { flex: 1; }
+.control-row, .stats-row, .message-bar { flex-shrink: 0; }
+.symbol-library, .paytable, footer { display: none; }
