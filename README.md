@@ -34,3 +34,13 @@ This is a front-end demonstration only. It does **not** issue, transfer, or veri
 1. Wire the 12 approved symbol images into the Fruity Puppy theme.
 2. Add a second theme once the first is stable.
 3. Implement the documented spin-request boundary when a server exists.
+
+## Asset fallback notes
+
+- If a symbol has no `image` field, the emoji fallback renders.
+- If a symbol has an `image` field but the file is missing or fails to load, the tile shows a broken image (emoji does not appear).  
+  This is current behavior, not a blocker. A future improvement can add an `onError` handler on the `<img>` so a failed load also falls back to the emoji.
+
+## Releases
+
+- **v0.1.0-fruity-puppy** — First verified Fruity Puppy theme. Engine extracted, 12 approved assets wired, production build and visual verification passed.
