@@ -46,12 +46,6 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
 }
 
 
-/* Fixed 4-symbol viewport; long strip scrolls inside it and lands on the last 4 */
-.reel-column {
-  overflow: hidden;
-  position: relative;
-  height: 280px;
-}
 .reel-strip {
   position: absolute;
   left: 0;
@@ -69,7 +63,30 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
 .reel-strip.rolling {
   animation: reelRoll 2.7s cubic-bezier(.15,.7,.25,1) forwards;
 }
-@keyframes reelRoll {
+
+/* Fixed viewport; long seamless loop while spinning */
+.reel-column {
+  overflow: hidden;
+  position: relative;
+  height: 280px;
+}
+.reel-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.reel-strip .symbol-tile {
+  flex: 0 0 66px;
+  height: 66px;
+}
+.reel-strip.looping {
+  animation: reelLoop 0.6s linear infinite;
+}
+@keyframes reelLoop {
   from { transform: translateY(0); }
-  to { transform: translateY(calc(-18 * 72px)); }
+  to { transform: translateY(-50%); }
 }

@@ -18,11 +18,6 @@ export function ReelGame({ theme }) {
   const [totalSpins, setTotalSpins] = useState(0);
   const wins = useMemo(() => lastWins, [lastWins]);
 
-  async function requestSpin() {
-    const outcome = makeGrid();
-    return { outcome, spinId: null, mode: "demo" };
-  }
-
   function spin() {
     if (spinning || (spins + bonusSpins) <= 0) return;
     setSpinning(true);
@@ -30,15 +25,16 @@ export function ReelGame({ theme }) {
     else setSpins((n) => n - 1);
     setMessage("THE REELS ARE IN MOTION…");
 
-    // Build strips that end with the final 4 symbols so they land in view
-    const finalGrid = makeGrid();
-    const strips = finalGrid.map((finalReel) => {
-      const lead = Array.from({ length: 18 }, randomSymbol);
-      return [...lead, ...finalReel];
+    // Long looping strips (repeat symbols so the loop is seamless)
+    const strips = Array.from({ length: 5 }, () => {
+      const base = Array.from({ length: 12 }, randomSymbol);
+      return [...base, ...base]; // doubled for seamless loop
     });
     setSpinStrips(strips);
 
-    window.setTimeout(async () => {
+    const finalGrid = makeGrid();
+
+    window.setTimeout(() => {
       const results = evaluateDemo(finalGrid, symbols);
       const payout = results.reduce((sum, win) => sum + win.reward, 0);
       setGrid(finalGrid);
@@ -76,8 +72,8 @@ export function ReelGame({ theme }) {
             {grid.map((reel, reelIndex) => (
               <div className="reel-column" key={reelIndex}>
                 <div
-                  className={`reel-strip ${spinning ? "rolling" : ""}`}
-                  style={{ animationDelay: `${reelIndex * 70}ms` }}
+                  className={`reel-strip ${spinning ? "looping" : ""}`}
+                  style={{ animationDelay: `${reelIndex * 40}ms` }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
                     <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
