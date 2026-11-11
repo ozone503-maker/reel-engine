@@ -40,6 +40,7 @@ export function ReelGame({ theme }) {
       const wins = result.wins || [];
       const payout = wins.reduce((sum, win) => sum + win.reward, 0);
       const free = result.freeSpinsAwarded || 0;
+      const freeJar = result.freeJar || false;
       setGrid(finalGrid);
       setSpinStrips(null);
       setLastWins(wins);
@@ -48,6 +49,7 @@ export function ReelGame({ theme }) {
       setTotalSpins((n) => n + 1);
       let msg = payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!";
       if (free > 0) msg += `  +${free} FREE SPINS!`;
+      if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
       setMessage(msg);
       setSpinning(false);
     }, 3400);

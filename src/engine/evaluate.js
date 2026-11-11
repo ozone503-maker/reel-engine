@@ -19,6 +19,7 @@ export const PAYTABLE = {
   spearmint: { 3: 4, 4: 10, 5: 25 },
   "aloe-vera": { 3: 4, 4: 10, 5: 25 },
   kdu: { 3: 8, 4: 20, 5: 50 },
+  jar: { 3: 50, 4: 200, 5: 0 },
 };
 
 export function evaluateDemo(grid, symbols) {
@@ -62,5 +63,6 @@ export function evaluateDemo(grid, symbols) {
   }
   const freeSpinsAwarded = freeSpinCount >= 5 ? 12 : freeSpinCount >= 4 ? 8 : freeSpinCount >= 3 ? 5 : 0;
 
-  return { wins, freeSpinsAwarded };
+  const jarWin = wins.find((w) => w.symbol?.id === "jar" && w.count === 5);
+  return { wins, freeSpinsAwarded, freeJar: !!jarWin };
 }

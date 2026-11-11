@@ -11,6 +11,7 @@ export const fruityPuppy = {
     { id: "wild-storm", name: "Storm Shadow", emoji: "⚡", color: "#45c9ff", type: "wild", role: "WILD", image: "/assets/symbols/special/wild-storm.jpg" },
     { id: "kdu", name: "Kudoken", emoji: "🪙", color: "#5bc9ff", type: "token", image: "/assets/symbols/special/kdu.jpg" },
     { id: "freespin", name: "Free Spin", emoji: "✨", color: "#5cf0ff", type: "scatter", role: "FREESPIN", image: "/assets/symbols/special/freespin.jpg" },
+    { id: "jar", name: "Fruity Puppy Jar", emoji: "🧴", color: "#ff4fb8", type: "rare", role: "JAR", image: "/assets/symbols/special/jar.jpg" },
     { id: "ipo", name: "Ipo", emoji: "🐶", color: "#ff55b9", type: "character", role: "WILD", image: "/assets/symbols/characters/ipo.jpg" },
     { id: "ruch", name: "Ruch", emoji: "🦎", color: "#ffbd54", type: "character", role: "BONUS", image: "/assets/symbols/characters/ruch.jpg" },
     { id: "erv", name: "Erv", emoji: "🐸", color: "#49c7ff", type: "character", role: "BONUS", image: "/assets/symbols/characters/erv.jpg" },
