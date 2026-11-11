@@ -1,7 +1,7 @@
 /**
- * Horizontal rows only.
- * A win is 3, 4, or 5 identical symbols in a straight row (same row, left to right).
- * WILD substitutes. Free spins are scatters (anywhere).
+ * Horizontal and vertical wins.
+ * 3, 4, or 5 identical symbols in a straight row or column.
+ * WILD substitutes. Free spins are scatters.
  */
 
 export const PAYTABLE = {
@@ -30,25 +30,35 @@ export function evaluateDemo(grid, symbols) {
     return cell.id === targetId;
   }
 
+  // Horizontal
   for (let row = 0; row < 4; row++) {
     const first = grid[0][row];
     if (!first || first.role === "WILD" || first.type === "wild" || first.type === "scatter") continue;
-
     let run = 1;
     for (let reel = 1; reel < 5; reel++) {
       if (matches(grid[reel][row], first.id)) run++;
       else break;
     }
-
     if (run >= 3) {
       const symbol = symbols.find((s) => s.id === first.id);
       const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
-      wins.push({
-        symbol,
-        count: run,
-        reward: pay[run] || pay[3],
-        row,
-      });
+      wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "horizontal" });
+    }
+  }
+
+  // Vertical
+  for (let reel = 0; reel < 5; reel++) {
+    const first = grid[reel][0];
+    if (!first || first.role === "WILD" || first.type === "wild" || first.type === "scatter") continue;
+    let run = 1;
+    for (let row = 1; row < 4; row++) {
+      if (matches(grid[reel][row], first.id)) run++;
+      else break;
+    }
+    if (run >= 3) {
+      const symbol = symbols.find((s) => s.id === first.id);
+      const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
+      wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "vertical" });
     }
   }
 
@@ -59,7 +69,6 @@ export function evaluateDemo(grid, symbols) {
     }
   }
   const freeSpinsAwarded = freeSpinCount >= 5 ? 12 : freeSpinCount >= 4 ? 8 : freeSpinCount >= 3 ? 5 : 0;
-
   const jarWin = wins.find((w) => w.symbol?.id === "jar" && w.count === 5);
   return { wins, freeSpinsAwarded, freeJar: !!jarWin };
 }
