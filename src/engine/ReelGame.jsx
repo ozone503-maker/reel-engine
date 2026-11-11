@@ -25,14 +25,15 @@ export function ReelGame({ theme }) {
     else setSpins((n) => n - 1);
     setMessage("THE REELS ARE IN MOTION…");
 
-    // Long looping strips (repeat symbols so the loop is seamless)
-    const strips = Array.from({ length: 5 }, () => {
-      const base = Array.from({ length: 12 }, randomSymbol);
-      return [...base, ...base]; // doubled for seamless loop
+    // Build long strips that end with the final 4 symbols.
+    // Animation will scroll so those final symbols land in the viewport.
+    const finalGrid = makeGrid();
+    const leadCount = 20;
+    const strips = finalGrid.map((finalReel) => {
+      const lead = Array.from({ length: leadCount }, randomSymbol);
+      return [...lead, ...finalReel];
     });
     setSpinStrips(strips);
-
-    const finalGrid = makeGrid();
 
     window.setTimeout(() => {
       const results = evaluateDemo(finalGrid, symbols);
@@ -72,8 +73,11 @@ export function ReelGame({ theme }) {
             {grid.map((reel, reelIndex) => (
               <div className="reel-column" key={reelIndex}>
                 <div
-                  className={`reel-strip ${spinning ? "looping" : ""}`}
-                  style={{ animationDelay: `${reelIndex * 40}ms` }}
+                  className={`reel-strip ${spinning ? "landing" : ""}`}
+                  style={{
+                    animationDelay: `${reelIndex * 80}ms`,
+                    "--lead": "20",
+                  }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
                     <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
