@@ -59,6 +59,9 @@ export function ReelGame({ theme }) {
       } else if (wins.some((w) => w.symbol?.id === "fonk")) {
         setWinVideo("/assets/videos/fonk-win.mp4");
         setTimeout(() => setWinVideo(null), 8000);
+      } else if (wins.some((w) => w.symbol?.id === "dinny")) {
+        setWinVideo("/assets/videos/dinny-win.mp4");
+        setTimeout(() => setWinVideo(null), 6000);
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
