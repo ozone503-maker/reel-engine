@@ -8,6 +8,11 @@ export const fruityPuppy = {
   heroTitle: "FRUITY PUPPY",
   heroSubtitle: "Six botanicals. Six characters. One very good spin.",
   symbols: [
+    { id: "wild-storm", name: "Storm Shadow", emoji: "⚡", color: "#45c9ff", type: "wild", role: "WILD", image: "/assets/symbols/special/wild-storm.jpg" },
+    { id: "kdu-1", name: "Kudoken", emoji: "🪙", color: "#5bc9ff", type: "token", image: "/assets/symbols/special/kdu-1.jpg" },
+    { id: "kdu-2", name: "Kudoken", emoji: "🪙", color: "#5bc9ff", type: "token", image: "/assets/symbols/special/kdu-2.jpg" },
+    { id: "kdu-3", name: "Kudoken", emoji: "🪙", color: "#5bc9ff", type: "token", image: "/assets/symbols/special/kdu-3.jpg" },
+    { id: "kdu-4", name: "Kudoken", emoji: "🪙", color: "#5bc9ff", type: "token", image: "/assets/symbols/special/kdu-4.jpg" },
     { id: "ipo", name: "Ipo", emoji: "🐶", color: "#ff55b9", type: "character", role: "WILD", image: "/assets/symbols/characters/ipo.jpg" },
     { id: "ruch", name: "Ruch", emoji: "🦎", color: "#ffbd54", type: "character", role: "BONUS", image: "/assets/symbols/characters/ruch.jpg" },
     { id: "erv", name: "Erv", emoji: "🐸", color: "#49c7ff", type: "character", role: "BONUS", image: "/assets/symbols/characters/erv.jpg" },

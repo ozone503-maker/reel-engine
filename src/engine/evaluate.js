@@ -1,24 +1,23 @@
 /**
  * Left-to-right consecutive evaluator (ways-lite).
- * High hit rate design for the free arcade game.
- *
- * Rules:
- * - A win is 3+ identical symbols on consecutive reels starting from reel 0.
- * - Any row on a reel counts.
- * - One payout per symbol per spin (longest run only).
- * - No WILD substitution, no BONUS scatter, no multipliers in v1.
+ * High hit rate. WILD substitutes for any symbol.
  */
 export function evaluateDemo(grid, symbols) {
-  const best = new Map(); // symbolId -> longest run
+  const best = new Map();
 
-  // Check every possible starting symbol on reel 0
+  function matches(cell, targetId) {
+    if (!cell) return false;
+    if (cell.role === "WILD" || cell.type === "wild") return true;
+    return cell.id === targetId;
+  }
+
   for (let row = 0; row < 4; row++) {
     const first = grid[0][row];
-    if (!first) continue;
+    if (!first || first.role === "WILD" || first.type === "wild") continue;
 
     let run = 1;
     for (let reel = 1; reel < 5; reel++) {
-      if (grid[reel].some((s) => s.id === first.id)) {
+      if (grid[reel].some((s) => matches(s, first.id))) {
         run++;
       } else {
         break;
@@ -33,7 +32,7 @@ export function evaluateDemo(grid, symbols) {
 
   const wins = [...best.entries()].map(([id, count]) => {
     const symbol = symbols.find((s) => s.id === id);
-    const base = symbol?.type === "character" ? 12 : 5;
+    const base = symbol?.type === "character" ? 12 : symbol?.type === "token" ? 8 : 5;
     return {
       symbol,
       count,
