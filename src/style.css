@@ -27,13 +27,33 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
 @media(max-width:650px){.app-shell{width:min(100% - 18px,560px);padding-top:12px}.hero{padding:22px 0 16px}.reel-frame{padding:5px}.reel-grid{gap:4px}.reel-column{grid-template-rows:repeat(4,auto);gap:4px}.symbol-tile{min-height:0;border-radius:7px;padding:4px 1px;gap:3px}.symbol-tile:after{inset:3px;border-radius:5px}.symbol-emoji{font-size:clamp(19px,6vw,30px)}.symbol-roster{grid-template-columns:repeat(3,minmax(0,1fr))}.wallet-card{min-width:110px;padding:8px}.wallet-card strong{font-size:17px}.spin-button span{font-size:16px}.machine-panel{padding:12px;border-radius:17px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
 
-/* Reel roll */
-.reel-column { overflow: hidden; position: relative; }
-.reel-strip { display: flex; flex-direction: column; gap: 8px; }
+
+/* Fixed-height reel viewport so strips scroll inside, not expand the layout */
+.reel-column {
+  overflow: hidden;
+  position: relative;
+  height: 0;
+  padding-bottom: 100%; /* square viewport per column; adjusted below */
+  min-height: 220px;
+  max-height: 320px;
+}
+.reel-strip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: auto;
+}
+.reel-strip .symbol-tile {
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  height: auto;
+}
 .reel-strip.rolling {
-  animation: reelRoll 2.8s cubic-bezier(.2,.8,.3,1) forwards;
+  animation: reelRoll 2.8s cubic-bezier(.25,.8,.25,1) forwards;
 }
 @keyframes reelRoll {
   from { transform: translateY(0); }
-  to { transform: translateY(-70%); }
+  to { transform: translateY(-78%); }
 }

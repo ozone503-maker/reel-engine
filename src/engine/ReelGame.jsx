@@ -13,7 +13,7 @@ export function ReelGame({ theme }) {
   const [credits, setCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
   const [spinning, setSpinning] = useState(false);
-  const [spinStrips, setSpinStrips] = useState(null); // temporary long strips while spinning
+  const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
   const [totalSpins, setTotalSpins] = useState(0);
   const wins = useMemo(() => lastWins, [lastWins]);
@@ -30,9 +30,8 @@ export function ReelGame({ theme }) {
     else setSpins((n) => n - 1);
     setMessage("THE REELS ARE IN MOTION…");
 
-    // Build long strips so columns visually scroll
     const strips = Array.from({ length: 5 }, () =>
-      Array.from({ length: 16 }, randomSymbol)
+      Array.from({ length: 20 }, randomSymbol)
     );
     setSpinStrips(strips);
 
@@ -74,7 +73,10 @@ export function ReelGame({ theme }) {
           <div className="reel-grid" aria-label="Five reels, four rows">
             {grid.map((reel, reelIndex) => (
               <div className="reel-column" key={reelIndex}>
-                <div className={`reel-strip ${spinning ? "rolling" : ""}`} style={{ animationDelay: `${reelIndex * 80}ms` }}>
+                <div
+                  className={`reel-strip ${spinning ? "rolling" : ""}`}
+                  style={{ animationDelay: `${reelIndex * 60}ms` }}
+                >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
                     <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
                   ))}
