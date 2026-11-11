@@ -54,22 +54,15 @@ export function ReelGame({ theme }) {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div className="brand-mark"><span className="paw">✿</span><strong>{theme.name}</strong></div>
-        <div className="status-pill"><span className="live-dot" /> PROTOTYPE MODE</div>
+        <div className="brand-mark"><span className="paw">✿</span></div>
       </header>
 
       <section className="hero">
-        <div className="eyebrow">{theme.heroEyebrow || "A NEW KIND OF ARCADE"}</div>
         <h1>{theme.heroTitle || theme.name}</h1>
         <div className="hero-tagline">spin to win kudokens</div>
-        <p>{theme.heroSubtitle || "Spin the reels."}</p>
       </section>
 
       <section className="machine-panel">
-        <div className="machine-heading">
-          <div><span className="section-kicker">THE MAIN EVENT</span><h2>FRUIT FRENZY</h2></div>
-          <div className="ways-badge"><strong>5×4</strong><span>REELS</span></div>
-        </div>
         <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
           <div className="reel-grid" aria-label="Five reels, four rows">
             {grid.map((reel, reelIndex) => (
