@@ -28,7 +28,7 @@ export function ReelGame({ theme }) {
     // Build long strips that end with the final 4 symbols.
     // Animation will scroll so those final symbols land in the viewport.
     const finalGrid = makeGrid();
-    const leadCount = 20;
+    const leadCount = 36;
     const strips = finalGrid.map((finalReel) => {
       const lead = Array.from({ length: leadCount }, randomSymbol);
       return [...lead, ...finalReel];
@@ -45,7 +45,7 @@ export function ReelGame({ theme }) {
       setTotalSpins((n) => n + 1);
       setMessage(payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!");
       setSpinning(false);
-    }, 3000);
+    }, 3400);
   }
 
   function earnDemoSpin() {
@@ -76,7 +76,7 @@ export function ReelGame({ theme }) {
                   className={`reel-strip ${spinning ? "landing" : ""}`}
                   style={{
                     animationDelay: `${reelIndex * 80}ms`,
-                    "--lead": "20",
+                    "--lead": "36",
                   }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
