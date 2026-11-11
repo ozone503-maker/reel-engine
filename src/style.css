@@ -303,3 +303,28 @@ body {
 }
 
 
+
+
+/* Win line overlay */
+.win-line {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid #ff2d8a;
+  border-radius: 8px;
+  box-shadow: 0 0 12px #ff2d8a, 0 0 24px #ff2d8a;
+  animation: winLinePulse 0.8s ease-in-out infinite;
+  z-index: 5;
+}
+@keyframes winLinePulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Jar pulse */
+.symbol-tile.is-jar {
+  animation: jarPulse 2s ease-in-out infinite;
+}
+@keyframes jarPulse {
+  0%, 100% { box-shadow: 0 0 8px #ff6ec7; }
+  50% { box-shadow: 0 0 20px #ff6ec7, 0 0 36px #ff6ec7; }
+}
