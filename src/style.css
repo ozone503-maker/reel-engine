@@ -107,3 +107,57 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
   from { transform: translateY(0); }
   to { transform: translateY(calc(-1 * var(--lead, 20) * 72px)); }
 }
+
+/* Fruity Puppy skin */
+body {
+  background:
+    radial-gradient(ellipse at 20% 10%, #ff4fb822 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 20%, #45c9ff18 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 100%, #1a0a2e 0%, #070510 70%);
+}
+.hero h1 {
+  background: linear-gradient(90deg, #ff75c8, #fff, #75d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 12px #ff4fb866);
+}
+.hero-tagline {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #ffd6f0;
+  letter-spacing: .04em;
+}
+.hero-tagline strong {
+  display: inline-block;
+  font: 800 18px Orbitron;
+  color: #fff;
+  letter-spacing: .08em;
+  text-shadow: 0 0 16px #ff4fb8;
+}
+.machine-panel {
+  background:
+    linear-gradient(160deg, #2a1840ee, #120c22fa 40%, #0d1228);
+  border: 1px solid #ff4fb855;
+  box-shadow:
+    0 30px 80px #000a,
+    0 0 60px #ff4fb822,
+    inset 0 1px #ffffff22;
+}
+.reel-frame {
+  border: 2px solid #ff4fb8;
+  box-shadow:
+    inset 0 0 30px #05040d,
+    0 0 24px #ff4fb866,
+    0 0 40px #45c9ff22;
+  background: linear-gradient(145deg, #0a0818, #16102c);
+}
+.spin-button {
+  background: linear-gradient(120deg, #ff4fb8, #c44bff 50%, #45c9ff);
+  box-shadow: 0 8px 28px #ff4fb844, 0 0 20px #45c9ff33;
+}
+.wallet-card strong {
+  color: #75e8ff;
+  text-shadow: 0 0 12px #45c9ff66;
+}

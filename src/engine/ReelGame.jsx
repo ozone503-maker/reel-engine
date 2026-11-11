@@ -64,7 +64,7 @@ export function ReelGame({ theme }) {
 
       <section className="hero">
         <h1>{theme.heroTitle || theme.name}</h1>
-        <div className="hero-tagline">spin to win kudokens</div>
+        <div className="hero-tagline">play to win a jar of<br/><strong>FRUITY PUPPY</strong><br/>spin to win kudokens</div>
       </section>
 
       <section className="machine-panel">
