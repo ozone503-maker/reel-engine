@@ -255,3 +255,48 @@ body {
   0%, 100% { filter: brightness(1); transform: scale(1); }
   50% { filter: brightness(1.25); transform: scale(1.04); }
 }
+
+/* Paytable */
+.paytable {
+  margin-top: 28px;
+  padding: 18px;
+  background: #ffffffcc;
+  border-radius: 16px;
+  border: 1px solid #ff4fb844;
+}
+.paytable-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.paytable-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px;
+  border: 1px solid #eee;
+}
+.paytable-row .symbol-tile {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.paytable-values {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  color: #444;
+}
+.paytable-values b {
+  color: #ff2d8a;
+  font-weight: 800;
+}
+.paytable-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}

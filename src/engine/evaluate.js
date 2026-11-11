@@ -1,10 +1,11 @@
+export export const PAYTABLE = {
 /**
  * Horizontal rows only.
  * A win is 3, 4, or 5 identical symbols in a straight row (same row, left to right).
  * WILD substitutes. Free spins are scatters (anywhere).
  */
 
-const PAYTABLE = {
+export const PAYTABLE = {
   ipo: { 3: 15, 4: 40, 5: 100 },
   ruch: { 3: 12, 4: 30, 5: 80 },
   erv: { 3: 12, 4: 30, 5: 80 },

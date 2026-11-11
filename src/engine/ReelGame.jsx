@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { SymbolTile } from "./SymbolTile.jsx";
-import { evaluateDemo } from "./evaluate.js";
+import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
@@ -116,6 +116,26 @@ export function ReelGame({ theme }) {
         </div>
         <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
         {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} reels <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
+      </section>
+
+      <section className="paytable">
+        <div className="library-heading"><div><span className="section-kicker">PAYTABLE</span><h2>How much each symbol pays</h2></div></div>
+        <div className="paytable-grid">
+          {symbols.filter(s => s.type !== "wild" && s.type !== "scatter").map((symbol) => {
+            const pay = PAYTABLE[symbol.id] || { 3: 5, 4: 12, 5: 30 };
+            return (
+              <div className="paytable-row" key={symbol.id}>
+                <SymbolTile symbol={symbol} small />
+                <div className="paytable-values">
+                  <span>3 <b>{pay[3]}</b></span>
+                  <span>4 <b>{pay[4]}</b></span>
+                  <span>5 <b>{pay[5]}</b></span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="paytable-note">Wins are horizontal only. 3, 4, or 5 matching symbols in a straight row. Storm Shadow is WILD. Free Spin symbols award free spins.</div>
       </section>
 
       <section className="symbol-library">
