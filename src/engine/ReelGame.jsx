@@ -47,7 +47,7 @@ export function ReelGame({ theme }) {
       setTotalSpins((n) => n + 1);
       setMessage(payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!");
       setSpinning(false);
-    }, 1400);
+    }, 3000);
   }
 
   function earnDemoSpin() {
