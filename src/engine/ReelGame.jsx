@@ -8,7 +8,7 @@ export function ReelGame({ theme }) {
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
   const [grid, setGrid] = useState(makeGrid);
-  const [spins, setSpins] = useState(3);
+  const [spins, setSpins] = useState(5);
   const [bonusSpins, setBonusSpins] = useState(0);
   const [credits, setCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
@@ -90,9 +90,10 @@ export function ReelGame({ theme }) {
                     "--lead": "36",
                   }}
                 >
-                  {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
-                    <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
-                  ))}
+                  {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
+                    const isWinning = !spinning && wins.some((w) => w.symbol.id === symbol.id);
+                    return <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} winning={isWinning} />;
+                  })}
                 </div>
               </div>
             ))}
