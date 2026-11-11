@@ -1,23 +1,45 @@
 /**
- * Demo-only evaluator.
- * This is NOT a verified 1,024-ways implementation.
- * It is a simple left-to-right consecutive match for prototype display.
+ * Left-to-right consecutive evaluator (ways-lite).
+ * High hit rate design for the free arcade game.
+ *
+ * Rules:
+ * - A win is 3+ identical symbols on consecutive reels starting from reel 0.
+ * - Any row on a reel counts.
+ * - One payout per symbol per spin (longest run only).
+ * - No WILD substitution, no BONUS scatter, no multipliers in v1.
  */
 export function evaluateDemo(grid, symbols) {
-  const counts = new Map();
-  for (let startRow = 0; startRow < 4; startRow++) {
-    const first = grid[0][startRow];
+  const best = new Map(); // symbolId -> longest run
+
+  // Check every possible starting symbol on reel 0
+  for (let row = 0; row < 4; row++) {
+    const first = grid[0][row];
+    if (!first) continue;
+
     let run = 1;
     for (let reel = 1; reel < 5; reel++) {
-      if (grid[reel].some((s) => s.id === first.id)) run++;
-      else break;
+      if (grid[reel].some((s) => s.id === first.id)) {
+        run++;
+      } else {
+        break;
+      }
     }
-    if (run >= 3) counts.set(first.id, Math.max(counts.get(first.id) || 0, run));
+
+    if (run >= 3) {
+      const prev = best.get(first.id) || 0;
+      if (run > prev) best.set(first.id, run);
+    }
   }
-  const wins = [...counts.entries()].map(([id, count]) => {
+
+  const wins = [...best.entries()].map(([id, count]) => {
     const symbol = symbols.find((s) => s.id === id);
-    const base = symbol.type === "character" ? 12 : 5;
-    return { symbol, count, reward: base * (count - 2) };
+    const base = symbol?.type === "character" ? 12 : 5;
+    return {
+      symbol,
+      count,
+      reward: base * (count - 2),
+    };
   });
+
   return wins;
 }
