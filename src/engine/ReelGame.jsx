@@ -80,6 +80,9 @@ export function ReelGame({ theme }) {
       } else if (wins.some((w) => w.symbol?.id === "lilikoi")) {
         setWinVideo("/assets/videos/lilikoi-win.mp4");
         setTimeout(() => setWinVideo(null), 10000);
+      } else if (wins.some((w) => w.symbol?.id === "aloe-vera")) {
+        setWinVideo("/assets/videos/aloe-vera-win.mp4");
+        setTimeout(() => setWinVideo(null), 10000);
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
