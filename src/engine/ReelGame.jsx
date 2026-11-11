@@ -30,16 +30,18 @@ export function ReelGame({ theme }) {
     else setSpins((n) => n - 1);
     setMessage("THE REELS ARE IN MOTION…");
 
-    const strips = Array.from({ length: 5 }, () =>
-      Array.from({ length: 28 }, randomSymbol)
-    );
+    // Build strips that end with the final 4 symbols so they land in view
+    const finalGrid = makeGrid();
+    const strips = finalGrid.map((finalReel) => {
+      const lead = Array.from({ length: 18 }, randomSymbol);
+      return [...lead, ...finalReel];
+    });
     setSpinStrips(strips);
 
     window.setTimeout(async () => {
-      const result = await requestSpin();
-      const results = evaluateDemo(result.outcome, symbols);
+      const results = evaluateDemo(finalGrid, symbols);
       const payout = results.reduce((sum, win) => sum + win.reward, 0);
-      setGrid(result.outcome);
+      setGrid(finalGrid);
       setSpinStrips(null);
       setLastWins(results);
       setCredits((n) => n + payout);
@@ -75,7 +77,7 @@ export function ReelGame({ theme }) {
               <div className="reel-column" key={reelIndex}>
                 <div
                   className={`reel-strip ${spinning ? "rolling" : ""}`}
-                  style={{ animationDelay: `${reelIndex * 60}ms`, "--strip-travel": "2400px" }}
+                  style={{ animationDelay: `${reelIndex * 70}ms` }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
                     <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
