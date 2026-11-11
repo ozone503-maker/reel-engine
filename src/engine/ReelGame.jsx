@@ -20,6 +20,7 @@ export function ReelGame({ theme }) {
   const [bonusSpins, setBonusSpins] = useState(0);
   const [credits, setCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
+  const [winVideo, setWinVideo] = useState(null);
   const [spinning, setSpinning] = useState(false);
   const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
@@ -52,6 +53,10 @@ export function ReelGame({ theme }) {
       setGrid(finalGrid);
       setSpinStrips(null);
       setLastWins(wins);
+      if (wins.some((w) => w.symbol?.id === "ruch")) {
+        setWinVideo("/assets/videos/ruch-win.mp4");
+        setTimeout(() => setWinVideo(null), 6000);
+      }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
       setTotalSpins((n) => n + 1);
@@ -106,6 +111,12 @@ export function ReelGame({ theme }) {
         </div>
         <div className="machine-footnote">Win: 3, 4, or 5 in a row — horizontal or vertical.</div>
 
+        
+        {winVideo && (
+          <div className="win-video-overlay" onClick={() => setWinVideo(null)}>
+            <video src={winVideo} autoPlay playsInline />
+          </div>
+        )}
         <div className="message-bar">{message}</div>
         <div className="control-row">
           <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>

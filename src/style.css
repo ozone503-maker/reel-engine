@@ -328,3 +328,20 @@ body {
   0%, 100% { box-shadow: 0 0 8px #ff6ec7; }
   50% { box-shadow: 0 0 20px #ff6ec7, 0 0 36px #ff6ec7; }
 }
+
+
+.win-video-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.win-video-overlay video {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 16px;
+  box-shadow: 0 0 40px #ff2d8a;
+}
