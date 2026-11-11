@@ -63,6 +63,13 @@ export function ReelGame({ theme }) {
       </header>
 
       <section className="hero">
+        <div className="character-banner">
+          <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
+          <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
+          <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" className="center" />
+          <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
+          <img src="/assets/symbols/characters/erv.jpg" alt="Erv" />
+        </div>
         <div className="hero-tagline">play to win a jar of<br/><strong>FRUITY PUPPY</strong><br/>spin to win kudokens</div>
       </section>
 
