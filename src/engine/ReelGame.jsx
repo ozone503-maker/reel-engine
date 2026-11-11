@@ -36,14 +36,19 @@ export function ReelGame({ theme }) {
     setSpinStrips(strips);
 
     window.setTimeout(() => {
-      const results = evaluateDemo(finalGrid, symbols);
-      const payout = results.reduce((sum, win) => sum + win.reward, 0);
+      const result = evaluateDemo(finalGrid, symbols);
+      const wins = result.wins || [];
+      const payout = wins.reduce((sum, win) => sum + win.reward, 0);
+      const free = result.freeSpinsAwarded || 0;
       setGrid(finalGrid);
       setSpinStrips(null);
-      setLastWins(results);
+      setLastWins(wins);
       setCredits((n) => n + payout);
+      if (free > 0) setBonusSpins((n) => n + free);
       setTotalSpins((n) => n + 1);
-      setMessage(payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!");
+      let msg = payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!";
+      if (free > 0) msg += `  +${free} FREE SPINS!`;
+      setMessage(msg);
       setSpinning(false);
     }, 3400);
   }
