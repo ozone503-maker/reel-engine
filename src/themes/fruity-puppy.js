@@ -5,7 +5,7 @@ export const fruityPuppy = {
   accent2: "#45c9ff",
   currency: "KDU",
   heroEyebrow: "A NEW KIND OF FRUIT-FUELED ARCADE",
-  heroTitle: "KUDOKEN REELS",
+  heroTitle: "FRUITY PUPPY",
   heroSubtitle: "Six botanicals. Six characters. One very good spin.",
   symbols: [
     { id: "ipo", name: "Ipo", emoji: "🐶", color: "#ff55b9", type: "character", role: "WILD", image: "/assets/symbols/characters/ipo.jpg" },
