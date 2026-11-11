@@ -55,5 +55,14 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
 }
 @keyframes reelRoll {
   from { transform: translateY(0); }
-  to { transform: translateY(-78%); }
+  to { transform: translateY(-82%); }
+}
+
+/* Ensure long travel for 15-20+ cells */
+.reel-strip.rolling {
+  animation: reelRollLong 2.8s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes reelRollLong {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-1 * (var(--strip-travel, 2200px)))); }
 }

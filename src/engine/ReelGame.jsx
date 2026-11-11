@@ -31,7 +31,7 @@ export function ReelGame({ theme }) {
     setMessage("THE REELS ARE IN MOTION…");
 
     const strips = Array.from({ length: 5 }, () =>
-      Array.from({ length: 20 }, randomSymbol)
+      Array.from({ length: 28 }, randomSymbol)
     );
     setSpinStrips(strips);
 
@@ -75,7 +75,7 @@ export function ReelGame({ theme }) {
               <div className="reel-column" key={reelIndex}>
                 <div
                   className={`reel-strip ${spinning ? "rolling" : ""}`}
-                  style={{ animationDelay: `${reelIndex * 60}ms` }}
+                  style={{ animationDelay: `${reelIndex * 60}ms`, "--strip-travel": "2400px" }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => (
                     <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} />
