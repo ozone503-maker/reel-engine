@@ -136,9 +136,11 @@ export function ReelGame({ theme }) {
       </section>
 
             <div className="character-banner">
+        <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
         <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
         <div className="logo-text">FRUITY<br/>PUPPY</div>
         <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
+        <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
       </div>
       <section className="machine-panel">
         <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
