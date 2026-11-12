@@ -174,18 +174,13 @@ export function ReelGame({ theme }) {
           </div>
         )}
         <div className="message-bar">{message}</div>
-        <div className="control-row">
+        <div className="control-bar">
+          <div className="bar-credits"><span>DEMO CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
           <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-            <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
+            <span>▶</span><small>{spinning ? "..." : "SPIN"}</small>
           </button>
-          <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
+          <div className="bar-win"><span>SPINS</span><strong>{spins + bonusSpins}</strong></div>
         </div>
-        <div className="stats-row">
-          <div><span>DAILY SPINS</span><strong>{spins}</strong></div>
-          <div><span>BONUS SPINS</span><strong>{bonusSpins}</strong></div>
-          <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
-        </div>
-        <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
         {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
       </section>
 
