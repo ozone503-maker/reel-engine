@@ -135,13 +135,20 @@ export function ReelGame({ theme }) {
         <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
       </section>
 
-            <div className="character-banner">
-        <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
-        <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
-        <div className="logo-text">FRUITY<br/>PUPPY</div>
-        <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
-        <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
-      </div>
+            <section className="character-banner" aria-label="Fruity Puppy character lineup">
+        <div className="character-lineup">
+          <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
+          <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
+          <img src="/assets/symbols/characters/erv.jpg" alt="Erv" />
+          <img src="/assets/symbols/characters/nonna.jpg" alt="Nonna" />
+          <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
+          <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
+        </div>
+        <div className="brand-lockup">
+          <div className="logo-text">FRUITY PUPPY</div>
+          <div className="brand-subtitle">spin to win kudokens</div>
+        </div>
+      </section>
       <section className="machine-panel">
         <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
           <div className="reel-grid" aria-label="Five reels, four rows">
