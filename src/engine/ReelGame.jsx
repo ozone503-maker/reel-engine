@@ -53,7 +53,14 @@ export function ReelGame({ theme }) {
       setGrid(finalGrid);
       setSpinStrips(null);
       setLastWins(wins);
-      if (wins.some((w) => w.symbol?.id === "ruch")) {
+      const hasWildInWin = wins.some((w) => w.positions?.some((p) => {
+        const cell = lastGrid?.[p.reel]?.[p.row];
+        return cell?.role === "WILD" || cell?.type === "wild";
+      }));
+      if (hasWildInWin) {
+        setWinVideo("/assets/videos/wild-win.mp4");
+        setTimeout(() => setWinVideo(null), 10000);
+      } else if (wins.some((w) => w.symbol?.id === "ruch")) {
         setWinVideo("/assets/videos/ruch-win.mp4");
         setTimeout(() => setWinVideo(null), 6000);
       } else if (wins.some((w) => w.symbol?.id === "fonk")) {
