@@ -50,9 +50,18 @@ export function ReelGame({ theme }) {
     }
   }
 
-  function spin() {
+  async function spin() {
     if (spinning || (spins + bonusSpins) <= 0) return;
-    if (soundOn) audioRef.current?.spin();
+    // SPIN is a direct browser gesture: unlock audio and start the soundtrack.
+    let playAudio = soundOn;
+    if (!audioRef.current) audioRef.current = createGameAudio();
+    if (!playAudio) {
+      await audioRef.current.start();
+      audioRef.current.click();
+      playAudio = true;
+      setSoundOn(true);
+    }
+    if (playAudio) audioRef.current?.spin();
     setSpinning(true);
     if (bonusSpins > 0) setBonusSpins((n) => n - 1);
     else setSpins((n) => n - 1);
@@ -114,7 +123,7 @@ export function ReelGame({ theme }) {
       if (free > 0) msg += `  +${free} FREE SPINS!`;
       if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
       setMessage(msg);
-      if (soundOn) {
+      if (playAudio) {
         if (freeJar) audioRef.current?.jar();
         else if (payout > 0) audioRef.current?.win(payout >= 100 ? "big" : "small");
         else audioRef.current?.miss();
