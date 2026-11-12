@@ -103,6 +103,9 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
 .reel-strip.landing {
   animation: reelLand 3.2s cubic-bezier(.12,.75,.2,1) forwards;
 }
+.reel-strip:not(.landing) {
+  transform: translateY(0);
+}
 @keyframes reelLand {
   from { transform: translateY(0); }
   to { transform: translateY(calc(-1 * var(--lead, 36) * 72px)); }
