@@ -355,3 +355,10 @@ body {
   opacity: 1;
 }
 
+
+.paytable, .symbol-library, footer { display: none; }
+@media (max-height: 900px) {
+  .app-shell { padding-top: 4px; }
+  .hero { padding: 4px 0 6px; }
+  .machine-panel { padding: 8px; }
+}
