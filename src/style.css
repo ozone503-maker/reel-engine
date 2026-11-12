@@ -362,3 +362,7 @@ body {
   .hero { padding: 4px 0 6px; }
   .machine-panel { padding: 8px; }
 }
+
+.topbar { padding: 2px 2px 4px; border: none; }
+.hero { padding: 2px 0 4px !important; }
+.app-shell { padding-top: 0 !important; }
