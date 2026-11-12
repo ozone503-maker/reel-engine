@@ -22,6 +22,7 @@ export function ReelGame({ theme }) {
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
   const [winVideo, setWinVideo] = useState(null);
   const [showIntro, setShowIntro] = useState(true);
+  useMemo(() => { const t = setTimeout(() => setShowIntro(false), 9000); return () => clearTimeout(t); }, []);
   const [spinning, setSpinning] = useState(false);
   const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
@@ -102,7 +103,7 @@ export function ReelGame({ theme }) {
         setTimeout(() => setWinVideo(null), 10000);
       } else if (wins.length === 0 && !result.freeSpinsAwarded) {
         setWinVideo("/assets/videos/dontbesad-win.mp4");
-        setTimeout(() => setWinVideo(null), 6000);
+        setTimeout(() => setWinVideo(null), 7000);
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
@@ -126,8 +127,8 @@ export function ReelGame({ theme }) {
   return (
     <>
       {showIntro && (
-        <div className="win-video-overlay" onClick={() => setShowIntro(false)}>
-          <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} />
+        <div className="win-video-overlay" onClick={() => setShowIntro(false)} style={{cursor:"pointer"}}>
+          <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} onError={() => setShowIntro(false)} />
         </div>
       )}
     <main className="app-shell">
