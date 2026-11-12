@@ -183,7 +183,7 @@ export function ReelGame({ theme }) {
           <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
         </div>
         <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
-        {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} reels <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
+        {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
       </section>
 
       <section className="paytable">
