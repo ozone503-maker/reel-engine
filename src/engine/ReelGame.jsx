@@ -4,29 +4,13 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
-  const regulars = symbols.filter((s) => s.type === "character" || s.type === "botanical" || s.type === "token");
-  const pickHot = () => {
-    const shuffled = [...regulars].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 4);
-  };
-  const randomSymbol = (hot) => {
-    if (Math.random() < 0.006) {
+  const randomSymbol = () => {
+    if (Math.random() < 0.015) {
       const jar = symbols.find((s) => s.id === "jar");
       if (jar) return jar;
     }
-    if (Math.random() < 0.035) {
-      const wild = symbols.find((s) => s.type === "wild");
-      if (wild) return wild;
-    }
-    if (Math.random() < 0.04) {
-      const free = symbols.find((s) => s.type === "scatter");
-      if (free) return free;
-    }
-    // 70% of cells come from the 4 hot symbols this spin
-    if (Math.random() < 0.78 && hot?.length) {
-      return hot[Math.floor(Math.random() * hot.length)];
-    }
-    return regulars[Math.floor(Math.random() * regulars.length)];
+    const pool = symbols.filter((s) => s.id !== "jar");
+    return pool[Math.floor(Math.random() * pool.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
@@ -52,11 +36,10 @@ export function ReelGame({ theme }) {
 
     // Build long strips that end with the final 4 symbols.
     // Animation will scroll so those final symbols land in the viewport.
-    const hot = pickHot();
-    const finalGrid = Array.from({ length: 5 }, () => Array.from({ length: 4 }, () => randomSymbol(hot)));
+    const finalGrid = makeGrid();
     const leadCount = 36;
     const strips = finalGrid.map((finalReel) => {
-      const lead = Array.from({ length: leadCount }, () => randomSymbol(hot));
+      const lead = Array.from({ length: leadCount }, randomSymbol);
       return [...lead, ...finalReel];
     });
     setSpinStrips(strips);
