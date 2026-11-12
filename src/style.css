@@ -380,3 +380,17 @@ body {
   height: 100% !important;
   object-fit: cover !important;
 }
+
+
+/* CLEAN REEL FIX */
+.reel-grid { display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 4px !important; }
+.reel-column { display: block !important; position: relative !important; height: auto !important; overflow: hidden !important; }
+.reel-strip { position: relative !important; display: flex !important; flex-direction: column !important; gap: 4px !important; }
+.reel-strip .symbol-tile {
+  width: 100% !important;
+  aspect-ratio: 1/1 !important;
+  height: auto !important;
+  padding: 0 !important;
+  flex: none !important;
+}
+.reel-strip .symbol-tile img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }
