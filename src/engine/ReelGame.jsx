@@ -3,6 +3,20 @@ import { createGameAudio } from "./audio.js";
 import { SymbolTile } from "./SymbolTile.jsx";
 import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
+function VideoOverlay({ src, durationMs = 12000, onClose }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const watchdog = window.setTimeout(onClose, durationMs + 3500);
+    return () => window.clearTimeout(watchdog);
+  }, [src, durationMs, onClose]);
+  return (
+    <div className={ready ? "win-video-overlay is-ready" : "win-video-overlay"} aria-hidden={!ready}>
+      <video src={src} autoPlay playsInline preload="auto"
+        onCanPlay={() => setReady(true)} onPlaying={() => setReady(true)}
+        onEnded={onClose} onError={onClose} />
+    </div>
+  );
+}
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
   const regulars = symbols.filter((s) => s.type === "character" || s.type === "botanical");
@@ -108,13 +122,13 @@ export function ReelGame({ theme }) {
       const charWin = wins.find((w) => videoFor[w.symbol?.id]);
       const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
       if (hasWildInWin) {
-        setWinVideo("/assets/videos/wild-win.mp4");
+        setWinVideo({ src: "/assets/videos/wild-win.mp4", durationMs: 9000 });
       } else if (result.freeSpinsAwarded > 0) {
-        setWinVideo("/assets/videos/freespins-win.mp4");
+        setWinVideo({ src: "/assets/videos/freespins-win.mp4", durationMs: 11000 });
       } else if (charVideo) {
-        setWinVideo(charVideo[0]);
+        setWinVideo({ src: charVideo[0], durationMs: charVideo[1] });
       } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
-        setWinVideo("/assets/videos/dontbesad-win.mp4");
+        setWinVideo({ src: "/assets/videos/dontbesad-win.mp4", durationMs: 9000 });
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
@@ -153,11 +167,7 @@ export function ReelGame({ theme }) {
 
   return (
     <>
-      {showIntro && (
-        <div className="win-video-overlay" onClick={() => setShowIntro(false)} style={{cursor:"pointer"}}>
-          <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} onError={() => setShowIntro(false)} />
-        </div>
-      )}
+      {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-mark"><span className="paw">✿</span></div>
@@ -197,11 +207,7 @@ export function ReelGame({ theme }) {
         <div className="machine-footnote">Win: 3, 4, or 5 in a row — horizontal or vertical.</div>
 
         
-        {winVideo && (
-          <div className="win-video-overlay" onClick={() => setWinVideo(null)}>
-            <video src={winVideo} autoPlay playsInline onPlaying={(e) => e.target.parentElement.classList.add("ready")} onEnded={() => setWinVideo(null)} />
-          </div>
-        )}
+        {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
         <div className="message-bar">{message}</div>
         <div className="control-row">
           <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
