@@ -343,5 +343,8 @@ body {
   max-width: 90vw;
   max-height: 80vh;
   border-radius: 16px;
-  box-shadow: 0 0 40px #ff2d8a;
+  background: transparent;
+}
+.win-video-overlay video:not([data-ready]) {
+  opacity: 0;
 }
