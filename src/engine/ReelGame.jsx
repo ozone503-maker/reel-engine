@@ -107,7 +107,7 @@ export function ReelGame({ theme }) {
       if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
       setMessage(msg);
       setSpinning(false);
-    }, 3400);
+    }, 3100);
   }
 
   function earnDemoSpin() {
