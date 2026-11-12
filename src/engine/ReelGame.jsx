@@ -55,7 +55,7 @@ export function ReelGame({ theme }) {
       setSpinStrips(null);
       setLastWins(wins);
       const hasWildInWin = wins.some((w) => w.positions?.some((p) => {
-        const cell = lastGrid?.[p.reel]?.[p.row];
+        const cell = finalGrid?.[p.reel]?.[p.row];
         return cell?.role === "WILD" || cell?.type === "wild";
       }));
       if (hasWildInWin) {
@@ -124,6 +124,7 @@ export function ReelGame({ theme }) {
   const botanicals = symbols.filter((s) => s.type === "botanical");
 
   return (
+    <>
       {showIntro && (
         <div className="win-video-overlay" onClick={() => setShowIntro(false)}>
           <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} />
@@ -191,11 +192,6 @@ export function ReelGame({ theme }) {
           {symbols.filter(s => s.type !== "wild" && s.type !== "scatter").map((symbol) => {
             const pay = PAYTABLE[symbol.id] || { 3: 5, 4: 12, 5: 30 };
             return (
-      {showIntro && (
-        <div className="win-video-overlay" onClick={() => setShowIntro(false)}>
-          <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} />
-        </div>
-      )}
               <div className="paytable-row" key={symbol.id}>
                 <SymbolTile symbol={symbol} small />
                 <div className="paytable-values">
@@ -220,5 +216,6 @@ export function ReelGame({ theme }) {
 
       <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
     </main>
+    </>
   );
 }
