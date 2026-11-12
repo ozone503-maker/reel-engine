@@ -102,7 +102,7 @@ export function ReelGame({ theme }) {
         setTimeout(() => setWinVideo(null), 10000);
       } else if (wins.length === 0 && !result.freeSpinsAwarded) {
         setWinVideo("/assets/videos/dontbesad-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
+        setTimeout(() => setWinVideo(null), 6000);
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
