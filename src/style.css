@@ -379,3 +379,12 @@ body {
   .app-shell { width: 100% !important; padding: 0 !important; }
   .machine-panel { border-radius: 0; }
 }
+
+body { background: #0c0a14 !important; }
+.topbar { display: none; }
+.hero-tagline { font-size: 14px; color: #e0d8f0; letter-spacing: 0.02em; }
+.hero-tagline strong { color: #fff; }
+.spin-button { background: #ff4fb8 !important; box-shadow: none; border-radius: 8px; }
+.earn-button { background: transparent !important; border: 1px solid #444; color: #aaa; border-radius: 8px; }
+.wallet-card, .stats-row div { background: #16141f; border-color: #2a2838; }
+.machine-panel { background: #12101a; border-color: #ff4fb8; }

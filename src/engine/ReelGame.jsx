@@ -126,9 +126,7 @@ export function ReelGame({ theme }) {
         </div>
       )}
     <main className="app-shell">
-      <header className="topbar">
-        <div className="brand-mark"><span className="paw">✿</span></div>
-      </header>
+
 
       <section className="hero">
         <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
