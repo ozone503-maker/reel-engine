@@ -120,6 +120,14 @@ export function ReelGame({ theme }) {
         else audioRef.current?.miss();
         if (hasWildInWin) audioRef.current?.wild();
         if (free > 0) audioRef.current?.freeSpins();
+        // Let the strongest winning symbol get its own brief musical identity.
+        // One signature cue per result keeps the mix exciting instead of noisy.
+        if (!freeJar && wins.length > 0) {
+          const signatureWin = [...wins].sort((a, b) => b.reward - a.reward)[0];
+          audioRef.current?.symbolCue(signatureWin.symbol?.id);
+        } else if (!freeJar && free > 0) {
+          audioRef.current?.symbolCue("freespin");
+        }
       }
       setSpinning(false);
     }, 3400);
