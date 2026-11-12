@@ -99,7 +99,7 @@ export function ReelGame({ theme }) {
       } else if (wins.some((w) => w.symbol?.id === "ice-cream-bean")) {
         setWinVideo("/assets/videos/ice-cream-bean-win.mp4");
         setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.length === 0 && !result.freeSpinsAwarded) {
+      } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
         setWinVideo("/assets/videos/dontbesad-win.mp4");
         setTimeout(() => setWinVideo(null), 7500);
       }

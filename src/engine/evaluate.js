@@ -141,7 +141,7 @@ export function evaluateDemo(grid, symbols) {
       if (cell?.role === "FREESPIN" || cell?.type === "scatter") freeSpinCount++;
     }
   }
-  const freeSpinsAwarded = freeSpinCount >= 5 ? 12 : freeSpinCount >= 4 ? 8 : freeSpinCount >= 3 ? 5 : 0;
+  const freeSpinsAwarded = freeSpinCount >= 5 ? 10 : freeSpinCount >= 4 ? 6 : 0;
   const jarWin = wins.find((w) => w.symbol?.id === "jar" && w.count === 5);
   return { wins, freeSpinsAwarded, freeJar: !!jarWin };
 }
