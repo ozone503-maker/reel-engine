@@ -109,7 +109,7 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
 }
 @keyframes reelLand {
   from { transform: translateY(0); }
-  to { transform: translateY(calc(-1 * var(--lead, 20) * 72px)); }
+  to { transform: translateY(calc(-1 * var(--lead, 36) * 70px)); }
 }
 
 /* Fruity Puppy skin */
