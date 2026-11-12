@@ -26,11 +26,14 @@ export function ReelGame({ theme }) {
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
   const audioRef = useRef(null);
+  const spinTimeoutRef = useRef(null);
+  const countUpRef = useRef(null);
   const [soundOn, setSoundOn] = useState(false);
   const [grid, setGrid] = useState(makeGrid);
   const [spins, setSpins] = useState(5);
   const [bonusSpins, setBonusSpins] = useState(0);
   const [credits, setCredits] = useState(0);
+  const [displayedCredits, setDisplayedCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
   const [winVideo, setWinVideo] = useState(null);
   const [showIntro, setShowIntro] = useState(false);
@@ -38,9 +41,36 @@ export function ReelGame({ theme }) {
   const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
   const [totalSpins, setTotalSpins] = useState(0);
+  const [turbo, setTurbo] = useState(false);
+  const [autoSpin, setAutoSpin] = useState(false);
+  const [stopOnFeature, setStopOnFeature] = useState(true);
+  const [anticipation, setAnticipation] = useState(false);
+  const [winTier, setWinTier] = useState(null); // null | 'small' | 'big' | 'mega'
+  const [screenShake, setScreenShake] = useState(false);
   const wins = useMemo(() => lastWins, [lastWins]);
 
-  useEffect(() => () => audioRef.current?.destroy(), []);
+  useEffect(() => () => {
+    audioRef.current?.destroy();
+    if (spinTimeoutRef.current) clearTimeout(spinTimeoutRef.current);
+    if (countUpRef.current) cancelAnimationFrame(countUpRef.current);
+  }, []);
+
+  // Count-up credits
+  useEffect(() => {
+    if (displayedCredits === credits) return;
+    const start = displayedCredits;
+    const end = credits;
+    const duration = Math.min(1200, Math.max(400, Math.abs(end - start) * 8));
+    const startTime = performance.now();
+    function tick(now) {
+      const t = Math.min(1, (now - startTime) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplayedCredits(Math.round(start + (end - start) * eased));
+      if (t < 1) countUpRef.current = requestAnimationFrame(tick);
+    }
+    countUpRef.current = requestAnimationFrame(tick);
+    return () => countUpRef.current && cancelAnimationFrame(countUpRef.current);
+  }, [credits]);
 
   async function toggleSound() {
     if (!audioRef.current) audioRef.current = createGameAudio();
@@ -53,18 +83,104 @@ export function ReelGame({ theme }) {
     }
   }
 
+  function getWinTier(payout) {
+    if (payout >= 200) return "mega";
+    if (payout >= 60) return "big";
+    if (payout > 0) return "small";
+    return null;
+  }
+
+  function finishSpin(finalGrid, result) {
+    const wins = result.wins || [];
+    const payout = wins.reduce((sum, win) => sum + win.reward, 0);
+    const free = result.freeSpinsAwarded || 0;
+    const freeJar = result.freeJar || false;
+    setGrid(finalGrid);
+    setSpinStrips(null);
+    setLastWins(wins);
+    setAnticipation(false);
+    const tier = getWinTier(payout);
+    setWinTier(tier);
+    if (tier === "big" || tier === "mega") {
+      setScreenShake(true);
+      setTimeout(() => setScreenShake(false), tier === "mega" ? 900 : 500);
+    }
+    const hasWildInWin = wins.some((w) => w.positions?.some((p) => {
+      const cell = finalGrid?.[p.reel]?.[p.row];
+      return cell?.role === "WILD" || cell?.type === "wild";
+    }));
+    const videoFor = {
+      ruch: ["/assets/videos/ruch-win.mp4", 6000],
+      fonk: ["/assets/videos/fonk-win.mp4", 8000],
+      dinny: ["/assets/videos/dinny-win.mp4", 6000],
+      nonna: ["/assets/videos/nonna-win.mp4", 8000],
+      erv: ["/assets/videos/erv-win.mp4", 8000],
+      ipo: ["/assets/videos/ipo-win.mp4", 10000],
+      "cranberry-hibiscus": ["/assets/videos/cranberry-hibiscus-win.mp4", 10000],
+      papaya: ["/assets/videos/papaya-win.mp4", 10000],
+      lilikoi: ["/assets/videos/lilikoi-win.mp4", 10000],
+      "aloe-vera": ["/assets/videos/aloe-vera-win.mp4", 10000],
+      spearmint: ["/assets/videos/spearmint-win.mp4", 10000],
+      "ice-cream-bean": ["/assets/videos/ice-cream-bean-win.mp4", 10000],
+    };
+    const charWin = wins.find((w) => videoFor[w.symbol?.id]);
+    const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
+    if (hasWildInWin) {
+      setWinVideo("/assets/videos/wild-win.mp4");
+    } else if (result.freeSpinsAwarded > 0) {
+      setWinVideo("/assets/videos/freespins-win.mp4");
+    } else if (charVideo) {
+      setWinVideo(charVideo[0]);
+    } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
+      setWinVideo("/assets/videos/dontbesad-win.mp4");
+    }
+    setCredits((n) => n + payout);
+    if (free > 0) setBonusSpins((n) => n + free);
+    setTotalSpins((n) => n + 1);
+    let msg = payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!";
+    if (free > 0) msg += `  +${free} FREE SPINS!`;
+    if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
+    if (tier === "mega") msg = `🔥 MEGA WIN! ${payout} ${theme.currency}! 🔥`;
+    else if (tier === "big") msg = `💥 BIG WIN! ${payout} ${theme.currency}! 💥`;
+    setMessage(msg);
+    if (soundOn) {
+      if (payout > 0) audioRef.current?.win();
+      else audioRef.current?.miss();
+      if (free > 0 || freeJar) audioRef.current?.bonus();
+    }
+    setSpinning(false);
+    // Autospin continuation
+    if (autoSpin && (free === 0 || !stopOnFeature) && !freeJar) {
+      setTimeout(() => {
+        if (autoSpin) spin();
+      }, turbo ? 400 : 900);
+    } else if (autoSpin && (free > 0 || freeJar) && stopOnFeature) {
+      setAutoSpin(false);
+    }
+  }
+
   function spin() {
     if (spinning || (spins + bonusSpins) <= 0) return;
     if (soundOn) audioRef.current?.spin();
     setSpinning(true);
+    setWinTier(null);
+    setScreenShake(false);
     if (bonusSpins > 0) setBonusSpins((n) => n - 1);
     else setSpins((n) => n - 1);
     setMessage("THE REELS ARE IN MOTION…");
 
-    // Build long strips that end with the final 4 symbols.
-    // Animation will scroll so those final symbols land in the viewport.
     const hot = pickHot();
     const finalGrid = Array.from({ length: 5 }, () => Array.from({ length: 4 }, () => randomSymbol(hot)));
+    // Anticipation: 2+ scatters in first 3 reels
+    let earlyScatters = 0;
+    for (let r = 0; r < 3; r++) {
+      for (const cell of finalGrid[r]) {
+        if (cell?.role === "FREESPIN" || cell?.type === "scatter") earlyScatters++;
+      }
+    }
+    const willAnticipate = earlyScatters >= 2;
+    setAnticipation(willAnticipate);
+
     const leadCount = 36;
     const strips = finalGrid.map((finalReel) => {
       const lead = Array.from({ length: leadCount }, () => randomSymbol(hot));
@@ -72,58 +188,26 @@ export function ReelGame({ theme }) {
     });
     setSpinStrips(strips);
 
-    window.setTimeout(() => {
+    const baseDuration = turbo ? 1200 : 3400;
+    const duration = willAnticipate ? baseDuration + 1800 : baseDuration;
+    spinTimeoutRef.current = window.setTimeout(() => {
       const result = evaluateDemo(finalGrid, symbols);
-      const wins = result.wins || [];
-      const payout = wins.reduce((sum, win) => sum + win.reward, 0);
-      const free = result.freeSpinsAwarded || 0;
-      const freeJar = result.freeJar || false;
-      setGrid(finalGrid);
-      setSpinStrips(null);
-      setLastWins(wins);
-      const hasWildInWin = wins.some((w) => w.positions?.some((p) => {
-        const cell = finalGrid?.[p.reel]?.[p.row];
-        return cell?.role === "WILD" || cell?.type === "wild";
-      }));
-      const videoFor = {
-        ruch: ["/assets/videos/ruch-win.mp4", 6000],
-        fonk: ["/assets/videos/fonk-win.mp4", 8000],
-        dinny: ["/assets/videos/dinny-win.mp4", 6000],
-        nonna: ["/assets/videos/nonna-win.mp4", 8000],
-        erv: ["/assets/videos/erv-win.mp4", 8000],
-        ipo: ["/assets/videos/ipo-win.mp4", 10000],
-        "cranberry-hibiscus": ["/assets/videos/cranberry-hibiscus-win.mp4", 10000],
-        papaya: ["/assets/videos/papaya-win.mp4", 10000],
-        lilikoi: ["/assets/videos/lilikoi-win.mp4", 10000],
-        "aloe-vera": ["/assets/videos/aloe-vera-win.mp4", 10000],
-        spearmint: ["/assets/videos/spearmint-win.mp4", 10000],
-        "ice-cream-bean": ["/assets/videos/ice-cream-bean-win.mp4", 10000],
-      };
-      const charWin = wins.find((w) => videoFor[w.symbol?.id]);
-      const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
-      if (hasWildInWin) {
-        setWinVideo("/assets/videos/wild-win.mp4");
-      } else if (result.freeSpinsAwarded > 0) {
-        setWinVideo("/assets/videos/freespins-win.mp4");
-      } else if (charVideo) {
-        setWinVideo(charVideo[0]);
-      } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
-        setWinVideo("/assets/videos/dontbesad-win.mp4");
-      }
-      setCredits((n) => n + payout);
-      if (free > 0) setBonusSpins((n) => n + free);
-      setTotalSpins((n) => n + 1);
-      let msg = payout ? `NICE! ${payout} ${theme.currency} DEMO CREDITS` : "NO MATCH THIS TIME — SPIN AGAIN!";
-      if (free > 0) msg += `  +${free} FREE SPINS!`;
-      if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
-      setMessage(msg);
-      if (soundOn) {
-        if (payout > 0) audioRef.current?.win();
-        else audioRef.current?.miss();
-        if (free > 0 || freeJar) audioRef.current?.bonus();
-      }
-      setSpinning(false);
-    }, 3400);
+      finishSpin(finalGrid, result);
+    }, duration);
+  }
+
+  function slamStop() {
+    if (!spinning || !spinTimeoutRef.current) return;
+    clearTimeout(spinTimeoutRef.current);
+    spinTimeoutRef.current = null;
+    // Immediately resolve with current final grid (already generated)
+    // We need the finalGrid — store it in a ref for slam-stop
+    // For simplicity, re-evaluate from the strips' final 4 symbols
+    if (spinStrips) {
+      const finalGrid = spinStrips.map((strip) => strip.slice(-4));
+      const result = evaluateDemo(finalGrid, symbols);
+      finishSpin(finalGrid, result);
+    }
   }
 
   function earnDemoSpin() {
@@ -141,7 +225,7 @@ export function ReelGame({ theme }) {
           <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} onError={() => setShowIntro(false)} />
         </div>
       )}
-    <main className="app-shell">
+    <main className={`app-shell ${screenShake ? "screen-shake" : ""} ${winTier ? `win-${winTier}` : ""}`}>
       <header className="topbar">
         <div className="brand-mark"><span className="paw">✿</span></div>
         <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
@@ -149,21 +233,21 @@ export function ReelGame({ theme }) {
         </button>
       </header>
 
-
       <section className="hero">
         <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
       </section>
 
       <section className="machine-panel">
-        <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
+        <div className={`reel-frame ${spinning ? "is-spinning" : ""} ${anticipation ? "is-anticipating" : ""} ${turbo ? "is-turbo" : ""}`}>
           <div className="reel-grid" aria-label="Five reels, four rows">
             {grid.map((reel, reelIndex) => (
               <div className="reel-column" key={reelIndex}>
                 <div
-                  className={`reel-strip ${spinning ? "landing" : ""}`}
+                  className={`reel-strip ${spinning ? "landing" : ""} ${anticipation && reelIndex >= 3 ? "anticipate" : ""}`}
                   style={{
-                    animationDelay: `${reelIndex * 80}ms`,
+                    animationDelay: `${reelIndex * (turbo ? 30 : 80)}ms`,
                     "--lead": "36",
+                    "--spin-duration": turbo ? "1.1s" : "3s",
                   }}
                 >
                   {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
@@ -176,21 +260,43 @@ export function ReelGame({ theme }) {
             ))}
           </div>
           <div className="reel-glow" />
+          {anticipation && spinning && <div className="anticipation-banner">ANTICIPATION…</div>}
         </div>
         <div className="machine-footnote">Win: 3, 4, or 5 in a row — horizontal or vertical.</div>
 
-        
         {winVideo && (
           <div className="win-video-overlay" onClick={() => setWinVideo(null)}>
             <video src={winVideo} autoPlay playsInline onPlaying={(e) => e.target.parentElement.classList.add("ready")} onEnded={() => setWinVideo(null)} />
           </div>
         )}
+        {winTier && (
+          <div className={`win-tier-banner tier-${winTier}`}>
+            {winTier === "mega" ? "MEGA WIN" : winTier === "big" ? "BIG WIN" : "WIN"}
+          </div>
+        )}
         <div className="message-bar">{message}</div>
         <div className="control-row">
-          <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-            <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
+          <button
+            className="spin-button"
+            onClick={spinning ? slamStop : spin}
+            disabled={!spinning && (spins + bonusSpins) <= 0}
+          >
+            <span>{spinning ? "STOP" : "SPIN"}</span>
+            <small>{spins + bonusSpins} SPINS AVAILABLE</small>
           </button>
-          <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
+          <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{displayedCredits.toLocaleString()}</strong></div>
+        </div>
+        <div className="mode-row">
+          <button className={`mode-btn ${turbo ? "active" : ""}`} onClick={() => setTurbo((t) => !t)} type="button">
+            ⚡ TURBO
+          </button>
+          <button className={`mode-btn ${autoSpin ? "active" : ""}`} onClick={() => setAutoSpin((a) => !a)} type="button">
+            ▶ AUTO
+          </button>
+          <label className="stop-on-feature">
+            <input type="checkbox" checked={stopOnFeature} onChange={(e) => setStopOnFeature(e.target.checked)} />
+            Stop on feature
+          </label>
         </div>
         <div className="stats-row">
           <div><span>DAILY SPINS</span><strong>{spins}</strong></div>
