@@ -125,6 +125,8 @@ button { font: inherit; }
   min-width: 0;
   position: relative;
   overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   border-radius: 9px;
   background: #fff;
   box-shadow: inset 0 0 0 1px #e6b3c9;
@@ -144,8 +146,14 @@ button { font: inherit; }
   min-height: 0;
   aspect-ratio: auto;
 }
+.reel-strip {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
 .reel-strip.landing {
   animation: reelLand 3s cubic-bezier(.12,.72,.16,1) forwards;
+  will-change: transform;
 }
 @keyframes reelLand {
   from { transform: translateY(0); }
