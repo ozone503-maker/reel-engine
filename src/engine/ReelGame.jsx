@@ -21,6 +21,7 @@ export function ReelGame({ theme }) {
   const [credits, setCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
   const [winVideo, setWinVideo] = useState(null);
+  const [showIntro, setShowIntro] = useState(true);
   const [spinning, setSpinning] = useState(false);
   const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
@@ -123,6 +124,11 @@ export function ReelGame({ theme }) {
   const botanicals = symbols.filter((s) => s.type === "botanical");
 
   return (
+      {showIntro && (
+        <div className="win-video-overlay" onClick={() => setShowIntro(false)}>
+          <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} />
+        </div>
+      )}
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-mark"><span className="paw">✿</span></div>
@@ -185,6 +191,11 @@ export function ReelGame({ theme }) {
           {symbols.filter(s => s.type !== "wild" && s.type !== "scatter").map((symbol) => {
             const pay = PAYTABLE[symbol.id] || { 3: 5, 4: 12, 5: 30 };
             return (
+      {showIntro && (
+        <div className="win-video-overlay" onClick={() => setShowIntro(false)}>
+          <video src="/assets/videos/intro.mp4" autoPlay playsInline onEnded={() => setShowIntro(false)} />
+        </div>
+      )}
               <div className="paytable-row" key={symbol.id}>
                 <SymbolTile symbol={symbol} small />
                 <div className="paytable-values">
