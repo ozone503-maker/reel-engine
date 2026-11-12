@@ -1,7 +1,8 @@
 /**
  * Horizontal and vertical wins.
  * 3, 4, or 5 identical symbols in a straight row or column.
- * WILD substitutes. Free spins are scatters.
+ * WILD substitutes. Free spins are scatters (4+ anywhere).
+ * Jar prize: 3+ jars anywhere.
  * 3+ consecutive WILDs also pay.
  */
 
@@ -50,13 +51,15 @@ export function evaluateDemo(grid, symbols) {
         else break;
       }
       if (run >= 3) {
-        const key = `h-${first.id}-${row}-${start}`;
+        const runStart = start;
+        start += run - 1; // pay the longest run once, not its 4- and 3-long tails too
+        const key = `h-${first.id}-${row}-${runStart}`;
         if (seen.has(key)) continue;
         seen.add(key);
         const symbol = symbols.find((s) => s.id === first.id);
         const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
         const positions = [];
-        for (let r = 0; r < run; r++) positions.push({ reel: start + r, row });
+        for (let r = 0; r < run; r++) positions.push({ reel: runStart + r, row });
         wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "horizontal", positions });
       }
     }
@@ -98,13 +101,15 @@ export function evaluateDemo(grid, symbols) {
         else break;
       }
       if (run >= 3) {
-        const key = `v-${first.id}-${reel}-${start}`;
+        const runStart = start;
+        start += run - 1;
+        const key = `v-${first.id}-${reel}-${runStart}`;
         if (seen.has(key)) continue;
         seen.add(key);
         const symbol = symbols.find((s) => s.id === first.id);
         const pay = PAYTABLE[first.id] || { 3: 5, 4: 12, 5: 30 };
         const positions = [];
-        for (let r = 0; r < run; r++) positions.push({ reel, row: start + r });
+        for (let r = 0; r < run; r++) positions.push({ reel, row: runStart + r });
         wins.push({ symbol, count: run, reward: pay[run] || pay[3], direction: "vertical", positions });
       }
     }
@@ -142,6 +147,8 @@ export function evaluateDemo(grid, symbols) {
     }
   }
   const freeSpinsAwarded = freeSpinCount >= 5 ? 10 : freeSpinCount >= 4 ? 6 : 0;
-  const jarWin = wins.find((w) => w.symbol?.id === "jar" && w.count === 5);
-  return { wins, freeSpinsAwarded, freeJar: !!jarWin };
+  // Jar prize: 3 or more jars anywhere on the grid
+  let jarCount = 0;
+  for (const reel of grid) for (const cell of reel) if (cell?.id === "jar") jarCount++;
+  return { wins, freeSpinsAwarded, freeJar: jarCount >= 3 };
 }
