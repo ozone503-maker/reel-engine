@@ -345,6 +345,4 @@ body {
   border-radius: 16px;
   background: transparent;
 }
-.win-video-overlay video:not([data-ready]) {
-  opacity: 0;
-}
+

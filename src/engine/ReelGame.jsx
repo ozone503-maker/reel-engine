@@ -166,7 +166,7 @@ export function ReelGame({ theme }) {
         
         {winVideo && (
           <div className="win-video-overlay" onClick={() => setWinVideo(null)}>
-            <video src={winVideo} autoPlay playsInline onCanPlay={(e) => e.target.setAttribute("data-ready", "1")} />
+            <video src={winVideo} autoPlay playsInline />
           </div>
         )}
         <div className="message-bar">{message}</div>
