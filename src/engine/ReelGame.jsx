@@ -135,6 +135,11 @@ export function ReelGame({ theme }) {
         <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
       </section>
 
+            <div className="character-banner">
+        <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
+        <div className="logo-text">FRUITY<br/>PUPPY</div>
+        <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
+      </div>
       <section className="machine-panel">
         <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
           <div className="reel-grid" aria-label="Five reels, four rows">

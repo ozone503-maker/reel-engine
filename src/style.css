@@ -389,3 +389,28 @@ body {
 .wallet-card, .stats-row div { background: #1a3a6a; border: 2px solid #5cf; border-radius: 10px; color: #fff; }
 .earn-button { display: none; }
 .message-bar { background: #1a3a6a; border: 2px solid #5cf; color: #fff; }
+
+.character-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  background: linear-gradient(180deg, #2a6aaa, #1a4a8a);
+  border-radius: 16px 16px 0 0;
+  margin-bottom: -4px;
+}
+.character-banner img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid #5cf;
+  object-fit: cover;
+}
+.logo-text {
+  font: 900 28px Orbitron;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 10px #f0f, 0 0 20px #5cf;
+  line-height: 1.1;
+}
