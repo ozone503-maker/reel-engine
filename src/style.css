@@ -333,16 +333,24 @@ body {
 .win-video-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 50;
+  pointer-events: none;
+}
+.win-video-overlay.ready {
+  background: rgba(0,0,0,0.6);
+  pointer-events: auto;
 }
 .win-video-overlay video {
   max-width: 90vw;
   max-height: 80vh;
   border-radius: 16px;
-  background: transparent;
+  opacity: 0;
+}
+.win-video-overlay.ready video {
+  opacity: 1;
 }
 
