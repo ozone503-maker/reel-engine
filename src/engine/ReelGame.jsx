@@ -15,7 +15,7 @@ export function ReelGame({ theme }) {
       const wild = symbols.find((s) => s.type === "wild");
       if (wild) return wild;
     }
-    if (Math.random() < 0.65 && hot?.length) return hot[Math.floor(Math.random() * hot.length)];
+    if (Math.random() < 0.75 && hot?.length) return hot[Math.floor(Math.random() * hot.length)];
     return regulars[Math.floor(Math.random() * regulars.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
