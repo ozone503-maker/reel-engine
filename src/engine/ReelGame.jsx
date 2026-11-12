@@ -21,8 +21,7 @@ export function ReelGame({ theme }) {
   const [credits, setCredits] = useState(0);
   const [message, setMessage] = useState("YOUR NEXT SPIN STARTS HERE");
   const [winVideo, setWinVideo] = useState(null);
-  const [showIntro, setShowIntro] = useState(true);
-  useMemo(() => { const t = setTimeout(() => setShowIntro(false), 9000); return () => clearTimeout(t); }, []);
+  const [showIntro, setShowIntro] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
@@ -103,7 +102,7 @@ export function ReelGame({ theme }) {
         setTimeout(() => setWinVideo(null), 10000);
       } else if (wins.length === 0 && !result.freeSpinsAwarded) {
         setWinVideo("/assets/videos/dontbesad-win.mp4");
-        setTimeout(() => setWinVideo(null), 7000);
+        setTimeout(() => setWinVideo(null), 7500);
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
