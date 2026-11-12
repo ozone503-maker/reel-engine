@@ -4,31 +4,29 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
-  const randomSymbol = () => {
-    if (Math.random() < 0.008) {
+  const regulars = symbols.filter((s) => s.type === "character" || s.type === "botanical" || s.type === "token");
+  const pickHot = () => {
+    const shuffled = [...regulars].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 4);
+  };
+  const randomSymbol = (hot) => {
+    if (Math.random() < 0.006) {
       const jar = symbols.find((s) => s.id === "jar");
       if (jar) return jar;
     }
-    if (Math.random() < 0.04) {
+    if (Math.random() < 0.035) {
       const wild = symbols.find((s) => s.type === "wild");
       if (wild) return wild;
     }
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.04) {
       const free = symbols.find((s) => s.type === "scatter");
       if (free) return free;
     }
-    // Characters land more often so runs form without flooding the board
-    const roll = Math.random();
-    if (roll < 0.55) {
-      const chars = symbols.filter((s) => s.type === "character");
-      return chars[Math.floor(Math.random() * chars.length)];
+    // 70% of cells come from the 4 hot symbols this spin
+    if (Math.random() < 0.7 && hot?.length) {
+      return hot[Math.floor(Math.random() * hot.length)];
     }
-    if (roll < 0.85) {
-      const bots = symbols.filter((s) => s.type === "botanical");
-      return bots[Math.floor(Math.random() * bots.length)];
-    }
-    const kdu = symbols.find((s) => s.type === "token");
-    return kdu || symbols[0];
+    return regulars[Math.floor(Math.random() * regulars.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
@@ -54,10 +52,11 @@ export function ReelGame({ theme }) {
 
     // Build long strips that end with the final 4 symbols.
     // Animation will scroll so those final symbols land in the viewport.
-    const finalGrid = makeGrid();
+    const hot = pickHot();
+    const finalGrid = Array.from({ length: 5 }, () => Array.from({ length: 4 }, () => randomSymbol(hot)));
     const leadCount = 36;
     const strips = finalGrid.map((finalReel) => {
-      const lead = Array.from({ length: leadCount }, randomSymbol);
+      const lead = Array.from({ length: leadCount }, () => randomSymbol(hot));
       return [...lead, ...finalReel];
     });
     setSpinStrips(strips);
