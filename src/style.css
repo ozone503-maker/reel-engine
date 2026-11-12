@@ -368,3 +368,18 @@ body {
 .topbar { padding: 2px 2px 4px; border: none; }
 .hero { padding: 2px 0 4px !important; }
 .app-shell { padding-top: 0 !important; }
+
+html, body { height: 100%; overflow: hidden; }
+.app-shell { height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; padding: 0; }
+.topbar { padding: 2px 4px; }
+.hero { padding: 0 !important; }
+.hero-tagline { font-size: 13px; margin: 2px 0; }
+.machine-panel { flex: 1; display: flex; flex-direction: column; padding: 6px; margin: 0; }
+.reel-frame { flex: 1; display: flex; }
+.reel-grid { flex: 1; }
+.symbol-tile { min-height: 0; }
+.control-row { margin-top: 6px; }
+.stats-row { margin-top: 6px; }
+.earn-button { margin: 6px auto 0; padding: 6px 12px; }
+.win-list { display: none; }
+.message-bar { padding: 6px; min-height: 28px; }
