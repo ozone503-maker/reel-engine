@@ -7,16 +7,20 @@ export function ReelGame({ theme }) {
   const symbols = theme.symbols;
   const regulars = symbols.filter((s) => s.type === "character" || s.type === "botanical");
   const pickHot = () => [...regulars].sort(() => Math.random() - 0.5).slice(0, 5);
+  // Odds per cell. Tune these to change how often each thing happens.
+  const ODDS = { jar: 0.0045, freespin: 0.055, kdu: 0.03, wild: 0.03, hot: 0.55 };
   const randomSymbol = (hot) => {
-    if (Math.random() < 0.006) {
-      const jar = symbols.find((s) => s.id === "jar");
-      if (jar) return jar;
+    for (const id of ["jar", "freespin", "kdu"]) {
+      if (Math.random() < ODDS[id]) {
+        const sym = symbols.find((s) => s.id === id);
+        if (sym) return sym;
+      }
     }
-    if (Math.random() < 0.03) {
+    if (Math.random() < ODDS.wild) {
       const wild = symbols.find((s) => s.type === "wild");
       if (wild) return wild;
     }
-    if (Math.random() < 0.75 && hot?.length) return hot[Math.floor(Math.random() * hot.length)];
+    if (Math.random() < ODDS.hot && hot?.length) return hot[Math.floor(Math.random() * hot.length)];
     return regulars[Math.floor(Math.random() * regulars.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
@@ -194,7 +198,7 @@ export function ReelGame({ theme }) {
           <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
         </div>
         <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
-        {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
+        {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w, i) => <div key={`${w.symbol.id}-${i}`}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
       </section>
 
       <section className="paytable">
@@ -214,7 +218,7 @@ export function ReelGame({ theme }) {
             );
           })}
         </div>
-        <div className="paytable-note">Wins are horizontal only. 3, 4, or 5 matching symbols in a straight row. Storm Shadow is WILD. Free Spin symbols award free spins.</div>
+        <div className="paytable-note">3, 4, or 5 matching symbols in a straight row or column. Storm Shadow is WILD. 4 Free Spin symbols anywhere award 6 free spins, 5 or more award 10. 3 Jars anywhere wins a jar of Fruity Puppy.</div>
       </section>
 
       <section className="symbol-library">
