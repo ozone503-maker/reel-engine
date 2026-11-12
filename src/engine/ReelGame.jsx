@@ -80,10 +80,7 @@ export function ReelGame({ theme }) {
       };
       const charWin = wins.find((w) => videoFor[w.symbol?.id]);
       const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
-      if (hasWildInWin && charVideo) {
-        setWinVideo("/assets/videos/wild-win.mp4");
-        window._nextVideo = charVideo[0];
-      } else if (hasWildInWin) {
+      if (hasWildInWin) {
         setWinVideo("/assets/videos/wild-win.mp4");
       } else if (result.freeSpinsAwarded > 0) {
         setWinVideo("/assets/videos/freespins-win.mp4");
@@ -156,10 +153,7 @@ export function ReelGame({ theme }) {
         
         {winVideo && (
           <div className="win-video-overlay" onClick={() => setWinVideo(null)}>
-            <video src={winVideo} autoPlay playsInline onPlaying={(e) => e.target.parentElement.classList.add("ready")} onEnded={() => {
-      if (window._nextVideo) { setWinVideo(window._nextVideo); window._nextVideo = null; }
-      else setWinVideo(null);
-    }} />
+            <video src={winVideo} autoPlay playsInline onPlaying={(e) => e.target.parentElement.classList.add("ready")} onEnded={() => setWinVideo(null)} />
           </div>
         )}
         <div className="message-bar">{message}</div>
