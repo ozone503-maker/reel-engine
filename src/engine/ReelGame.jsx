@@ -126,6 +126,9 @@ export function ReelGame({ theme }) {
         </div>
       )}
     <main className="app-shell">
+      <header className="topbar">
+        <div className="brand-mark"><span className="paw">✿</span></div>
+      </header>
 
 
       <section className="hero">
