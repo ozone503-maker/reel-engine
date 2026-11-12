@@ -136,13 +136,15 @@ export function ReelGame({ theme }) {
       </section>
 
             <section className="character-banner" aria-label="Fruity Puppy character lineup">
-        <div className="character-lineup">
-          <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
-          <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
-          <img src="/assets/symbols/characters/erv.jpg" alt="Erv" />
-          <img src="/assets/symbols/characters/nonna.jpg" alt="Nonna" />
-          <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
-          <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
+        <div className="marquee-stage">
+          <div className="character-lineup">
+            <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
+            <img src="/assets/symbols/characters/erv.jpg" alt="Erv" />
+            <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
+            <img src="/assets/symbols/characters/nonna.jpg" alt="Nonna" />
+            <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
+            <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
+          </div>
         </div>
         <div className="brand-lockup">
           <div className="logo-text">FRUITY PUPPY</div>
