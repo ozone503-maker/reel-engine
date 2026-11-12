@@ -44,3 +44,41 @@ This is a front-end demonstration only. It does **not** issue, transfer, or veri
 ## Releases
 
 - **v0.1.0-fruity-puppy** — First verified Fruity Puppy theme. Engine extracted, 12 approved assets wired, production build and visual verification passed.
+
+
+## Reel animation (locked)
+
+The spin animation is working. Do not change these values without testing.
+
+**How it works:**
+- Each reel builds a strip of 36 lead symbols + 4 final symbols.
+- CSS animation `reelLand` translates the strip up by **2592px** (36 tiles × 72px).
+- The reel column is clipped to **280px** height with `overflow: hidden`, showing only 4 rows.
+- Tiles are **66px** tall with a **6px** gap (72px pitch).
+
+**Key CSS** (`src/style.css`):
+```css
+.reel-column {
+  height: 280px;
+  overflow: hidden;
+}
+.reel-strip .symbol-tile {
+  height: 66px;
+  flex: 0 0 66px;
+}
+.reel-strip.landing {
+  animation: reelLand 3s linear forwards;
+}
+@keyframes reelLand {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2592px); }
+}
+```
+
+**If the reels break:**
+- Cells go blank → animation distance is wrong. Keep it at -2592px.
+- Cells don't move → animation is disabled. Re-enable `reelLand`.
+- Too many rows show → reel-column height or overflow is missing.
+- Cells are wide → tile height must stay 66px with aspect-ratio 1/1.
+
+Do not change the lead count (36), tile height (66px), or translation (-2592px) without recalculating and testing.
