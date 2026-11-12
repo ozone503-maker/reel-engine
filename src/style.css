@@ -414,3 +414,42 @@ body {
   text-shadow: 0 0 10px #f0f, 0 0 20px #5cf;
   line-height: 1.1;
 }
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #2a6aaa, #1a4a8a);
+  border: 3px solid #5cf;
+  border-radius: 16px;
+  padding: 8px 12px;
+  margin-top: 10px;
+}
+.bar-credits, .bar-win {
+  background: #0a2a5a;
+  border: 2px solid #5cf;
+  border-radius: 10px;
+  padding: 6px 10px;
+  text-align: center;
+  min-width: 70px;
+}
+.bar-credits span, .bar-win span { font-size: 8px; color: #8cf; display: block; }
+.bar-credits strong, .bar-win strong { font: 800 16px Orbitron; color: #fff; }
+.bar-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid #5cf;
+  background: #1a4a8a;
+  color: #fff;
+  font-size: 16px;
+}
+.spin-button {
+  width: 70px !important; height: 70px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, #f6f, #c0f) !important;
+  border: 3px solid #fff !important;
+  box-shadow: 0 0 25px #f0f !important;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.spin-button span { font-size: 20px; }
+.spin-button small { font-size: 9px; }
