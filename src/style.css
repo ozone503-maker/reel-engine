@@ -345,9 +345,10 @@ body {
   pointer-events: auto;
 }
 .win-video-overlay video {
-  max-width: 90vw;
-  max-height: 80vh;
+  max-width: 85vw;
+  max-height: 70vh;
   border-radius: 16px;
+  object-fit: contain;
   opacity: 0;
 }
 .win-video-overlay.ready video {
