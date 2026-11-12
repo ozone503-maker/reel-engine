@@ -394,3 +394,13 @@ body {
   flex: none !important;
 }
 .reel-strip .symbol-tile img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }
+
+.reel-column {
+  height: 280px !important;
+  overflow: hidden !important;
+}
+.reel-strip .symbol-tile {
+  height: 66px !important;
+  flex: 0 0 66px !important;
+  aspect-ratio: 1/1 !important;
+}
