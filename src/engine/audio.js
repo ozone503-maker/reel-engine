@@ -154,5 +154,6 @@ export function createGameAudio() {
       tone(1320,t+0.12,0.22,"sine",0.055);
     }
   }
-\n  return {start,stop,click,spin,reelStop,win,bonus,miss,wild,jar,freeSpins,symbolCue,destroy(){stop();if(ctx&&ctx.state!=="closed")ctx.close();}};
+
+  return {start,stop,click,spin,reelStop,win,bonus,miss,wild,jar,freeSpins,symbolCue,destroy(){stop();if(ctx&&ctx.state!=="closed")ctx.close();}};
 }
