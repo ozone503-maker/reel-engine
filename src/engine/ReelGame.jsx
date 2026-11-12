@@ -5,12 +5,23 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
   const randomSymbol = () => {
-    // Jar is super rare (~1.5% chance per cell)
-    if (Math.random() < 0.015) {
+    // Jar is super rare
+    if (Math.random() < 0.008) {
       const jar = symbols.find((s) => s.id === "jar");
       if (jar) return jar;
     }
-    const pool = symbols.filter((s) => s.id !== "jar");
+    // Wilds appear more often so they help complete runs
+    if (Math.random() < 0.12) {
+      const wild = symbols.find((s) => s.type === "wild");
+      if (wild) return wild;
+    }
+    // Free spins are less common than regular symbols
+    if (Math.random() < 0.06) {
+      const free = symbols.find((s) => s.type === "scatter");
+      if (free) return free;
+    }
+    // Regular pool is just characters + botanicals + kudoken so matches happen
+    const pool = symbols.filter((s) => s.type === "character" || s.type === "botanical" || s.type === "token");
     return pool[Math.floor(Math.random() * pool.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
