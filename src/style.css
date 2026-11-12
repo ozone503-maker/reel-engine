@@ -105,7 +105,7 @@ footer{display:flex;justify-content:space-between;border-top:1px solid #ffffff1b
   height: auto;
 }
 .reel-strip.landing {
-  animation: reelLand 3.2s cubic-bezier(.12,.75,.2,1) forwards;
+  /* animation disabled - was scrolling cells off screen */
 }
 @keyframes reelLand {
   from { transform: translateY(0); }
