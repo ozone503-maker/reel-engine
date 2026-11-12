@@ -57,48 +57,37 @@ export function ReelGame({ theme }) {
         const cell = finalGrid?.[p.reel]?.[p.row];
         return cell?.role === "WILD" || cell?.type === "wild";
       }));
-      if (hasWildInWin) {
+      const videoFor = {
+        ruch: ["/assets/videos/ruch-win.mp4", 6000],
+        fonk: ["/assets/videos/fonk-win.mp4", 8000],
+        dinny: ["/assets/videos/dinny-win.mp4", 6000],
+        nonna: ["/assets/videos/nonna-win.mp4", 8000],
+        erv: ["/assets/videos/erv-win.mp4", 8000],
+        ipo: ["/assets/videos/ipo-win.mp4", 10000],
+        "cranberry-hibiscus": ["/assets/videos/cranberry-hibiscus-win.mp4", 10000],
+        papaya: ["/assets/videos/papaya-win.mp4", 10000],
+        lilikoi: ["/assets/videos/lilikoi-win.mp4", 10000],
+        "aloe-vera": ["/assets/videos/aloe-vera-win.mp4", 10000],
+        spearmint: ["/assets/videos/spearmint-win.mp4", 10000],
+        "ice-cream-bean": ["/assets/videos/ice-cream-bean-win.mp4", 10000],
+      };
+      const charWin = wins.find((w) => videoFor[w.symbol?.id]);
+      const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
+      if (hasWildInWin && charVideo) {
+        setWinVideo("/assets/videos/wild-win.mp4");
+        setTimeout(() => {
+          setWinVideo(charVideo[0]);
+          setTimeout(() => setWinVideo(null), charVideo[1]);
+        }, 10000);
+      } else if (hasWildInWin) {
         setWinVideo("/assets/videos/wild-win.mp4");
         setTimeout(() => setWinVideo(null), 10000);
       } else if (result.freeSpinsAwarded > 0) {
         setWinVideo("/assets/videos/freespins-win.mp4");
         setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "ruch")) {
-        setWinVideo("/assets/videos/ruch-win.mp4");
-        setTimeout(() => setWinVideo(null), 6000);
-      } else if (wins.some((w) => w.symbol?.id === "fonk")) {
-        setWinVideo("/assets/videos/fonk-win.mp4");
-        setTimeout(() => setWinVideo(null), 8000);
-      } else if (wins.some((w) => w.symbol?.id === "dinny")) {
-        setWinVideo("/assets/videos/dinny-win.mp4");
-        setTimeout(() => setWinVideo(null), 6000);
-      } else if (wins.some((w) => w.symbol?.id === "nonna")) {
-        setWinVideo("/assets/videos/nonna-win.mp4");
-        setTimeout(() => setWinVideo(null), 8000);
-      } else if (wins.some((w) => w.symbol?.id === "erv")) {
-        setWinVideo("/assets/videos/erv-win.mp4");
-        setTimeout(() => setWinVideo(null), 8000);
-      } else if (wins.some((w) => w.symbol?.id === "ipo")) {
-        setWinVideo("/assets/videos/ipo-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "cranberry-hibiscus")) {
-        setWinVideo("/assets/videos/cranberry-hibiscus-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "papaya")) {
-        setWinVideo("/assets/videos/papaya-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "lilikoi")) {
-        setWinVideo("/assets/videos/lilikoi-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "aloe-vera")) {
-        setWinVideo("/assets/videos/aloe-vera-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "spearmint")) {
-        setWinVideo("/assets/videos/spearmint-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
-      } else if (wins.some((w) => w.symbol?.id === "ice-cream-bean")) {
-        setWinVideo("/assets/videos/ice-cream-bean-win.mp4");
-        setTimeout(() => setWinVideo(null), 10000);
+      } else if (charVideo) {
+        setWinVideo(charVideo[0]);
+        setTimeout(() => setWinVideo(null), charVideo[1]);
       } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
         setWinVideo("/assets/videos/dontbesad-win.mp4");
         setTimeout(() => setWinVideo(null), 7500);
