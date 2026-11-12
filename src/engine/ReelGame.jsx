@@ -60,6 +60,9 @@ export function ReelGame({ theme }) {
       if (hasWildInWin) {
         setWinVideo("/assets/videos/wild-win.mp4");
         setTimeout(() => setWinVideo(null), 10000);
+      } else if (result.freeSpinsAwarded > 0) {
+        setWinVideo("/assets/videos/freespins-win.mp4");
+        setTimeout(() => setWinVideo(null), 10000);
       } else if (wins.some((w) => w.symbol?.id === "ruch")) {
         setWinVideo("/assets/videos/ruch-win.mp4");
         setTimeout(() => setWinVideo(null), 6000);
