@@ -5,12 +5,21 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
   const randomSymbol = () => {
-    if (Math.random() < 0.015) {
+    if (Math.random() < 0.008) {
       const jar = symbols.find((s) => s.id === "jar");
       if (jar) return jar;
     }
-    const pool = symbols.filter((s) => s.id !== "jar");
-    return pool[Math.floor(Math.random() * pool.length)];
+    const roll = Math.random();
+    if (roll < 0.5) {
+      const chars = symbols.filter((s) => s.type === "character");
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+    if (roll < 0.8) {
+      const bots = symbols.filter((s) => s.type === "botanical");
+      return bots[Math.floor(Math.random() * bots.length)];
+    }
+    const rest = symbols.filter((s) => s.type === "token" || s.type === "wild" || s.type === "scatter");
+    return rest[Math.floor(Math.random() * rest.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
