@@ -114,5 +114,45 @@ export function createGameAudio() {
   function wild(){if(!ctx||ctx.state!=="running")return;const t=ctx.currentTime+0.01; tone(180,t,0.35,"sawtooth",0.09,sfxGain,1450);sequence([72,79,84],{spacing:0.045,duration:0.2,volume:0.1,type:"triangle"});}
   function jar(){if(!ctx||ctx.state!=="running")return;const t=ctx.currentTime+0.01;sequence([72,76,79,84,88,91,96],{spacing:0.12,duration:0.42,volume:0.19});noise(t+0.3,0.9,0.13,3000);kick(t+0.08,sfxGain,0.5);tone(1320,t+0.7,0.65,"sine",0.12);}
   function freeSpins(){if(!ctx||ctx.state!=="running")return;sequence([67,72,76,79,84],{spacing:0.08,duration:0.22,volume:0.14});for(let i=0;i<4;i++)tone(1200+i*170,ctx.currentTime+0.2+i*0.11,0.09,"sine",0.045);}
-  return {start,stop,click,spin,reelStop,win,bonus,miss,wild,jar,freeSpins,destroy(){stop();if(ctx&&ctx.state!=="closed")ctx.close();}};
+
+  // Signature cues use only the symbols in the Fruity Puppy theme.
+  // Each cue has its own rhythm, register, and synthesis texture.
+  function symbolCue(id) {
+    if(!ctx||ctx.state!=="running")return;
+    const t=ctx.currentTime+0.035;
+    const cues = {
+      ipo: {notes:[84,79,88],gap:0.105,type:"sine",dur:0.24,vol:0.105},
+      ruch: {notes:[67,74,79,74],gap:0.075,type:"triangle",dur:0.13,vol:0.09},
+      erv: {notes:[48,55,60],gap:0.14,type:"sawtooth",dur:0.19,vol:0.075},
+      nonna: {notes:[60,60,72,67],gap:0.09,type:"square",dur:0.11,vol:0.065},
+      fonk: {notes:[72,69,77,84],gap:0.065,type:"sawtooth",dur:0.12,vol:0.07},
+      dinny: {notes:[55,62,67,74],gap:0.12,type:"triangle",dur:0.2,vol:0.085},
+      lilikoi: {notes:[88,84,91],gap:0.09,type:"sine",dur:0.28,vol:0.085},
+      papaya: {notes:[60,67,72],gap:0.12,type:"triangle",dur:0.24,vol:0.09},
+      "cranberry-hibiscus": {notes:[76,79,83,88],gap:0.085,type:"sine",dur:0.25,vol:0.085},
+      "ice-cream-bean": {notes:[72,84,79],gap:0.16,type:"sine",dur:0.34,vol:0.075},
+      spearmint: {notes:[91,96,100],gap:0.075,type:"triangle",dur:0.16,vol:0.075},
+      "aloe-vera": {notes:[64,69,76],gap:0.15,type:"sine",dur:0.3,vol:0.075},
+      kdu: {notes:[60,72,79,84],gap:0.095,type:"square",dur:0.17,vol:0.08},
+      "wild-storm": {notes:[43,55,67,79],gap:0.055,type:"sawtooth",dur:0.15,vol:0.07},
+      freespin: {notes:[67,72,79,84,91],gap:0.07,type:"sine",dur:0.22,vol:0.08},
+      jar: {notes:[72,76,84,91],gap:0.13,type:"sine",dur:0.32,vol:0.08}
+    };
+    const cue=cues[id];
+    if(!cue)return;
+    cue.notes.forEach((note,i)=>{
+      const at=t+i*cue.gap;
+      tone(hz(note),at,cue.dur,cue.type,cue.vol);
+      if(id==="ipo"||id==="lilikoi"||id==="cranberry-hibiscus"||id==="spearmint")
+        tone(hz(note+12),at+0.018,cue.dur*0.62,"sine",cue.vol*0.22);
+      if(id==="ruch"||id==="dinny") noise(at,0.035,cue.vol*0.22,5200);
+    });
+    if(id==="papaya"||id==="lilikoi"||id==="cranberry-hibiscus") {
+      noise(t+0.025,0.12,0.035,2600);
+    }
+    if(id==="kdu") {
+      tone(1320,t+0.12,0.22,"sine",0.055);
+    }
+  }
+\n  return {start,stop,click,spin,reelStop,win,bonus,miss,wild,jar,freeSpins,symbolCue,destroy(){stop();if(ctx&&ctx.state!=="closed")ctx.close();}};
 }
