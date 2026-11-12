@@ -45,6 +45,7 @@ export function ReelGame({ theme }) {
       setSoundOn(false);
     } else {
       await audioRef.current.start();
+      audioRef.current.click();
       setSoundOn(true);
     }
   }
@@ -114,9 +115,11 @@ export function ReelGame({ theme }) {
       if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
       setMessage(msg);
       if (soundOn) {
-        if (payout > 0) audioRef.current?.win();
+        if (freeJar) audioRef.current?.jar();
+        else if (payout > 0) audioRef.current?.win(payout >= 100 ? "big" : "small");
         else audioRef.current?.miss();
-        if (free > 0 || freeJar) audioRef.current?.bonus();
+        if (hasWildInWin) audioRef.current?.wild();
+        if (free > 0) audioRef.current?.freeSpins();
       }
       setSpinning(false);
     }, 3400);
@@ -124,6 +127,7 @@ export function ReelGame({ theme }) {
 
   function earnDemoSpin() {
     setBonusSpins((n) => n + 1);
+    if (soundOn) audioRef.current?.bonus();
     setMessage("BONUS SPIN ADDED — DEMO ONLY");
   }
 
