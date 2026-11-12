@@ -23,7 +23,7 @@ export function ReelGame({ theme }) {
       if (free) return free;
     }
     // 70% of cells come from the 4 hot symbols this spin
-    if (Math.random() < 0.7 && hot?.length) {
+    if (Math.random() < 0.78 && hot?.length) {
       return hot[Math.floor(Math.random() * hot.length)];
     }
     return regulars[Math.floor(Math.random() * regulars.length)];
