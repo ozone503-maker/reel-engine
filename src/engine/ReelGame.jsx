@@ -107,7 +107,7 @@ export function ReelGame({ theme }) {
       if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
       setMessage(msg);
       setSpinning(false);
-    }, 3100);
+    }, 3400);
   }
 
   function earnDemoSpin() {
@@ -135,22 +135,6 @@ export function ReelGame({ theme }) {
         <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
       </section>
 
-            <section className="character-banner" aria-label="Fruity Puppy character lineup">
-        <div className="marquee-stage">
-          <div className="character-lineup">
-            <img src="/assets/symbols/characters/ruch.jpg" alt="Ruch" />
-            <img src="/assets/symbols/characters/erv.jpg" alt="Erv" />
-            <img src="/assets/symbols/characters/ipo.jpg" alt="Ipo" />
-            <img src="/assets/symbols/characters/nonna.jpg" alt="Nonna" />
-            <img src="/assets/symbols/characters/fonk.jpg" alt="Fonk" />
-            <img src="/assets/symbols/characters/dinny.jpg" alt="Dinny" />
-          </div>
-        </div>
-        <div className="brand-lockup">
-          <div className="logo-text">FRUITY PUPPY</div>
-          <div className="brand-subtitle">spin to win kudokens</div>
-        </div>
-      </section>
       <section className="machine-panel">
         <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
           <div className="reel-grid" aria-label="Five reels, four rows">
@@ -183,13 +167,18 @@ export function ReelGame({ theme }) {
           </div>
         )}
         <div className="message-bar">{message}</div>
-        <div className="control-bar">
-          <div className="bar-credits"><span>DEMO CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
+        <div className="control-row">
           <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-            <span>▶</span><small>{spinning ? "..." : "SPIN"}</small>
+            <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
           </button>
-          <div className="bar-win"><span>SPINS</span><strong>{spins + bonusSpins}</strong></div>
+          <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
         </div>
+        <div className="stats-row">
+          <div><span>DAILY SPINS</span><strong>{spins}</strong></div>
+          <div><span>BONUS SPINS</span><strong>{bonusSpins}</strong></div>
+          <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
+        </div>
+        <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
         {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
       </section>
 
