@@ -5,24 +5,30 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
   const randomSymbol = () => {
-    // Jar is super rare
     if (Math.random() < 0.008) {
       const jar = symbols.find((s) => s.id === "jar");
       if (jar) return jar;
     }
-    // Wilds appear more often so they help complete runs
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.04) {
       const wild = symbols.find((s) => s.type === "wild");
       if (wild) return wild;
     }
-    // Free spins are less common than regular symbols
-    if (Math.random() < 0.06) {
+    if (Math.random() < 0.05) {
       const free = symbols.find((s) => s.type === "scatter");
       if (free) return free;
     }
-    // Regular pool is just characters + botanicals + kudoken so matches happen
-    const pool = symbols.filter((s) => s.type === "character" || s.type === "botanical" || s.type === "token");
-    return pool[Math.floor(Math.random() * pool.length)];
+    // Characters land more often so runs form without flooding the board
+    const roll = Math.random();
+    if (roll < 0.55) {
+      const chars = symbols.filter((s) => s.type === "character");
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+    if (roll < 0.85) {
+      const bots = symbols.filter((s) => s.type === "botanical");
+      return bots[Math.floor(Math.random() * bots.length)];
+    }
+    const kdu = symbols.find((s) => s.type === "token");
+    return kdu || symbols[0];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
