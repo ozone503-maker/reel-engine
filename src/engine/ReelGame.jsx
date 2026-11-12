@@ -11,7 +11,7 @@ export function ReelGame({ theme }) {
       if (jar) return jar;
     }
     // Wilds appear more often so they help complete runs
-    if (Math.random() < 0.18) {
+    if (Math.random() < 0.05) {
       const wild = symbols.find((s) => s.type === "wild");
       if (wild) return wild;
     }
