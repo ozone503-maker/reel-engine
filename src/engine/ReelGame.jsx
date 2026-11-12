@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createGameAudio } from "./audio.js";
 import { SymbolTile } from "./SymbolTile.jsx";
 import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
@@ -20,6 +21,8 @@ export function ReelGame({ theme }) {
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
+  const audioRef = useRef(null);
+  const [soundOn, setSoundOn] = useState(false);
   const [grid, setGrid] = useState(makeGrid);
   const [spins, setSpins] = useState(5);
   const [bonusSpins, setBonusSpins] = useState(0);
@@ -33,8 +36,22 @@ export function ReelGame({ theme }) {
   const [totalSpins, setTotalSpins] = useState(0);
   const wins = useMemo(() => lastWins, [lastWins]);
 
+  useEffect(() => () => audioRef.current?.destroy(), []);
+
+  async function toggleSound() {
+    if (!audioRef.current) audioRef.current = createGameAudio();
+    if (soundOn) {
+      audioRef.current.stop();
+      setSoundOn(false);
+    } else {
+      await audioRef.current.start();
+      setSoundOn(true);
+    }
+  }
+
   function spin() {
     if (spinning || (spins + bonusSpins) <= 0) return;
+    if (soundOn) audioRef.current?.spin();
     setSpinning(true);
     if (bonusSpins > 0) setBonusSpins((n) => n - 1);
     else setSpins((n) => n - 1);
@@ -96,6 +113,11 @@ export function ReelGame({ theme }) {
       if (free > 0) msg += `  +${free} FREE SPINS!`;
       if (freeJar) msg = "🎉 FREE JAR OF FRUITY PUPPY! 🎉";
       setMessage(msg);
+      if (soundOn) {
+        if (payout > 0) audioRef.current?.win();
+        else audioRef.current?.miss();
+        if (free > 0 || freeJar) audioRef.current?.bonus();
+      }
       setSpinning(false);
     }, 3400);
   }
@@ -118,6 +140,9 @@ export function ReelGame({ theme }) {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-mark"><span className="paw">✿</span></div>
+        <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
+          <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
+        </button>
       </header>
 
 
