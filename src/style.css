@@ -453,3 +453,29 @@ body {
 }
 .spin-button span { font-size: 20px; }
 .spin-button small { font-size: 9px; }
+
+.paytable, .symbol-library, footer { display: none !important; }
+.character-banner {
+  background: linear-gradient(180deg, #3a8ad0, #1a5aaa);
+  padding: 12px 8px;
+  border-radius: 20px 20px 0 0;
+  border: 3px solid #5cf;
+  border-bottom: none;
+}
+.character-banner img {
+  width: 64px;
+  height: 64px;
+  border: 3px solid #fff;
+  box-shadow: 0 0 12px #5cf;
+}
+.logo-text {
+  font-size: 32px;
+  background: linear-gradient(180deg, #fff, #f0f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+.machine-panel {
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+}
