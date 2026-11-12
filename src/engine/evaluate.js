@@ -4,6 +4,8 @@
  * WILD substitutes. Free spins are scatters (4+ anywhere).
  * Jar prize: 3+ jars anywhere.
  * 3+ consecutive WILDs also pay.
+ *
+ * Cascades: winning symbols are removed, new symbols drop in, multiplier rises.
  */
 
 export const PAYTABLE = {
@@ -151,4 +153,74 @@ export function evaluateDemo(grid, symbols) {
   let jarCount = 0;
   for (const reel of grid) for (const cell of reel) if (cell?.id === "jar") jarCount++;
   return { wins, freeSpinsAwarded, freeJar: jarCount >= 3 };
+}
+
+/**
+ * Run cascades after an initial evaluation.
+ * Removes winning positions, drops new symbols from the top of each reel,
+ * re-evaluates, and multiplies the payout of each successive cascade.
+ * Returns the sequence of steps plus the final grid and totals.
+ */
+export function runCascades(initialGrid, symbols, randomSymbol, maxCascades = 5) {
+  const steps = [];
+  let grid = initialGrid.map((reel) => [...reel]);
+  let multiplier = 1;
+  let totalPayout = 0;
+  let freeSpinsAwarded = 0;
+  let freeJar = false;
+
+  for (let i = 0; i < maxCascades; i++) {
+    const result = evaluateDemo(grid, symbols);
+    const basePayout = result.wins.reduce((sum, w) => sum + w.reward, 0);
+    const stepPayout = basePayout * multiplier;
+
+    if (result.freeSpinsAwarded > freeSpinsAwarded) freeSpinsAwarded = result.freeSpinsAwarded;
+    if (result.freeJar) freeJar = true;
+
+    steps.push({
+      grid: grid.map((reel) => [...reel]),
+      wins: result.wins,
+      multiplier,
+      payout: stepPayout,
+    });
+
+    totalPayout += stepPayout;
+
+    if (result.wins.length === 0) break;
+
+    // Collect all winning positions
+    const remove = new Set();
+    for (const win of result.wins) {
+      for (const p of win.positions || []) {
+        remove.add(`${p.reel},${p.row}`);
+      }
+    }
+
+    // Build new grid: remove winning cells, drop remaining down, fill from top
+    const newGrid = [];
+    for (let reel = 0; reel < 5; reel++) {
+      const kept = [];
+      for (let row = 3; row >= 0; row--) {
+        if (!remove.has(`${reel},${row}`)) {
+          kept.push(grid[reel][row]);
+        }
+      }
+      // kept is bottom-to-top; reverse so index 0 is top
+      kept.reverse();
+      while (kept.length < 4) {
+        kept.unshift(randomSymbol());
+      }
+      newGrid.push(kept.slice(0, 4));
+    }
+    grid = newGrid;
+    multiplier = Math.min(multiplier + 1, 5);
+  }
+
+  return {
+    steps,
+    finalGrid: grid,
+    totalPayout,
+    freeSpinsAwarded,
+    freeJar,
+  };
 }
