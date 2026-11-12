@@ -358,3 +358,25 @@ body {
   opacity: 1;
 }
 
+
+.reel-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+}
+.reel-column {
+  height: auto !important;
+  max-height: none !important;
+}
+.reel-strip .symbol-tile {
+  width: 100% !important;
+  height: 0 !important;
+  padding-bottom: 100% !important;
+  aspect-ratio: unset !important;
+}
+.reel-strip .symbol-tile img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
