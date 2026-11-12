@@ -4,22 +4,19 @@ import { evaluateDemo, PAYTABLE } from "./evaluate.js";
 
 export function ReelGame({ theme }) {
   const symbols = theme.symbols;
-  const randomSymbol = () => {
-    if (Math.random() < 0.008) {
+  const regulars = symbols.filter((s) => s.type === "character" || s.type === "botanical");
+  const pickHot = () => [...regulars].sort(() => Math.random() - 0.5).slice(0, 5);
+  const randomSymbol = (hot) => {
+    if (Math.random() < 0.006) {
       const jar = symbols.find((s) => s.id === "jar");
       if (jar) return jar;
     }
-    const roll = Math.random();
-    if (roll < 0.5) {
-      const chars = symbols.filter((s) => s.type === "character");
-      return chars[Math.floor(Math.random() * chars.length)];
+    if (Math.random() < 0.03) {
+      const wild = symbols.find((s) => s.type === "wild");
+      if (wild) return wild;
     }
-    if (roll < 0.8) {
-      const bots = symbols.filter((s) => s.type === "botanical");
-      return bots[Math.floor(Math.random() * bots.length)];
-    }
-    const rest = symbols.filter((s) => s.type === "token" || s.type === "wild" || s.type === "scatter");
-    return rest[Math.floor(Math.random() * rest.length)];
+    if (Math.random() < 0.65 && hot?.length) return hot[Math.floor(Math.random() * hot.length)];
+    return regulars[Math.floor(Math.random() * regulars.length)];
   };
   const makeGrid = () => Array.from({ length: 5 }, () => Array.from({ length: 4 }, randomSymbol));
 
@@ -45,10 +42,11 @@ export function ReelGame({ theme }) {
 
     // Build long strips that end with the final 4 symbols.
     // Animation will scroll so those final symbols land in the viewport.
-    const finalGrid = makeGrid();
+    const hot = pickHot();
+    const finalGrid = Array.from({ length: 5 }, () => Array.from({ length: 4 }, () => randomSymbol(hot)));
     const leadCount = 36;
     const strips = finalGrid.map((finalReel) => {
-      const lead = Array.from({ length: leadCount }, randomSymbol);
+      const lead = Array.from({ length: leadCount }, () => randomSymbol(hot));
       return [...lead, ...finalReel];
     });
     setSpinStrips(strips);
