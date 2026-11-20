@@ -48,9 +48,17 @@ export function ReelGame({ theme }) {
   const [spinStrips, setSpinStrips] = useState(null);
   const [lastWins, setLastWins] = useState([]);
   const [totalSpins, setTotalSpins] = useState(0);
+  const [plate, setPlate] = useState(null);
   const wins = useMemo(() => lastWins, [lastWins]);
 
   useEffect(() => () => audioRef.current?.destroy(), []);
+
+  useEffect(() => {
+    if (!plate) return;
+    const onKey = (e) => { if (e.key === "Escape") setPlate(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [plate]);
 
   async function toggleSound() {
     if (!audioRef.current) audioRef.current = createGameAudio();
@@ -164,95 +172,164 @@ export function ReelGame({ theme }) {
 
   const characters = symbols.filter((s) => s.type === "character");
   const botanicals = symbols.filter((s) => s.type === "botanical");
+  const isWin = !spinning && wins.length > 0;
+
+  const paytablePanel = (
+    <section className="paytable" id="paytable-panel">
+      <div className="library-heading"><div><span className="section-kicker">PAYTABLE</span><h2>How much each symbol pays</h2></div></div>
+      <div className="paytable-grid">
+        {symbols.filter(s => s.type !== "wild" && s.type !== "scatter").map((symbol) => {
+          const pay = PAYTABLE[symbol.id] || { 3: 5, 4: 12, 5: 30 };
+          return (
+            <div className="paytable-row" key={symbol.id}>
+              <SymbolTile symbol={symbol} small />
+              <div className="paytable-values">
+                <span>3 <b>{pay[3]}</b></span>
+                <span>4 <b>{pay[4]}</b></span>
+                <span>5 <b>{symbol.id === "jar" ? "FREE JAR" : pay[5]}</b></span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="paytable-note">Wins are horizontal or vertical. 3, 4, or 5 matching symbols in a straight row or column. Storm Shadow is WILD. Free Spin symbols award free spins.</div>
+    </section>
+  );
+
+  const lineupPanel = (
+    <section className="symbol-library" id="lineup-panel">
+      <div className="library-heading"><div><span className="section-kicker">THE SYMBOL COLLECTION</span><h2>Meet the lineup</h2></div><span className="count-label">{characters.length + botanicals.length} SYMBOLS</span></div>
+      <h3>THE CHARACTERS</h3>
+      <div className="symbol-roster">{characters.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
+      <h3>THE BOTANICALS</h3>
+      <div className="symbol-roster">{botanicals.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
+    </section>
+  );
 
   return (
     <>
       {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
-    <main className="app-shell">
-      <div className="cabinet">
-      <header className="marquee">
-        <div className="brand-mark"><span className="paw">✿</span></div>
-        <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
-      </header>
+      {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
+    <main className={`arcade-room ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
+      <div className="cab-scene">
+        <div className="cab-side cab-side-left" aria-hidden="true">
+          <div className="side-paint" />
+          <img className="side-hero" src="/assets/symbols/characters/ipo.jpg" alt="" />
+          <img className="side-thumb side-thumb-a" src="/assets/symbols/botanicals/lilikoi.jpg" alt="" />
+          <img className="side-thumb side-thumb-b" src="/assets/symbols/botanicals/papaya.jpg" alt="" />
+        </div>
 
-      <section className="machine-panel">
-        <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
-          <div className="reel-grid" aria-label="Five reels, four rows">
-            {grid.map((reel, reelIndex) => (
-              <div className="reel-column" key={reelIndex}>
-                <div
-                  className={`reel-strip ${spinning ? "landing" : ""}`}
-                  style={{
-                    animationDelay: `${reelIndex * 80}ms`,
-                    "--lead": "36",
-                  }}
-                >
-                  {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
-                    const isWinning = !spinning && wins.some((w) => w.positions?.some((p) => p.reel === reelIndex && p.row === rowIndex));
-                    const isJar = symbol.id === "jar";
-                    return <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} winning={isWinning} isJar={isJar} />;
-                  })}
-                </div>
-              </div>
-            ))}
+        <div className="cab-body">
+          <header className="cab-marquee">
+            <div className="marquee-channel">
+              <div className="brand-mark"><span className="paw">✿</span></div>
+              <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
+            </div>
+          </header>
+
+          <div className="cab-speaker-bar" aria-hidden="true">
+            <span className="speaker" /><span className="speaker" />
           </div>
-          <div className="reel-glow" />
-        </div>
-        <div className="machine-footnote">Win: 3, 4, or 5 in a row — horizontal or vertical.</div>
 
-        
-        {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
-        <div className="message-bar">{message}</div>
-        <div className="control-row">
-          <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
-            <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
-          </button>
-          <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-            <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
-          </button>
-          <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
-        </div>
-        <div className="stats-row">
-          <div><span>DAILY SPINS</span><strong>{spins}</strong></div>
-          <div><span>BONUS SPINS</span><strong>{bonusSpins}</strong></div>
-          <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
-        </div>
-        <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
-        {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
-      </section>
-
-      <div className="cabinet-lower">
-      <section className="paytable">
-        <div className="library-heading"><div><span className="section-kicker">PAYTABLE</span><h2>How much each symbol pays</h2></div></div>
-        <div className="paytable-grid">
-          {symbols.filter(s => s.type !== "wild" && s.type !== "scatter").map((symbol) => {
-            const pay = PAYTABLE[symbol.id] || { 3: 5, 4: 12, 5: 30 };
-            return (
-              <div className="paytable-row" key={symbol.id}>
-                <SymbolTile symbol={symbol} small />
-                <div className="paytable-values">
-                  <span>3 <b>{pay[3]}</b></span>
-                  <span>4 <b>{pay[4]}</b></span>
-                  <span>5 <b>{symbol.id === "jar" ? "FREE JAR" : pay[5]}</b></span>
+          <section className="cab-monitor">
+            <div className="bezel">
+              <img className="bezel-art bezel-art-tl" src="/assets/symbols/characters/ruch.jpg" alt="" />
+              <img className="bezel-art bezel-art-tr" src="/assets/symbols/characters/erv.jpg" alt="" />
+              <img className="bezel-art bezel-art-bl" src="/assets/symbols/botanicals/cranberry-hibiscus.jpg" alt="" />
+              <img className="bezel-art bezel-art-br" src="/assets/symbols/botanicals/spearmint.jpg" alt="" />
+              <div className={`crt ${spinning ? "is-spinning" : ""}`}>
+              <div className="crt-game">
+                <div className="crt-hud">
+                  <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
+                  <div className="stats-row">
+                    <div><span>DAILY SPINS</span><strong>{spins}</strong></div>
+                    <div><span>BONUS SPINS</span><strong>{bonusSpins}</strong></div>
+                    <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
+                  </div>
                 </div>
+                <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
+                  <div className="reel-grid" aria-label="Five reels, four rows">
+                    {grid.map((reel, reelIndex) => (
+                      <div className="reel-column" key={reelIndex}>
+                        <div
+                          className={`reel-strip ${spinning ? "landing" : ""}`}
+                          style={{
+                            animationDelay: `${reelIndex * 80}ms`,
+                            "--lead": "36",
+                          }}
+                        >
+                          {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
+                            const isWinning = !spinning && wins.some((w) => w.positions?.some((p) => p.reel === reelIndex && p.row === rowIndex));
+                            const isJar = symbol.id === "jar";
+                            return <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} winning={isWinning} isJar={isJar} />;
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="reel-glow" />
+                </div>
+                <div className="machine-footnote">Win: 3, 4, or 5 in a row — horizontal or vertical.</div>
+                <div className="message-bar">{message}</div>
+                {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
               </div>
-            );
-          })}
+              </div>
+            </div>
+          </section>
+
+          <div className="control-panel">
+            <div className="panel-overlay">
+              <div className="joystick" aria-hidden="true">
+                <span className="joy-base" />
+                <span className="joy-shaft" />
+                <span className="joy-ball" />
+              </div>
+              <div className="button-bank">
+                <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
+                  <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
+                </button>
+                <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
+                  <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
+                </button>
+                <button className="plate-btn plate-btn-pay" type="button" aria-pressed={plate === "paytable"} onClick={() => setPlate((p) => p === "paytable" ? null : "paytable")}>PAYTABLE</button>
+                <button className="plate-btn plate-btn-lineup" type="button" aria-pressed={plate === "lineup"} onClick={() => setPlate((p) => p === "lineup" ? null : "lineup")}>Meet the lineup</button>
+                <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="coin-door">
+            <div className="coin-mechs" aria-hidden="true">
+              <span className="coin-mech"><i className="coin-slot" /><i className="coin-lamp" /></span>
+              <span className="coin-mech"><i className="coin-slot" /><i className="coin-lamp" /></span>
+            </div>
+            <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
+          </div>
+          <div className="kick-plate" aria-hidden="true" />
         </div>
-        <div className="paytable-note">Wins are horizontal or vertical. 3, 4, or 5 matching symbols in a straight row or column. Storm Shadow is WILD. Free Spin symbols award free spins.</div>
-      </section>
 
-      <section className="symbol-library">
-        <div className="library-heading"><div><span className="section-kicker">THE SYMBOL COLLECTION</span><h2>Meet the lineup</h2></div><span className="count-label">{characters.length + botanicals.length} SYMBOLS</span></div>
-        <h3>THE CHARACTERS</h3>
-        <div className="symbol-roster">{characters.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
-        <h3>THE BOTANICALS</h3>
-        <div className="symbol-roster">{botanicals.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
-      </section>
+        <div className="cab-side cab-side-right" aria-hidden="true">
+          <div className="side-paint" />
+          <img className="side-thumb side-thumb-a" src="/assets/symbols/characters/fonk.jpg" alt="" />
+          <img className="side-thumb side-thumb-b" src="/assets/symbols/characters/nonna.jpg" alt="" />
+          <img className="side-hero" src="/assets/symbols/characters/dinny.jpg" alt="" />
+          <img className="side-thumb side-thumb-c" src="/assets/symbols/characters/erv.jpg" alt="" />
+        </div>
+      </div>
 
-      <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
-      </div>
-      </div>
+      {plate && (
+        <div className="attract-overlay" onClick={() => setPlate(null)}>
+          <div
+            className="attract-screen"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={plate === "paytable" ? "paytable-panel" : "lineup-panel"}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {plate === "paytable" ? paytablePanel : lineupPanel}
+          </div>
+        </div>
+      )}
     </main>
     </>
   );
