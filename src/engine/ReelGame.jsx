@@ -235,17 +235,17 @@ export function ReelGame({ theme }) {
                 <div className="paytable-values">
                   <span>3 <b>{pay[3]}</b></span>
                   <span>4 <b>{pay[4]}</b></span>
-                  <span>5 <b>{pay[5]}</b></span>
+                  <span>5 <b>{symbol.id === "jar" ? "FREE JAR" : pay[5]}</b></span>
                 </div>
               </div>
             );
           })}
         </div>
-        <div className="paytable-note">Wins are horizontal only. 3, 4, or 5 matching symbols in a straight row. Storm Shadow is WILD. Free Spin symbols award free spins.</div>
+        <div className="paytable-note">Wins are horizontal or vertical. 3, 4, or 5 matching symbols in a straight row or column. Storm Shadow is WILD. Free Spin symbols award free spins.</div>
       </section>
 
       <section className="symbol-library">
-        <div className="library-heading"><div><span className="section-kicker">THE SYMBOL COLLECTION</span><h2>Meet the lineup</h2></div><span className="count-label">{symbols.length} SYMBOLS</span></div>
+        <div className="library-heading"><div><span className="section-kicker">THE SYMBOL COLLECTION</span><h2>Meet the lineup</h2></div><span className="count-label">{characters.length + botanicals.length} SYMBOLS</span></div>
         <h3>THE CHARACTERS</h3>
         <div className="symbol-roster">{characters.map((symbol) => <SymbolTile key={symbol.id} symbol={symbol} small />)}</div>
         <h3>THE BOTANICALS</h3>
