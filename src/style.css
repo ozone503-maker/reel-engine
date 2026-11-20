@@ -12,111 +12,44 @@
   --black-soft: #2a2026;
   --metal: #c5c1b7;
   --hud: #f3e2a4;
+  --arcade-bg: #241820;
+  --arcade-bg-image: none; /* drop art here: url('/assets/cabinet/background.webp') */
   font-family: 'Oswald', system-ui, sans-serif;
   color: var(--cream);
-  background: #241820;
+  background: var(--arcade-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; background: #241820; }
+html, body { margin: 0; min-height: 100%; background: var(--arcade-bg); }
 button { font: inherit; color: inherit; }
 button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
-#root { min-height: 100svh; }
+#root { min-height: 100svh; background: var(--arcade-bg); }
 
-/* Dim arcade: dark wall, scuffed carpet, a pool of pink cabinet light */
+/* Game sits on a plain dark field. Illustrated background art drops in via --arcade-bg-image. */
 .arcade-room {
   min-height: 100svh;
   height: 100svh;
   overflow: hidden;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding: 4px 16px 0;
-  background:
-    radial-gradient(ellipse 70% 28% at 50% 100%, rgba(239, 78, 157, 0.28), transparent 70%),
-    linear-gradient(180deg, #1a1418 0 62%, #3a2d32 62%, #2e2428 100%);
-}
-
-.arcade-room::before {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 38%;
-  background:
-    repeating-linear-gradient(90deg, #35282c 0 11px, #31242a 11px 22px);
-  opacity: 0.55;
-  pointer-events: none;
+  padding: 8px 16px;
+  background-color: var(--arcade-bg);
+  background-image: var(--arcade-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .cab-scene {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 200px minmax(0, 720px) 200px;
-  width: min(1120px, calc(100% - 8px));
-  height: min(calc(100svh - 6px), 980px);
-  filter: drop-shadow(0 28px 0 rgba(16, 10, 12, 0.55));
-  transform: translateY(0);
-}
-
-/* Side panels: Dynamo-style slanted-top silhouette + SF2 portrait art */
-.cab-side {
-  position: relative;
-  overflow: hidden;
-  background: var(--pink-deep);
-  border-left: 7px solid var(--black);
-  border-right: 7px solid var(--black);
-  box-shadow: inset 0 0 0 3px var(--pink);
-}
-
-.cab-side-left {
-  clip-path: polygon(0 11%, 100% 0, 100% 100%, 0 100%);
-  border-radius: 4px 0 0 0;
-  margin-right: -2px;
-}
-
-.cab-side-right {
-  clip-path: polygon(0 0, 100% 11%, 100% 100%, 0 100%);
-  border-radius: 0 4px 0 0;
-  margin-left: -2px;
-}
-
-.side-paint {
-  position: absolute;
-  inset: 0;
-  background: var(--pink-deep);
-  pointer-events: none;
-}
-
-.cab-side .side-hero {
-  position: absolute;
-  left: 50%;
-  top: 10%;
-  width: 136%;
-  height: auto;
-  max-height: 52%;
-  transform: translateX(-50%);
-  object-fit: contain;
-  object-position: center top;
-  border: 0;
-  box-shadow: none;
-  background: transparent;
-  z-index: 1;
-  filter: contrast(1.06) saturate(1.08);
-}
-
-.cab-side-left .side-hero { top: 9%; width: 142%; object-position: center 8%; }
-.cab-side-right .side-hero { top: 12%; width: 108%; max-height: 56%; object-position: center 30%; }
-
-.cab-side::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  box-shadow: inset 0 0 0 3px var(--black);
+  display: block;
+  width: min(720px, 100%);
+  height: min(calc(100svh - 16px), 980px);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.45));
 }
 
 /* Front cabinet: painted pink plywood with black T-molding */
@@ -156,26 +89,59 @@ button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 8px 86px 10px;
+  padding: 4px 16px 4px;
   background:
     radial-gradient(ellipse at 50% 40%, #ffe6f3 0%, #ff7ec0 42%, #ef4e9d 100%);
   box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.45), inset 0 0 0 3px #1b1418;
-  min-height: 86px;
+  min-height: 0;
 }
 
-.marquee-art {
-  position: absolute;
-  top: 8px;
-  bottom: 8px;
-  width: 72px;
-  object-fit: cover;
-  object-position: center 18%;
-  border: 3px solid var(--black);
-  pointer-events: none;
-  z-index: 1;
+.marquee-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
-.marquee-art-left { left: 8px; }
-.marquee-art-right { right: 8px; object-position: center 12%; }
+
+.marquee-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.6vw, 16px);
+  width: 100%;
+  min-width: 0;
+}
+
+.logo-word {
+  font-family: 'Titan One', sans-serif;
+  font-size: clamp(26px, 6.4vw, 56px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  color: var(--cream);
+  -webkit-text-stroke: 5px var(--black);
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--blue), 7px 7px 0 var(--black);
+  white-space: nowrap;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.logo-word:first-child { text-align: right; }
+.logo-word:last-child { text-align: left; }
+
+.marquee-ipo {
+  display: block;
+  height: clamp(72px, 10.2vh, 108px);
+  width: auto;
+  max-width: 30%;
+  object-fit: contain;
+  object-position: center bottom;
+  flex: 0 0 auto;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  pointer-events: none;
+}
 
 .brand-mark { display: flex; }
 
@@ -204,19 +170,7 @@ button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
   text-align: center;
 }
 
-.hero-tagline strong {
-  display: block;
-  margin-top: 2px;
-  font-family: 'Titan One', sans-serif;
-  font-size: clamp(34px, 6.2vw, 62px);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 0.95;
-  color: var(--cream);
-  -webkit-text-stroke: 5px var(--black);
-  paint-order: stroke fill;
-  text-shadow: 4px 4px 0 var(--blue), 7px 7px 0 var(--black);
-}
+.hero-tagline strong { font-weight: inherit; }
 
 .cab-speaker-bar {
   display: flex;
@@ -257,22 +211,6 @@ button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
   border: 4px solid #0a0809;
   box-shadow: inset 0 0 0 2px #3a3236;
 }
-
-.bezel-art {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
-  object-position: center 18%;
-  border: 2px solid var(--black);
-  box-shadow: 2px 2px 0 var(--yellow);
-  z-index: 2;
-  pointer-events: none;
-}
-.bezel-art-tl { top: 6px; left: 6px; transform: rotate(-8deg); }
-.bezel-art-tr { top: 6px; right: 6px; transform: rotate(8deg); }
-.bezel-art-bl { bottom: 6px; left: 6px; transform: rotate(6deg); }
-.bezel-art-br { bottom: 6px; right: 6px; transform: rotate(-6deg); }
 
 /* CRT: slight curve, scanlines, phosphor, dark glass edge */
 .crt {
@@ -321,7 +259,7 @@ button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
   justify-content: space-between;
   align-items: flex-start;
   gap: 10px;
-  padding: 8px 28px 6px;
+  padding: 8px 12px 6px;
   flex-shrink: 0;
   z-index: 1;
 }
@@ -388,7 +326,6 @@ footer,
 }
 
 @media (min-width: 721px) {
-  .hero-tagline strong { white-space: nowrap; }
   .bezel { container-type: size; }
   .crt {
     flex: 0 1 auto;
@@ -950,36 +887,22 @@ footer span { min-width: 0; flex: 0 1 auto; }
 @media (max-width: 720px) {
   .arcade-room { padding: 0; align-items: stretch; }
   .cab-scene {
-    grid-template-columns: 22px 1fr 22px;
     width: 100%;
     height: 100svh;
     filter: none;
   }
-  .cab-side { border-width: 4px; }
-  .cab-side .side-hero {
-    inset: 0;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    max-height: none;
-    transform: none;
-    object-fit: cover;
-    opacity: 1;
-  }
-  .cab-side-left .side-hero { object-position: 55% 20%; width: 100%; }
-  .cab-side-right .side-hero { object-position: 50% 35%; width: 100%; }
-  .marquee-channel { min-height: 64px; padding: 6px 48px 7px; }
-  .marquee-art { width: 36px; top: 6px; bottom: 6px; border-width: 2px; }
-  .marquee-art-left { left: 6px; }
-  .marquee-art-right { right: 6px; }
+  .marquee-channel { min-height: 0; padding: 4px 8px 6px; }
   .hero-tagline { font-size: 11px; }
-  .hero-tagline strong { font-size: clamp(22px, 9vw, 34px); -webkit-text-stroke: 3px var(--black); text-shadow: 3px 3px 0 var(--blue), 5px 5px 0 var(--black); }
+  .logo-word {
+    font-size: clamp(18px, 7vw, 26px);
+    -webkit-text-stroke: 3px var(--black);
+    text-shadow: 2px 2px 0 var(--blue), 4px 4px 0 var(--black);
+  }
+  .marquee-ipo { height: clamp(52px, 16vw, 70px); max-width: 26%; }
   .paw { width: 20px; height: 20px; font-size: 11px; }
   .cab-speaker-bar { height: 16px; padding: 0 10px; }
   .speaker { width: 54px; height: 7px; }
   .bezel { margin: 4px 3px; padding: 4px; }
-  .bezel-art { width: 22px; height: 22px; }
   .crt { margin: 20px 8px 8px; justify-content: flex-start; }
   .crt-game { flex: 0 0 auto; width: 100%; }
   .cab-monitor { padding: 0 4px; }
@@ -1021,9 +944,10 @@ footer span { min-width: 0; flex: 0 1 auto; }
 }
 
 @media (max-height: 720px) and (min-width: 721px) {
-  .cab-scene { grid-template-columns: 150px minmax(0, 720px) 150px; width: min(1020px, calc(100% - 8px)); }
-  .marquee-channel { min-height: 58px; padding: 3px 72px 4px; }
-  .hero-tagline strong { font-size: 36px; -webkit-text-stroke: 4px var(--black); text-shadow: 3px 3px 0 var(--blue), 5px 5px 0 var(--black); }
+  .cab-scene { width: min(720px, calc(100% - 8px)); }
+  .marquee-channel { padding: 3px 12px 5px; }
+  .logo-word { font-size: 36px; -webkit-text-stroke: 4px var(--black); text-shadow: 3px 3px 0 var(--blue), 5px 5px 0 var(--black); }
+  .marquee-ipo { height: 72px; }
   .cab-speaker-bar { height: 14px; }
   .panel-overlay { padding: 6px 10px 8px 8px; }
   .spin-button { width: 92px; height: 92px; min-width: 92px; }

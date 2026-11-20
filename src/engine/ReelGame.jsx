@@ -212,18 +212,18 @@ export function ReelGame({ theme }) {
       {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
     <main className={`arcade-room ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
       <div className="cab-scene">
-        <div className="cab-side cab-side-left" aria-hidden="true">
-          <div className="side-paint" />
-          <img className="side-hero" src="/assets/cabinet/ipo-portrait.webp" alt="" />
-        </div>
-
         <div className="cab-body">
           <header className="cab-marquee">
             <div className="marquee-channel">
-              <img className="marquee-art marquee-art-left" src="/assets/cabinet/ipo-cameo.webp" alt="" />
-              <div className="brand-mark"><span className="paw">✿</span></div>
-              <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
-              <img className="marquee-art marquee-art-right" src="/assets/cabinet/toad-cameo.webp" alt="" />
+              <div className="marquee-kicker">
+                <div className="brand-mark"><span className="paw">✿</span></div>
+                <div className="hero-tagline">play to win a jar of</div>
+              </div>
+              <div className="marquee-logo">
+                <span className="logo-word">FRUITY</span>
+                <img className="marquee-ipo" src="/assets/cabinet/ipo-face.webp" alt="" />
+                <span className="logo-word">PUPPY</span>
+              </div>
             </div>
           </header>
 
@@ -233,10 +233,6 @@ export function ReelGame({ theme }) {
 
           <section className="cab-monitor">
             <div className="bezel">
-              <img className="bezel-art bezel-art-tl" src="/assets/cabinet/ipo-cameo.webp" alt="" />
-              <img className="bezel-art bezel-art-tr" src="/assets/cabinet/toad-cameo.webp" alt="" />
-              <img className="bezel-art bezel-art-bl" src="/assets/cabinet/ipo-cameo.webp" alt="" />
-              <img className="bezel-art bezel-art-br" src="/assets/cabinet/toad-cameo.webp" alt="" />
               <div className={`crt ${spinning ? "is-spinning" : ""}`}>
               <div className="crt-game">
                 <div className="crt-hud">
@@ -306,11 +302,6 @@ export function ReelGame({ theme }) {
             <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
           </div>
           <div className="kick-plate" aria-hidden="true" />
-        </div>
-
-        <div className="cab-side cab-side-right" aria-hidden="true">
-          <div className="side-paint" />
-          <img className="side-hero" src="/assets/cabinet/ipo-and-toad.webp" alt="" />
         </div>
       </div>
 
