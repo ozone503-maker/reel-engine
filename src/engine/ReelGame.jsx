@@ -169,17 +169,11 @@ export function ReelGame({ theme }) {
     <>
       {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
     <main className="app-shell">
-      <header className="topbar">
+      <div className="cabinet">
+      <header className="marquee">
         <div className="brand-mark"><span className="paw">✿</span></div>
-        <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
-          <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
-        </button>
-      </header>
-
-
-      <section className="hero">
         <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
-      </section>
+      </header>
 
       <section className="machine-panel">
         <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
@@ -210,6 +204,9 @@ export function ReelGame({ theme }) {
         {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
         <div className="message-bar">{message}</div>
         <div className="control-row">
+          <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
+            <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
+          </button>
           <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
             <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
           </button>
@@ -224,6 +221,7 @@ export function ReelGame({ theme }) {
         {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
       </section>
 
+      <div className="cabinet-lower">
       <section className="paytable">
         <div className="library-heading"><div><span className="section-kicker">PAYTABLE</span><h2>How much each symbol pays</h2></div></div>
         <div className="paytable-grid">
@@ -253,6 +251,8 @@ export function ReelGame({ theme }) {
       </section>
 
       <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
+      </div>
+      </div>
     </main>
     </>
   );
