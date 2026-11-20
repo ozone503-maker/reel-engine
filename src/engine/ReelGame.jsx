@@ -214,16 +214,16 @@ export function ReelGame({ theme }) {
       <div className="cab-scene">
         <div className="cab-side cab-side-left" aria-hidden="true">
           <div className="side-paint" />
-          <img className="side-hero" src="/assets/symbols/characters/ipo.jpg" alt="" />
-          <img className="side-thumb side-thumb-a" src="/assets/symbols/botanicals/lilikoi.jpg" alt="" />
-          <img className="side-thumb side-thumb-b" src="/assets/symbols/botanicals/papaya.jpg" alt="" />
+          <img className="side-hero" src="/assets/cabinet/ipo-portrait.webp" alt="" />
         </div>
 
         <div className="cab-body">
           <header className="cab-marquee">
             <div className="marquee-channel">
+              <img className="marquee-art marquee-art-left" src="/assets/cabinet/ipo-cameo.webp" alt="" />
               <div className="brand-mark"><span className="paw">✿</span></div>
               <div className="hero-tagline">play to win a jar of <strong>FRUITY PUPPY</strong></div>
+              <img className="marquee-art marquee-art-right" src="/assets/cabinet/toad-cameo.webp" alt="" />
             </div>
           </header>
 
@@ -233,10 +233,10 @@ export function ReelGame({ theme }) {
 
           <section className="cab-monitor">
             <div className="bezel">
-              <img className="bezel-art bezel-art-tl" src="/assets/symbols/characters/ruch.jpg" alt="" />
-              <img className="bezel-art bezel-art-tr" src="/assets/symbols/characters/erv.jpg" alt="" />
-              <img className="bezel-art bezel-art-bl" src="/assets/symbols/botanicals/cranberry-hibiscus.jpg" alt="" />
-              <img className="bezel-art bezel-art-br" src="/assets/symbols/botanicals/spearmint.jpg" alt="" />
+              <img className="bezel-art bezel-art-tl" src="/assets/cabinet/ipo-cameo.webp" alt="" />
+              <img className="bezel-art bezel-art-tr" src="/assets/cabinet/toad-cameo.webp" alt="" />
+              <img className="bezel-art bezel-art-bl" src="/assets/cabinet/ipo-cameo.webp" alt="" />
+              <img className="bezel-art bezel-art-br" src="/assets/cabinet/toad-cameo.webp" alt="" />
               <div className={`crt ${spinning ? "is-spinning" : ""}`}>
               <div className="crt-game">
                 <div className="crt-hud">
@@ -310,10 +310,7 @@ export function ReelGame({ theme }) {
 
         <div className="cab-side cab-side-right" aria-hidden="true">
           <div className="side-paint" />
-          <img className="side-thumb side-thumb-a" src="/assets/symbols/characters/fonk.jpg" alt="" />
-          <img className="side-thumb side-thumb-b" src="/assets/symbols/characters/nonna.jpg" alt="" />
-          <img className="side-hero" src="/assets/symbols/characters/dinny.jpg" alt="" />
-          <img className="side-thumb side-thumb-c" src="/assets/symbols/characters/erv.jpg" alt="" />
+          <img className="side-hero" src="/assets/cabinet/ipo-and-toad.webp" alt="" />
         </div>
       </div>
 
