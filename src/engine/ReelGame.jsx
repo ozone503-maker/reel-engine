@@ -280,15 +280,9 @@ export function ReelGame({ theme }) {
           <div className="control-panel">
             <div className="panel-overlay">
               <div className="button-bank">
-                <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
-                  <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
-                </button>
                 <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
                   <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
                 </button>
-                <button className="plate-btn plate-btn-pay" type="button" aria-pressed={plate === "paytable"} onClick={() => setPlate((p) => p === "paytable" ? null : "paytable")}>PAYTABLE</button>
-                <button className="plate-btn plate-btn-lineup" type="button" aria-pressed={plate === "lineup"} onClick={() => setPlate((p) => p === "lineup" ? null : "lineup")}>Meet the lineup</button>
-                <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
               </div>
             </div>
           </div>
