@@ -114,29 +114,29 @@ export function ReelGame({ theme }) {
         return cell?.role === "WILD" || cell?.type === "wild";
       }));
       const videoFor = {
-        ruch: ["/assets/videos/ruch-win.mp4", 6000],
-        fonk: ["/assets/videos/fonk-win.mp4", 8000],
-        dinny: ["/assets/videos/dinny-win.mp4", 6000],
-        nonna: ["/assets/videos/nonna-win.mp4", 8000],
-        erv: ["/assets/videos/erv-win.mp4", 8000],
-        ipo: ["/assets/videos/ipo-win.mp4", 10000],
-        "cranberry-hibiscus": ["/assets/videos/cranberry-hibiscus-win.mp4", 10000],
-        papaya: ["/assets/videos/papaya-win.mp4", 10000],
-        lilikoi: ["/assets/videos/lilikoi-win.mp4", 10000],
-        "aloe-vera": ["/assets/videos/aloe-vera-win.mp4", 10000],
-        spearmint: ["/assets/videos/spearmint-win.mp4", 10000],
-        "ice-cream-bean": ["/assets/videos/ice-cream-bean-win.mp4", 10000],
+        ruch: [`${import.meta.env.BASE_URL}assets/videos/ruch-win.mp4`, 6000],
+        fonk: [`${import.meta.env.BASE_URL}assets/videos/fonk-win.mp4`, 8000],
+        dinny: [`${import.meta.env.BASE_URL}assets/videos/dinny-win.mp4`, 6000],
+        nonna: [`${import.meta.env.BASE_URL}assets/videos/nonna-win.mp4`, 8000],
+        erv: [`${import.meta.env.BASE_URL}assets/videos/erv-win.mp4`, 8000],
+        ipo: [`${import.meta.env.BASE_URL}assets/videos/ipo-win.mp4`, 10000],
+        "cranberry-hibiscus": [`${import.meta.env.BASE_URL}assets/videos/cranberry-hibiscus-win.mp4`, 10000],
+        papaya: [`${import.meta.env.BASE_URL}assets/videos/papaya-win.mp4`, 10000],
+        lilikoi: [`${import.meta.env.BASE_URL}assets/videos/lilikoi-win.mp4`, 10000],
+        "aloe-vera": [`${import.meta.env.BASE_URL}assets/videos/aloe-vera-win.mp4`, 10000],
+        spearmint: [`${import.meta.env.BASE_URL}assets/videos/spearmint-win.mp4`, 10000],
+        "ice-cream-bean": [`${import.meta.env.BASE_URL}assets/videos/ice-cream-bean-win.mp4`, 10000],
       };
       const charWin = wins.find((w) => videoFor[w.symbol?.id]);
       const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
       if (hasWildInWin) {
-        setWinVideo({ src: "/assets/videos/wild-win.mp4", durationMs: 9000 });
+        setWinVideo({ src: `${import.meta.env.BASE_URL}assets/videos/wild-win.mp4`, durationMs: 9000 });
       } else if (result.freeSpinsAwarded > 0) {
-        setWinVideo({ src: "/assets/videos/freespins-win.mp4", durationMs: 11000 });
+        setWinVideo({ src: `${import.meta.env.BASE_URL}assets/videos/freespins-win.mp4`, durationMs: 11000 });
       } else if (charVideo) {
         setWinVideo({ src: charVideo[0], durationMs: charVideo[1] });
       } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
-        setWinVideo({ src: "/assets/videos/dontbesad-win.mp4", durationMs: 9000 });
+        setWinVideo({ src: `${import.meta.env.BASE_URL}assets/videos/dontbesad-win.mp4`, durationMs: 9000 });
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
@@ -229,7 +229,7 @@ export function ReelGame({ theme }) {
 
   return (
     <>
-      {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
+      {showIntro && <VideoOverlay src={`${import.meta.env.BASE_URL}assets/videos/intro.mp4`} durationMs={12000} onClose={() => setShowIntro(false)} />}
       {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
     <main className={`fp ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
       <div className="fp-scene" aria-hidden="true">
@@ -311,7 +311,7 @@ export function ReelGame({ theme }) {
             <g className="spark"><use href="#fpSpark" transform="translate(196 28) scale(1.1)" /><use href="#fpSpark" transform="translate(150 132) scale(.8)" /><use href="#fpSpark" transform="translate(16 108) scale(.7)" /><use href="#fpSpark" transform="translate(222 108) scale(.6)" /><use href="#fpSpark" transform="translate(92 120) scale(.55)" /><use href="#fpSpark" transform="translate(690 120) scale(1)" /><use href="#fpSpark" transform="translate(760 60) scale(.7)" /><use href="#fpSpark" transform="translate(580 150) scale(.6)" /></g>
             <g className="dots"><circle cx="120" cy="150" r="3" /><circle cx="210" cy="64" r="3.5" /><circle cx="14" cy="22" r="2.5" /><circle cx="600" cy="110" r="3" /><circle cx="710" cy="40" r="3" /></g>
           </svg>
-          <img className="fp-ipo" src="/assets/cabinet/ipo-cap.webp" alt="Ipo" />
+          <img className="fp-ipo" src={`${import.meta.env.BASE_URL}assets/cabinet/ipo-cap.webp`} alt="Ipo" />
           <div className="fp-lockup"><p className="fp-tag fp-tag-top">spin to win</p><h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1><p className="fp-tag fp-tag-bot">+ kudokens</p></div>
         </header>
 

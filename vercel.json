@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/spin_to_win/:path*", "destination": "/:path*" }
+  ]
+}
