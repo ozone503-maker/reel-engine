@@ -215,14 +215,18 @@ export function ReelGame({ theme }) {
         <div className="cab-body">
           <header className="cab-marquee">
             <div className="marquee-channel">
+              <div className="marquee-plate" aria-hidden="true" />
               <div className="marquee-kicker">
                 <div className="brand-mark"><span className="paw">✿</span></div>
                 <div className="hero-tagline">play to win a jar of</div>
               </div>
               <div className="marquee-logo">
-                <span className="logo-word">FRUITY</span>
-                <img className="marquee-ipo" src="/assets/cabinet/ipo-face.webp" alt="" />
-                <span className="logo-word">PUPPY</span>
+                <span className="logo-word" data-text="FRUITY">FRUITY</span>
+                <span className="ipo-stage">
+                  <span className="ipo-rays" aria-hidden="true" />
+                  <img className="marquee-ipo" src="/assets/cabinet/ipo-face.webp" alt="" />
+                </span>
+                <span className="logo-word" data-text="PUPPY">PUPPY</span>
               </div>
             </div>
           </header>
@@ -275,11 +279,6 @@ export function ReelGame({ theme }) {
 
           <div className="control-panel">
             <div className="panel-overlay">
-              <div className="joystick" aria-hidden="true">
-                <span className="joy-base" />
-                <span className="joy-shaft" />
-                <span className="joy-ball" />
-              </div>
               <div className="button-bank">
                 <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
                   <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
