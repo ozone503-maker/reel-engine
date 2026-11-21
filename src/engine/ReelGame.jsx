@@ -273,6 +273,19 @@ export function ReelGame({ theme }) {
           <div className="message-bar" aria-live="polite">{message}</div>
         </section>
 
+        <footer className="fp-deck">
+          <div className="fp-meter" aria-hidden="true">
+            {Array.from({ length: 18 }, (_, i) => <i key={i} style={{ "--i": i }} />)}
+          </div>
+          <div className="fp-row">
+            <div className="fp-stat fp-left"><strong>{spins + bonusSpins}</strong><span>Spins</span></div>
+            <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
+              <span>{spinning ? "Spinning" : "Spin"}</span>
+            </button>
+            <div className="fp-stat fp-right"><strong>{credits.toLocaleString()}</strong><span>{theme.currency} Won</span></div>
+          </div>
+        </footer>
+
         <section className="fp-pay" aria-labelledby="fp-pay-title">
           <h2 id="fp-pay-title" className="fp-pay-title">How to win</h2>
           <p className="fp-pay-rule">Match 3, 4 or 5 across, or 3 or 4 down. {wildSymbol?.name} is wild.{freeSpinSymbol && <span className="fp-rule-fs"> 4 {freeSpinSymbol.name} symbols anywhere = 6 spins, 5 = 10.</span>}</p>
@@ -295,19 +308,6 @@ export function ReelGame({ theme }) {
           </ul>
           <p className="fp-pay-foot">Payouts are demo {theme.currency}. 5 jars in a row wins a free jar of Fruity Puppy.</p>
         </section>
-
-        <footer className="fp-deck">
-          <div className="fp-meter" aria-hidden="true">
-            {Array.from({ length: 18 }, (_, i) => <i key={i} style={{ "--i": i }} />)}
-          </div>
-          <div className="fp-row">
-            <div className="fp-stat fp-left"><strong>{spins + bonusSpins}</strong><span>Spins</span></div>
-            <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-              <span>{spinning ? "Spinning" : "Spin"}</span>
-            </button>
-            <div className="fp-stat fp-right"><strong>{credits.toLocaleString()}</strong><span>{theme.currency} Won</span></div>
-          </div>
-        </footer>
       </div>
     </main>
     </>
