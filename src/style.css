@@ -326,18 +326,18 @@ footer,
 }
 
 @media (min-width: 721px) {
-  .bezel { container-type: size; }
+  .cab-body { --cell-size: 72px; }
+  .bezel { container-type: inline-size; }
   .crt {
-    flex: 0 1 auto;
-    align-self: stretch;
-    --cell-size: clamp(52px, calc((100cqh - 144px) / 4), 128px);
-    width: min(100%, calc(var(--cell-size) * 5 + 20px + 32px));
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    flex: 0 0 auto;
+    align-self: center;
+    --cell-size: inherit;
+    width: calc(var(--cell-size) * 5 + 48px);
+    max-width: none;
+    margin: 10px auto;
   }
   .reel-frame {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     min-height: 0;
     width: 100%;
     display: flex;
@@ -1299,4 +1299,170 @@ footer { color: #6e6880; letter-spacing: 0.14em; margin-top: 0; }
   .spin-button { width: 96px; height: 96px; min-width: 96px; }
   .sound-toggle, .plate-btn, .earn-button { height: 32px; }
   .ipo-stage { margin-bottom: -12px; }
+}
+
+/* ===== Shrink-wrap the CRT, give leftover height to the marquee ===== */
+.cab-body {
+  grid-template-rows: minmax(96px, 1fr) auto auto auto auto auto;
+}
+
+.cab-marquee {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: auto;
+  container-type: size;
+  container-name: marquee;
+}
+
+.marquee-channel {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(6px, 4cqh, 16px) clamp(10px, 3cqi, 22px) 0;
+  gap: clamp(2px, 2cqh, 10px);
+}
+
+.marquee-kicker {
+  flex: 0 0 auto;
+  gap: clamp(6px, 2cqh, 12px);
+}
+
+.hero-tagline {
+  font-size: clamp(12px, 7.2cqh, 26px);
+  letter-spacing: 0.16em;
+}
+
+.paw {
+  width: clamp(20px, 10cqh, 36px);
+  height: clamp(20px, 10cqh, 36px);
+  font-size: clamp(11px, 5.5cqh, 20px);
+}
+
+.marquee-logo {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  align-items: flex-end;
+  gap: clamp(4px, 1.5cqi, 16px);
+}
+
+.logo-word {
+  font-size: clamp(24px, min(8.2cqi, 18cqh), 80px);
+  overflow: visible;
+}
+
+.ipo-stage {
+  flex: 0 0 auto;
+  width: min(34cqi, 70cqh);
+  max-width: 32%;
+  height: auto;
+  max-height: 92%;
+  margin-bottom: clamp(-22px, -4cqh, -10px);
+  overflow: visible;
+}
+
+.marquee-ipo {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* Monitor / CRT / bezel hug the game, no leftover glass */
+.cab-monitor {
+  flex: 0 0 auto;
+  min-height: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bezel {
+  flex: 0 0 auto !important;
+  min-height: 0;
+  height: auto !important;
+  width: 100%;
+  align-self: center;
+}
+
+.crt {
+  flex: 0 0 auto !important;
+  min-height: 0;
+  height: auto;
+  width: 100%;
+  margin: 8px;
+  justify-content: flex-start;
+  align-self: stretch;
+}
+
+.crt-game {
+  flex: 0 0 auto !important;
+  min-height: 0;
+  width: 100%;
+}
+
+.reel-frame {
+  flex: 0 0 auto !important;
+  min-height: 0;
+}
+
+.message-bar { margin: 2px 8px 8px; }
+
+@media (min-width: 721px) {
+  .cab-monitor {
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 8% 92%, rgba(0, 0, 0, 0.18)),
+      linear-gradient(180deg, var(--pink) 0%, var(--pink-deep) 100%);
+    flex-direction: row;
+    justify-content: center;
+    padding: 0 12px;
+  }
+  .bezel {
+    width: calc(var(--cell-size) * 5 + 76px);
+    max-width: calc(100% - 8px);
+    flex: 0 0 auto;
+    height: auto !important;
+    align-self: center;
+  }
+  .crt {
+    width: calc(var(--cell-size) * 5 + 48px);
+    max-width: none;
+    --cell-size: inherit;
+    margin: 10px;
+  }
+  .reel-grid { --cell-size: inherit; }
+  .logo-word { font-size: clamp(40px, min(10cqi, 20cqh), 80px); }
+  .ipo-stage { max-width: 34%; width: auto; height: min(72cqh, 200px); }
+}
+
+@media (max-width: 720px) {
+  .cab-monitor { padding: 0; }
+  .bezel { margin: 0; padding: 4px; border-width: 3px; }
+  .crt {
+    margin: 4px;
+    justify-content: flex-start;
+    border-radius: 16px 16px 12px 12px / 10px 10px 14px 14px;
+  }
+  .crt-game { container-type: inline-size; width: 100%; }
+  .reel-frame { width: 100%; padding: 0 4px; }
+  .reel-grid {
+    --cell-size: calc((100cqw - 8px - 12px) / 5);
+  }
+  .logo-word { font-size: clamp(22px, 7.1cqi, 30px); }
+  .ipo-stage { max-width: 36%; width: min(36cqi, 70cqh); z-index: 3; }
+  .hero-tagline { font-size: clamp(11px, 6.5cqh, 20px); }
+  .message-bar { margin: 2px 6px 6px; }
+}
+
+@media (max-height: 720px) and (min-width: 721px) {
+  .cab-body { --cell-size: clamp(52px, 8vh, 64px); }
+  .crt { --cell-size: inherit; }
+  .logo-word { font-size: clamp(28px, min(12cqi, 20cqh), 48px); }
 }
