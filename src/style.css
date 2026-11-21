@@ -23,7 +23,7 @@
 @supports (height: 100svh) { :root { --vh: 100svh; } }
 @supports (height: 100dvh) { :root { --vh: 100dvh; } }
 * { box-sizing: border-box; }
-html, body { margin: 0; background: var(--magenta); }
+html, body { margin: 0; background: #8e0d57; }
 html { overflow-x: hidden; }
 body { font-family: var(--ui); color: var(--plum); -webkit-font-smoothing: antialiased; font-synthesis: none; }
 #root { min-height: var(--vh); }
@@ -37,17 +37,18 @@ button { font: inherit; color: inherit; }
   --cab-w: min(100vw, 520px);
   --cell-w: calc((var(--cab-w) - 36px - 4 * var(--gap)) / 5);
   /* Height left for the 4 reel rows = screen minus marquee floor and the fixed console parts. */
-  --reserve: calc(242px + env(safe-area-inset-bottom) + clamp(136px, 21svh, 230px));
+  --reserve: calc(274px + env(safe-area-inset-bottom) + clamp(136px, 21svh, 230px));
   --cell: max(46px, min(calc(var(--cell-w) * 1.2), calc((var(--vh) - var(--reserve)) / 4)));
   position: relative; width: var(--cab-w);
   display: flex; flex-direction: column;
-  background:
-    linear-gradient(90deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.22) 8%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(90,18,64,.18) 100%),
-    linear-gradient(180deg, #ff5fb3 0%, var(--hot) 40%, var(--magenta) 100%);
 }
 
 /* --- First screen: marquee, reels, console. Exactly one visible viewport tall. --- */
-.fp-game { position: relative; height: var(--vh); display: flex; flex-direction: column; overflow: hidden; padding: 7px 0 0; }
+.fp-game {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.22) 8%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(90,18,64,.18) 100%),
+    linear-gradient(180deg, #ff5fb3 0%, var(--hot) 40%, var(--magenta) 100%);
+  position: relative; height: var(--vh); display: flex; flex-direction: column; overflow: hidden; padding: 7px 0 calc(22px + env(safe-area-inset-bottom)); }
 .fp-game > .fp-body { flex: 0 0 auto; }
 
 /* --- Candy marquee --- */
@@ -104,7 +105,7 @@ button { font: inherit; color: inherit; }
 /* --- Cabinet body with aqua LED edges --- */
 .fp-body { position: relative; display: flex; flex-direction: column; flex: 0 0 auto; z-index: 3; }
 .fp-body::before, .fp-body::after, .fp-pay::before, .fp-pay::after {
-  content: ""; position: absolute; top: 10px; bottom: 0; width: 6px; z-index: 6; pointer-events: none; border-radius: 4px;
+  content: ""; position: absolute; top: 10px; bottom: 30px; width: 6px; z-index: 6; pointer-events: none; border-radius: 4px;
   background: linear-gradient(90deg, #a6fbff, #ffffff 50%, #a6fbff);
   box-shadow: 0 0 6px 2px var(--aqua), 0 0 16px 4px rgba(63,243,255,.7), 0 0 30px 8px rgba(63,243,255,.35);
 }
@@ -152,10 +153,12 @@ button { font: inherit; color: inherit; }
 /* --- Console --- */
 .fp-deck {
   position: relative; flex: 0 0 auto;
-  margin-top: 8px; padding: 6px 16px calc(6px + env(safe-area-inset-bottom));
+  margin-top: 8px; padding: 6px 16px 14px;
+  border-radius: 0 0 26px 26px;
   display: flex; flex-direction: column; gap: 6px;
   background: linear-gradient(180deg, #ffb6dc 0%, #ff8cc8 30%, #ff63b4 100%);
-  box-shadow: inset 0 3px 0 rgba(255,255,255,.75), inset 0 -3px 0 rgba(163,15,99,.35), 0 -1px 0 var(--berry);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,.75), inset 0 -4px 0 rgba(163,15,99,.35), 0 -1px 0 var(--berry),
+    0 0 0 3px var(--berry), 0 6px 0 3px var(--plum); /* finished cabinet bottom edge */
 }
 .fp-deck::before { /* chrome lip */
   content: ""; position: absolute; left: 0; right: 0; top: -5px; height: 5px; background: var(--chrome);
@@ -208,15 +211,17 @@ button { font: inherit; color: inherit; }
 
 /* --- Second screen: lower cabinet body with the prize & payout glass --- */
 .fp-pay {
-  position: relative; padding: 18px 16px calc(26px + env(safe-area-inset-bottom));
+  position: relative; margin-top: 24px; border-radius: 26px 26px 0 0;
+  padding: 22px 16px calc(26px + env(safe-area-inset-bottom));
   background:
     linear-gradient(90deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.22) 8%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(90,18,64,.18) 100%),
     radial-gradient(circle at 10% 88%, rgba(255,255,255,.16) 0 22px, transparent 23px),
     radial-gradient(circle at 92% 8%, rgba(255,255,255,.14) 0 28px, transparent 29px),
     linear-gradient(180deg, var(--magenta) 0%, #c3127a 100%);
-  box-shadow: inset 0 5px 0 var(--berry), inset 0 9px 0 rgba(255,255,255,.35);
+  /* chrome seam on top of the lower cabinet */
+  box-shadow: 0 0 0 3px var(--berry), 0 -6px 0 3px #fff, 0 -9px 0 3px #b9b1c6, 0 -11px 0 3px var(--berry), inset 0 6px 0 rgba(255,255,255,.3);
 }
-.fp-pay::before, .fp-pay::after { top: 0; }
+.fp-pay::before, .fp-pay::after { top: 26px; bottom: 0; }
 .fp-pay::before { box-shadow: 0 0 6px 2px var(--aqua), 0 0 16px 4px rgba(63,243,255,.7); }
 .fp-pay-title {
   margin: 4px 0 12px; text-align: center; font-family: var(--display); font-weight: 400;
@@ -327,13 +332,13 @@ button { font: inherit; color: inherit; }
 
   .fp-cab {
     --top-h: clamp(142px, 17vh, 200px);
-    --cell: max(56px, min(calc((var(--vh) - var(--top-h) - 9.2vh - 150px) / 4), 168px));
+    --cell: max(56px, min(calc((var(--vh) - var(--top-h) - 9.2vh - 186px) / 4), 168px));
     --cell-w: min(calc(var(--cell) * 1.16), 190px);
     --body-w: calc(var(--cell-w) * 5 + 4 * var(--gap) + 62px);
     width: var(--body-w);
     background: none; overflow: visible;
   }
-  .fp-game { padding: 12px 0 0; overflow: visible; }
+  .fp-game { padding: 12px 0 26px; overflow: visible; background: none; }
   .fp-game > .fp-body { flex: 1 1 auto; }
   .fp-top {
     flex: 0 0 auto; height: var(--top-h); min-height: 0;
@@ -356,10 +361,10 @@ button { font: inherit; color: inherit; }
     filter: drop-shadow(0 20px 30px rgba(20,4,30,.55));
   }
   .fp-body {
+    border-radius: 0 0 22px 22px;
     background:
       linear-gradient(90deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.25) 6%, rgba(255,255,255,0) 14%, rgba(255,255,255,0) 86%, rgba(90,18,64,.22) 100%),
       linear-gradient(180deg, #ff5fb3 0%, var(--hot) 45%, var(--magenta) 100%);
-    border-radius: 0 0 10px 10px;
     margin-top: 6px;
     box-shadow: 0 0 0 3px var(--berry), 0 30px 60px rgba(10,0,20,.5);
   }
@@ -371,7 +376,7 @@ button { font: inherit; color: inherit; }
   .reel-frame::after { inset: 9px; border-radius: 16px; }
   .reel-column, .symbol-tile { border-radius: 13px; }
   .message-bar { font-size: 14px; padding-top: 12px; }
-  .fp-deck { margin-top: 6px; padding: 6px 22px 4px; gap: 2px; border-radius: 0 0 10px 10px; }
+  .fp-deck { margin-top: 6px; padding: 6px 22px 10px; gap: 2px; border-radius: 0 0 22px 22px; }
   .fp-meter i { height: 7px; }
   .fp-row { gap: 18px; }
   .fp-stat { padding: 7px 16px 6px; align-items: center !important; text-align: center !important; }
