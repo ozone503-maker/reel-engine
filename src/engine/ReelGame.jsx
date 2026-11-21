@@ -210,114 +210,68 @@ export function ReelGame({ theme }) {
     <>
       {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
       {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
-    <main className={`arcade-room ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
-      <div className="cab-scene">
-        <div className="cab-body">
-          <header className="cab-marquee">
-            <div className="marquee-channel">
-              <div className="marquee-kicker">
-                <div className="brand-mark"><span className="paw">✿</span></div>
-                <div className="hero-tagline">play to win a jar of</div>
-              </div>
-              <div className="marquee-logo">
-                <span className="logo-word">FRUITY</span>
-                <img className="marquee-ipo" src="/assets/cabinet/ipo-face.webp" alt="" />
-                <span className="logo-word">PUPPY</span>
-              </div>
-            </div>
-          </header>
-
-          <div className="cab-speaker-bar" aria-hidden="true">
-            <span className="speaker" /><span className="speaker" />
+    <main className={`fp ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
+      <div className="fp-cab">
+        <header className="fp-top">
+          <svg className="fp-art" viewBox="0 0 390 270" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
+            <rect width="390" height="270" className="sand" />
+            <circle cx="290" cy="92" r="88" className="sun" />
+            <g className="sun-lines">
+              <rect x="190" y="120" width="200" height="5" />
+              <rect x="190" y="136" width="200" height="6" />
+              <rect x="190" y="153" width="200" height="7" />
+              <rect x="190" y="171" width="200" height="8" />
+            </g>
+            <path d="M186 270 L186 178 A 104 104 0 0 1 394 178 L 394 270 Z" className="arch" />
+            <path d="M0 270 L0 150 A 120 120 0 0 1 120 270 Z" className="quarter" />
+            <path d="M0 0 L 150 0 L 0 120 Z" className="wedge" />
+            <rect y="252" width="390" height="18" className="floor" />
+          </svg>
+          <img className="fp-ipo" src="/assets/cabinet/ipo-cap.webp" alt="Ipo" />
+          <h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1>
+        </header>
+        <section className="fp-screen">
+          <div className="fp-hud">
+            <div className="fp-stat fp-credits"><span>Demo {theme.currency}</span><strong>{credits.toLocaleString()}</strong></div>
+            <div className="fp-stat"><span>Spins</span><strong>{spins}</strong></div>
+            <div className="fp-stat"><span>Bonus</span><strong>{bonusSpins}</strong></div>
           </div>
-
-          <section className="cab-monitor">
-            <div className="bezel">
-              <div className={`crt ${spinning ? "is-spinning" : ""}`}>
-              <div className="crt-game">
-                <div className="crt-hud">
-                  <div className="wallet-card"><span>DEMO {theme.currency} CREDITS</span><strong>{credits.toLocaleString()}</strong></div>
-                  <div className="stats-row">
-                    <div><span>DAILY SPINS</span><strong>{spins}</strong></div>
-                    <div><span>BONUS SPINS</span><strong>{bonusSpins}</strong></div>
-                    <div><span>TOTAL SPINS</span><strong>{totalSpins}</strong></div>
+          <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
+            <div className="reel-grid" aria-label="Five reels, four rows">
+              {grid.map((reel, reelIndex) => (
+                <div className="reel-column" key={reelIndex}>
+                  <div
+                    className={`reel-strip ${spinning ? "landing" : ""}`}
+                    style={{
+                      animationDelay: `${reelIndex * 80}ms`,
+                      "--lead": "36",
+                    }}
+                  >
+                    {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
+                      const isWinning = !spinning && wins.some((w) => w.positions?.some((p) => p.reel === reelIndex && p.row === rowIndex));
+                      const isJar = symbol.id === "jar";
+                      return <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} winning={isWinning} isJar={isJar} />;
+                    })}
                   </div>
                 </div>
-                <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
-                  <div className="reel-grid" aria-label="Five reels, four rows">
-                    {grid.map((reel, reelIndex) => (
-                      <div className="reel-column" key={reelIndex}>
-                        <div
-                          className={`reel-strip ${spinning ? "landing" : ""}`}
-                          style={{
-                            animationDelay: `${reelIndex * 80}ms`,
-                            "--lead": "36",
-                          }}
-                        >
-                          {(spinning && spinStrips ? spinStrips[reelIndex] : reel).map((symbol, rowIndex) => {
-                            const isWinning = !spinning && wins.some((w) => w.positions?.some((p) => p.reel === reelIndex && p.row === rowIndex));
-                            const isJar = symbol.id === "jar";
-                            return <SymbolTile key={`${reelIndex}-${rowIndex}-${symbol.id}`} symbol={symbol} winning={isWinning} isJar={isJar} />;
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="reel-glow" />
-                </div>
-                <div className="machine-footnote">Win: 3, 4, or 5 in a row — horizontal or vertical.</div>
-                <div className="message-bar">{message}</div>
-                {wins.length > 0 && <div className="win-list"><strong>LAST SPIN WINS</strong>{wins.map((w) => <div key={w.symbol.id}>{w.symbol.name} · {w.count} {w.direction} <b>+{w.reward} demo {theme.currency}</b></div>)}</div>}
-              </div>
-              </div>
-            </div>
-          </section>
-
-          <div className="control-panel">
-            <div className="panel-overlay">
-              <div className="joystick" aria-hidden="true">
-                <span className="joy-base" />
-                <span className="joy-shaft" />
-                <span className="joy-ball" />
-              </div>
-              <div className="button-bank">
-                <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
-                  <span>{soundOn ? "♫ SOUND ON" : "♫ SOUND OFF"}</span>
-                </button>
-                <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-                  <span>{spinning ? "SPINNING…" : "SPIN"}</span><small>{spins + bonusSpins} SPINS AVAILABLE</small>
-                </button>
-                <button className="plate-btn plate-btn-pay" type="button" aria-pressed={plate === "paytable"} onClick={() => setPlate((p) => p === "paytable" ? null : "paytable")}>PAYTABLE</button>
-                <button className="plate-btn plate-btn-lineup" type="button" aria-pressed={plate === "lineup"} onClick={() => setPlate((p) => p === "lineup" ? null : "lineup")}>Meet the lineup</button>
-                <button className="earn-button" onClick={earnDemoSpin}>＋ ADD TEST BONUS SPIN</button>
-              </div>
+              ))}
             </div>
           </div>
-
-          <div className="coin-door">
-            <div className="coin-mechs" aria-hidden="true">
-              <span className="coin-mech"><i className="coin-slot" /><i className="coin-lamp" /></span>
-              <span className="coin-mech"><i className="coin-slot" /><i className="coin-lamp" /></span>
-            </div>
-            <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
+          <div className="message-bar" aria-live="polite">{message}</div>
+        </section>
+        <footer className="fp-deck">
+          <div className="fp-meter" aria-hidden="true">
+            {Array.from({ length: 14 }, (_, i) => <i key={i} style={{ "--i": i }} />)}
           </div>
-          <div className="kick-plate" aria-hidden="true" />
-        </div>
+          <svg className="fp-floor" viewBox="0 0 390 120" preserveAspectRatio="none" aria-hidden="true">
+            {Array.from({ length: 11 }, (_, i) => <line key={`v${i}`} x1={195 + (i - 5) * 22} y1="0" x2={195 + (i - 5) * 90} y2="120" />)}
+            {[14, 34, 60, 94].map((y) => <line key={`h${y}`} x1="0" y1={y} x2="390" y2={y} />)}
+          </svg>
+          <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
+            <span>{spinning ? "Spinning" : "Spin"}</span>
+          </button>
+        </footer>
       </div>
-
-      {plate && (
-        <div className="attract-overlay" onClick={() => setPlate(null)}>
-          <div
-            className="attract-screen"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={plate === "paytable" ? "paytable-panel" : "lineup-panel"}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {plate === "paytable" ? paytablePanel : lineupPanel}
-          </div>
-        </div>
-      )}
     </main>
     </>
   );
