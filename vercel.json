@@ -3,5 +3,9 @@
     { "source": "/spin_to_win", "destination": "/index.html" },
     { "source": "/spin_to_win/", "destination": "/index.html" },
     { "source": "/spin_to_win/:path+", "destination": "/:path+" }
+  ],
+  "headers": [
+    { "source": "/assets/videos/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" }] },
+    { "source": "/spin_to_win/assets/videos/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" }] }
   ]
 }
