@@ -206,30 +206,48 @@ export function ReelGame({ theme }) {
     </section>
   );
 
+  // ---- View-only helpers for the always-visible paytable (reads PAYTABLE + theme; no game logic) ----
+  const payGroups = (() => {
+    const groups = [];
+    symbols.filter((s) => s.type !== "scatter").forEach((s) => {
+      const pay = PAYTABLE[s.id] || { 3: 5, 4: 12, 5: 30 };
+      const key = `${pay[3]}-${pay[4]}-${pay[5]}`;
+      const g = groups.find((x) => x.key === key && x.symbols[0].type !== "wild" && s.type !== "wild" && x.symbols[0].id !== "jar" && s.id !== "jar" && x.symbols[0].type !== "token" && s.type !== "token");
+      if (g) g.symbols.push(s);
+      else groups.push({ key, pay, symbols: [s] });
+    });
+    return groups.sort((a, b) => b.pay[4] - a.pay[4]);
+  })();
+  const wildSymbol = symbols.find((s) => s.type === "wild");
+  const freeSpinSymbol = symbols.find((s) => s.type === "scatter");
+  const payFive = (g) => (g.symbols[0].id === "jar" ? "Jar" : g.pay[5]);
+  const groupName = (g) => {
+    if (g.symbols.length === 1) return g.symbols[0].name;
+    if (g.symbols.every((s) => s.type === "character")) return "Ruch, Erv, Nonna, Fonk, Dinny";
+    return g.symbols.map((s) => s.name).join(", ");
+  };
+
   return (
     <>
       {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
       {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
     <main className={`fp ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
+      <div className="fp-scene" aria-hidden="true" />
       <div className="fp-cab">
         <header className="fp-top">
-          <svg className="fp-art" viewBox="0 0 390 270" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
-            <rect width="390" height="270" className="sand" />
-            <circle cx="290" cy="92" r="88" className="sun" />
-            <g className="sun-lines">
-              <rect x="190" y="120" width="200" height="5" />
-              <rect x="190" y="136" width="200" height="6" />
-              <rect x="190" y="153" width="200" height="7" />
-              <rect x="190" y="171" width="200" height="8" />
-            </g>
-            <path d="M186 270 L186 178 A 104 104 0 0 1 394 178 L 394 270 Z" className="arch" />
-            <path d="M0 270 L0 150 A 120 120 0 0 1 120 270 Z" className="quarter" />
-            <path d="M0 0 L 150 0 L 0 120 Z" className="wedge" />
-            <rect y="252" width="390" height="18" className="floor" />
+          <div className="fp-rays" aria-hidden="true" />
+          <div className="fp-glow" aria-hidden="true" />
+          <svg className="fp-art" viewBox="0 0 390 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <path className="hill h1" d="M-10 260 L-10 170 C 60 130 130 150 190 190 C 230 215 260 240 300 260 Z" />
+            <path className="hill h2" d="M-10 260 L-10 214 C 50 196 110 206 160 230 C 180 240 196 250 210 260 Z" />
+            <circle className="dot d1" cx="28" cy="150" r="5" />
+            <circle className="dot d2" cx="150" cy="168" r="3.5" />
+            <circle className="dot d3" cx="176" cy="40" r="4" />
           </svg>
           <img className="fp-ipo" src="/assets/cabinet/ipo-cap.webp" alt="Ipo" />
           <h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1>
         </header>
+
         <section className="fp-screen">
           <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
             <div className="reel-grid" aria-label="Five reels, four rows">
@@ -254,14 +272,34 @@ export function ReelGame({ theme }) {
           </div>
           <div className="message-bar" aria-live="polite">{message}</div>
         </section>
+
+        <section className="fp-pay" aria-labelledby="fp-pay-title">
+          <h2 id="fp-pay-title" className="fp-pay-title">How to win</h2>
+          <p className="fp-pay-rule">Match 3, 4 or 5 across, or 3 or 4 down. {wildSymbol?.name} is wild.{freeSpinSymbol && <span className="fp-rule-fs"> 4 {freeSpinSymbol.name} symbols anywhere = 6 spins, 5 = 10.</span>}</p>
+          <div className="fp-pay-head" aria-hidden="true"><span /><span>3</span><span>4</span><span>5</span></div>
+          <ul className="fp-pay-list">
+            {payGroups.map((g) => (
+              <li className={`fp-pay-row ${g.symbols[0].type}`} key={g.key + g.symbols[0].id}>
+                <span className="fp-pay-icons">{g.symbols.map((s) => <img key={s.id} src={s.image} alt="" />)}</span>
+                <span className="fp-pay-name">{groupName(g)}</span>
+                <b>{g.pay[3]}</b><b>{g.pay[4]}</b><b className={g.symbols[0].id === "jar" ? "is-jar" : ""}>{payFive(g)}</b>
+              </li>
+            ))}
+            {freeSpinSymbol && (
+              <li className="fp-pay-row scatter">
+                <span className="fp-pay-icons"><img src={freeSpinSymbol.image} alt="" /></span>
+                <span className="fp-pay-name">{freeSpinSymbol.name} anywhere</span>
+                <b className="fp-pay-wide">4 = 6 spins, 5 = 10 spins</b>
+              </li>
+            )}
+          </ul>
+          <p className="fp-pay-foot">Payouts are demo {theme.currency}. 5 jars in a row wins a free jar of Fruity Puppy.</p>
+        </section>
+
         <footer className="fp-deck">
           <div className="fp-meter" aria-hidden="true">
-            {Array.from({ length: 14 }, (_, i) => <i key={i} style={{ "--i": i }} />)}
+            {Array.from({ length: 18 }, (_, i) => <i key={i} style={{ "--i": i }} />)}
           </div>
-          <svg className="fp-floor" viewBox="0 0 390 120" preserveAspectRatio="none" aria-hidden="true">
-            {Array.from({ length: 11 }, (_, i) => <line key={`v${i}`} x1={195 + (i - 5) * 22} y1="0" x2={195 + (i - 5) * 90} y2="120" />)}
-            {[14, 34, 60, 94].map((y) => <line key={`h${y}`} x1="0" y1={y} x2="390" y2={y} />)}
-          </svg>
           <div className="fp-row">
             <div className="fp-stat fp-left"><strong>{spins + bonusSpins}</strong><span>Spins</span></div>
             <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
