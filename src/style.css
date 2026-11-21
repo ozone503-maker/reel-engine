@@ -347,7 +347,7 @@ footer,
   .reel-grid {
     --cell-size: inherit;
   }
-  .coin-door { min-height: 52px; padding: 4px 12px 6px; }
+  .coin-door { min-height: 0; padding: 4px 12px 6px; }
   .kick-plate { height: 12px; }
 }
 
@@ -678,7 +678,7 @@ footer,
   gap: 8px;
   min-width: 0;
   width: 100%;
-  min-height: 56px;
+  min-height: 0;
   padding: 6px 12px 8px;
   overflow: hidden;
   background:
@@ -908,7 +908,7 @@ footer span { min-width: 0; flex: 0 1 auto; }
   .cab-monitor { padding: 0; }
   .reel-frame { width: 100%; padding: 0 4px; }
   .reel-grid {
-    --cell-size: min(calc((100cqw - 8px - 12px) / 5), calc((100svh - 470px) / 4));
+    --cell-size: min(calc((100cqw - 8px - 12px) / 5), calc((100svh - 430px) / 4));
     gap: 3px;
     justify-content: center;
   }
@@ -939,7 +939,7 @@ footer span { min-width: 0; flex: 0 1 auto; }
   .spin-button small { font-size: 7px; }
   .sound-toggle, .plate-btn { width: 52px; height: 52px; font-size: 8px; }
   .earn-button { height: 26px; font-size: 8px; padding: 0 8px; }
-  .coin-door { min-height: 62px; padding: 6px 8px 8px; }
+  .coin-door { min-height: 0; padding: 6px 8px 8px; }
   footer { font-size: 9px; letter-spacing: 0.03em; padding: 0 2px; }
   .kick-plate { height: 12px; }
   .paytable-grid { grid-template-columns: 1fr; }

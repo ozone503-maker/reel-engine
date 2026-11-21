@@ -295,10 +295,6 @@ export function ReelGame({ theme }) {
           </div>
 
           <div className="coin-door">
-            <div className="coin-mechs" aria-hidden="true">
-              <span className="coin-mech"><i className="coin-slot" /><i className="coin-lamp" /></span>
-              <span className="coin-mech"><i className="coin-slot" /><i className="coin-lamp" /></span>
-            </div>
             <footer><span>REEL ENGINE</span><span>THEME: {theme.name} · BUILD 0.1</span></footer>
           </div>
           <div className="kick-plate" aria-hidden="true" />
