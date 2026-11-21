@@ -29,7 +29,7 @@ button { font: inherit; color: inherit; }
 .fp-cab {
   --gap: 4px;
   --cab-w: min(100vw, 520px);
-  --cell: max(44px, min(calc((var(--cab-w) - 64px - 4 * var(--gap)) / 5), calc((100svh - 604px) / 4)));
+  --cell: max(44px, min(calc((var(--cab-w) - 64px - 4 * var(--gap)) / 5), calc((100svh - 616px) / 4)));
   position: relative; width: var(--cab-w); height: 100svh; min-height: 680px;
   display: flex; flex-direction: column; overflow: hidden;
   padding: 7px 0 0;
@@ -63,17 +63,29 @@ button { font: inherit; color: inherit; }
   z-index: 2; pointer-events: none; user-select: none;
   filter: drop-shadow(0 0 0 #fff) drop-shadow(0 6px 10px rgba(90,18,64,.35));
 }
-.fp-logo {
-  position: absolute; left: 18px; top: 20px; margin: 0; z-index: 3;
-  display: flex; flex-direction: column; align-items: flex-start;
-  font-family: var(--display); font-weight: 400;
-  font-size: clamp(42px, 11.8vw, 60px); line-height: .9; letter-spacing: .015em;
-  color: var(--lemon);
-  -webkit-text-stroke: 7px var(--plum); paint-order: stroke fill;
-  filter: drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 5px 0 var(--plum));
+.fp-lockup {
+  position: absolute; left: 12px; top: 24px; z-index: 3;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
   transform: rotate(-4deg); transform-origin: left top;
 }
-.fp-logo span:last-child { margin-left: .2em; color: var(--aqua-2); }
+.fp-tag {
+  margin: 0; font-family: var(--display); font-weight: 400; line-height: 1;
+  font-size: clamp(13px, 3.7vw, 17px); letter-spacing: .08em; color: #fff;
+  -webkit-text-stroke: 4px var(--plum); paint-order: stroke fill;
+  text-shadow: 0 2px 0 var(--plum);
+}
+.fp-tag-top { margin-left: 4px; }
+.fp-tag-bot { margin-left: 3.2em; color: var(--aqua-2); }
+.fp-logo {
+  margin: 0;
+  display: flex; flex-direction: column; align-items: flex-start;
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(50px, 14.6vw, 72px); line-height: .88; letter-spacing: .01em;
+  color: var(--lemon);
+  -webkit-text-stroke: 8px var(--plum); paint-order: stroke fill;
+  filter: drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 5px 0 var(--plum));
+}
+.fp-logo span:last-child { margin-left: .16em; color: var(--aqua-2); }
 
 /* --- Cabinet body with aqua LED edges --- */
 .fp-body { position: relative; display: flex; flex-direction: column; flex: 0 0 auto; z-index: 3; }
@@ -90,7 +102,7 @@ button { font: inherit; color: inherit; }
 .reel-frame {
   position: relative; display: flex; justify-content: center;
   padding: 7px; border-radius: 20px;
-  background: radial-gradient(120% 90% at 50% 0%, #4a1040 0%, #2a0726 60%, #1d0419 100%);
+  background: radial-gradient(120% 90% at 50% 0%, #a3246f 0%, #74114f 60%, #5a0c3e 100%);
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,.18), inset 0 6px 16px rgba(0,0,0,.55),
     0 0 0 3px #fff, 0 0 0 6px #b9b1c6, 0 0 0 7px #fff, 0 0 0 10px var(--berry), 0 5px 0 9px var(--plum);
@@ -102,15 +114,18 @@ button { font: inherit; color: inherit; }
     linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 30%);
 }
 .reel-grid { display: grid; grid-template-columns: repeat(5, var(--cell)); gap: var(--gap); position: relative; z-index: 1; }
-.reel-column { width: var(--cell); height: calc(var(--cell) * 4 + var(--gap) * 3); position: relative; overflow: hidden; border-radius: 10px; background: #160414; transform: translateZ(0); }
+.reel-column { width: var(--cell); height: calc(var(--cell) * 4 + var(--gap) * 3); position: relative; overflow: hidden; border-radius: 10px; background: #ffe3f1; transform: translateZ(0); }
 .reel-strip { position: absolute; inset: 0 auto auto 0; width: 100%; display: flex; flex-direction: column; gap: var(--gap); will-change: transform; transform: translateZ(0); }
 .reel-strip .symbol-tile { flex: 0 0 var(--cell); width: var(--cell); height: var(--cell); }
 .reel-strip.landing { animation: reelLand 3s cubic-bezier(.12,.72,.16,1) forwards; }
 @keyframes reelLand { from { transform: translateY(0); } to { transform: translateY(calc(-1 * var(--lead, 36) * (var(--cell) + var(--gap)))); } }
-.symbol-tile { position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; aspect-ratio: 1 / 1; border-radius: 10px; background: #1b0618; }
+.symbol-tile { position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; aspect-ratio: 1 / 1; border-radius: 10px; background: #fff; }
+.symbol-tile::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--symbol-color, #ff6cbc) 70%, white), inset 0 -4px 8px rgba(163,15,99,.10); }
 .symbol-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .symbol-emoji { position: relative; font-size: 26px; line-height: 1; }
-.symbol-tile.is-winning::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 6px var(--aqua), inset 0 0 14px 6px rgba(63,243,255,.6); }
+.symbol-tile.is-winning { background: #e9feff; }
+.symbol-tile.is-winning::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; box-shadow: inset 0 0 0 3px var(--plum), inset 0 0 0 7px var(--aqua), inset 0 0 18px 8px rgba(63,243,255,.75); }
+.symbol-tile.is-winning img { transform: scale(1.04); }
 .is-spinning .symbol-tile { animation: bright .16s linear infinite alternate; }
 @keyframes bright { to { filter: brightness(1.15); } }
 .message-bar {
@@ -155,7 +170,7 @@ button { font: inherit; color: inherit; }
 .fp-right strong { color: var(--aqua-deep); -webkit-text-stroke-color: #045566; }
 .spin-button {
   position: relative; cursor: pointer; border: 0;
-  width: clamp(104px, 29vw, 124px); aspect-ratio: 1; border-radius: 50%;
+  width: clamp(92px, 25vw, 112px); aspect-ratio: 1; border-radius: 50%;
   color: #fff;
   background:
     radial-gradient(circle at 50% 30%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 22%, rgba(255,255,255,0) 40%),
@@ -179,12 +194,20 @@ button { font: inherit; color: inherit; }
 
 /* --- Paytable: lower body decal panel, right under SPIN --- */
 .fp-pay {
-  position: relative; padding: 8px 14px calc(10px + env(safe-area-inset-bottom));
+  position: relative; padding: 9px 14px calc(10px + env(safe-area-inset-bottom));
   background:
     radial-gradient(circle at 12% 70%, rgba(255,255,255,.18) 0 18px, transparent 19px),
     radial-gradient(circle at 92% 30%, rgba(255,255,255,.14) 0 26px, transparent 27px),
     linear-gradient(180deg, var(--magenta) 0%, #c3127a 100%);
   box-shadow: inset 0 4px 0 rgba(90,18,64,.35);
+}
+.fp-jar-call {
+  margin: 0 auto 6px; width: fit-content; max-width: 100%;
+  padding: 5px 12px 4px; border-radius: 999px;
+  font-family: var(--display); font-weight: 400; font-size: 13.5px; letter-spacing: .03em; line-height: 1.1; text-align: center;
+  color: var(--plum); background: linear-gradient(180deg, #fff6b8 0%, var(--lemon) 100%);
+  box-shadow: 0 0 0 2px var(--plum), 0 3px 0 2px var(--plum), 0 0 14px 2px rgba(255,227,106,.7);
+  transform: rotate(-1.2deg);
 }
 .fp-pay-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .fp-pay-rule { margin: 0 0 6px; text-align: center; font-size: 11px; line-height: 1.3; font-weight: 700; color: #fff; }
@@ -196,7 +219,7 @@ button { font: inherit; color: inherit; }
   box-shadow: 0 3px 0 var(--plum), inset 0 -2px 0 #ffd4ea;
 }
 .fp-pay-icons { grid-column: 1 / -1; display: flex; justify-content: center; }
-.fp-pay-icons img { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; box-shadow: 0 0 0 1.5px #fff; }
+.fp-pay-icons img { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; background: #fff; box-shadow: 0 0 0 1.5px var(--bubble); }
 .fp-pay-icons img + img { margin-left: -10px; }
 .fp-pay-row b { font-size: 11px; font-weight: 800; color: var(--plum); font-variant-numeric: tabular-nums; }
 .fp-pay-row b:last-child, .fp-pay-row b.is-jar { color: var(--hot); }
@@ -267,7 +290,7 @@ button { font: inherit; color: inherit; }
   }
 
   .fp-cab {
-    --cell: max(60px, min(calc((100vh - 224px - 32vh) / 4), 132px));
+    --cell: max(60px, min(calc((100vh - 204px - 41.5vh) / 4), 132px));
     --body-w: max(calc(var(--cell) * 5 + 4 * var(--gap) + 170px), 720px);
     width: var(--body-w); height: auto; min-height: 0; max-height: 100vh;
     padding: 12px 0 0; margin-bottom: 0;
@@ -275,14 +298,16 @@ button { font: inherit; color: inherit; }
     align-self: flex-end;
   }
   .fp-top {
-    flex: 0 0 auto; height: clamp(124px, 16.5vh, 190px); min-height: 0;
+    flex: 0 0 auto; height: clamp(150px, 21vh, 236px); min-height: 0;
     margin: 0 -26px; border-radius: 30px 30px 22px 22px; overflow: visible;
   }
   .fp-art { border-radius: 30px 30px 22px 22px; }
+  .fp-lockup { left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-3deg); transform-origin: center; align-items: center; gap: 5px; }
+  .fp-tag { font-size: clamp(15px, 2.2vh, 24px); -webkit-text-stroke-width: 5px; }
+  .fp-tag-top, .fp-tag-bot { margin-left: 0; }
   .fp-logo {
-    left: 50%; top: 50%; transform: translate(-50%, -54%) rotate(-3deg); transform-origin: center;
-    font-size: clamp(50px, 6.6vh, 80px); align-items: center; flex-direction: row; gap: .25em; white-space: nowrap;
-    -webkit-text-stroke-width: 9px;
+    font-size: clamp(64px, 9.6vh, 112px); align-items: center; flex-direction: row; gap: .22em; white-space: nowrap;
+    -webkit-text-stroke-width: 10px;
   }
   .fp-logo span:last-child { margin-left: 0; }
   /* Ipo stands beside the machine, leaning on it */
@@ -321,6 +346,7 @@ button { font: inherit; color: inherit; }
   .fp-pay-list { gap: 7px; grid-template-columns: repeat(8, minmax(0, 1fr)); }
   .fp-rule-fs { display: inline; }
   .fp-pay-rule { white-space: nowrap; }
+  .fp-jar-call { font-size: clamp(14px, 1.9vh, 20px); margin-bottom: 6px; padding: 5px 16px 4px; }
   .fp-pay-icons img { width: clamp(22px, 3.4vh, 36px); height: clamp(22px, 3.4vh, 36px); }
   .fp-pay-icons img + img { margin-left: calc(clamp(22px, 3.4vh, 36px) * -.68); }
   .fp-pay-row b { font-size: clamp(11px, 1.55vh, 17px); }

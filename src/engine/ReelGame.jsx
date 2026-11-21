@@ -242,12 +242,53 @@ export function ReelGame({ theme }) {
             <defs>
               <linearGradient id="fpSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff9fd0" /><stop offset=".62" stopColor="#ff6fb8" /><stop offset="1" stopColor="#ff58a8" /></linearGradient>
               <pattern id="fpStripe" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><rect width="11" height="22" fill="rgba(255,255,255,.10)" /></pattern>
-              <g id="fpBerry">
-                <path d="M0 -26 C 18 -26 28 -14 26 4 C 23 22 10 34 0 38 C -10 34 -23 22 -26 4 C -28 -14 -18 -26 0 -26 Z" fill="#ff4f8f" stroke="#a3124f" strokeWidth="3" />
-                <path d="M-14 -16 C -8 -22 2 -22 8 -18" stroke="#ffd0e2" strokeWidth="4" fill="none" strokeLinecap="round" opacity=".8" />
-                <g fill="#a3124f"><ellipse cx="-11" cy="-4" rx="2.2" ry="3.2" /><ellipse cx="3" cy="-9" rx="2.2" ry="3.2" /><ellipse cx="13" cy="2" rx="2.2" ry="3.2" /><ellipse cx="-4" cy="8" rx="2.2" ry="3.2" /><ellipse cx="8" cy="17" rx="2.2" ry="3.2" /><ellipse cx="-13" cy="13" rx="2.2" ry="3.2" /><ellipse cx="0" cy="26" rx="2.2" ry="3.2" /></g>
-                <path d="M0 -24 L -16 -34 L -6 -24 L -14 -18 L 0 -22 L 12 -18 L 6 -26 L 18 -34 Z" fill="#46c46e" stroke="#1d7a43" strokeWidth="2.5" strokeLinejoin="round" />
-                <path d="M0 -26 L 1 -40" stroke="#1d7a43" strokeWidth="3.5" strokeLinecap="round" />
+              <g id="fpLilikoi">
+                <circle r="26" fill="#f6c63f" stroke="#7a4a12" strokeWidth="3" />
+                <circle r="20" fill="#ffe7a0" />
+                <circle r="17" fill="#ffb02e" />
+                <g fill="#3b2208"><circle cx="-7" cy="-6" r="2.6" /><circle cx="5" cy="-9" r="2.6" /><circle cx="9" cy="3" r="2.6" /><circle cx="-2" cy="4" r="2.6" /><circle cx="-10" cy="6" r="2.6" /><circle cx="3" cy="11" r="2.6" /><circle cx="-4" cy="-13" r="2.2" /></g>
+                <path d="M-14 -12 C -8 -18 0 -19 6 -17" stroke="#fff6c8" strokeWidth="3" fill="none" strokeLinecap="round" opacity=".8" />
+              </g>
+              <g id="fpPapaya">
+                <path d="M0 -34 C 16 -34 22 -18 22 -2 C 22 20 12 36 0 36 C -12 36 -22 20 -22 -2 C -22 -18 -16 -34 0 -34 Z" fill="#9bd14a" stroke="#3f7a1e" strokeWidth="3" />
+                <path d="M0 -29 C 12 -29 17 -16 17 -2 C 17 17 9 31 0 31 C -9 31 -17 17 -17 -2 C -17 -16 -12 -29 0 -29 Z" fill="#ff8a3d" />
+                <path d="M0 -12 C 7 -12 9 -2 9 6 C 9 16 5 22 0 22 C -5 22 -9 16 -9 6 C -9 -2 -7 -12 0 -12 Z" fill="#ffb37a" />
+                <g fill="#2a1408"><circle cx="-3" cy="0" r="2.4" /><circle cx="3" cy="3" r="2.4" /><circle cx="-2" cy="8" r="2.4" /><circle cx="4" cy="11" r="2.4" /><circle cx="-3" cy="15" r="2.4" /><circle cx="2" cy="-5" r="2.2" /></g>
+              </g>
+              <g id="fpHibiscus">
+                <g fill="#e0336f" stroke="#8c0f3e" strokeWidth="2.5">
+                  <path d="M0 0 C -14 -10 -14 -32 0 -34 C 14 -32 14 -10 0 0 Z" />
+                  <path d="M0 0 C -14 -10 -14 -32 0 -34 C 14 -32 14 -10 0 0 Z" transform="rotate(72)" />
+                  <path d="M0 0 C -14 -10 -14 -32 0 -34 C 14 -32 14 -10 0 0 Z" transform="rotate(144)" />
+                  <path d="M0 0 C -14 -10 -14 -32 0 -34 C 14 -32 14 -10 0 0 Z" transform="rotate(216)" />
+                  <path d="M0 0 C -14 -10 -14 -32 0 -34 C 14 -32 14 -10 0 0 Z" transform="rotate(288)" />
+                </g>
+                <circle r="8" fill="#8c0f3e" />
+                <path d="M0 0 L 10 -20" stroke="#ffe36a" strokeWidth="3" strokeLinecap="round" />
+                <circle cx="10" cy="-21" r="3.5" fill="#ffe36a" />
+              </g>
+              <g id="fpBean">
+                <path d="M-40 6 C -30 -14 24 -16 42 -6 C 30 10 -24 18 -40 6 Z" fill="#7cc04a" stroke="#2f6e1c" strokeWidth="3" />
+                <g fill="#ffffff" stroke="#d9d4c4" strokeWidth="1.5"><ellipse cx="-22" cy="1" rx="8" ry="6" /><ellipse cx="-7" cy="-1" rx="8" ry="6.5" /><ellipse cx="8" cy="-2" rx="8" ry="6.5" /><ellipse cx="23" cy="-3" rx="7" ry="5.5" /></g>
+              </g>
+              <g id="fpMint">
+                <path d="M0 34 L 0 -26" stroke="#2f7a3a" strokeWidth="3.5" strokeLinecap="round" />
+                <g fill="#4cc463" stroke="#2f7a3a" strokeWidth="2.5">
+                  <path d="M0 -24 C -8 -36 8 -44 10 -34 C 12 -26 6 -22 0 -24 Z" />
+                  <path d="M0 -8 C -22 -10 -26 -28 -12 -28 C -4 -26 -2 -16 0 -8 Z" />
+                  <path d="M0 -8 C 22 -10 26 -28 12 -28 C 4 -26 2 -16 0 -8 Z" />
+                  <path d="M0 12 C -24 12 -30 -8 -14 -8 C -4 -6 -2 4 0 12 Z" />
+                  <path d="M0 12 C 24 12 30 -8 14 -8 C 4 -6 2 4 0 12 Z" />
+                </g>
+              </g>
+              <g id="fpAloe" fill="#5fc28a" stroke="#226e46" strokeWidth="2.5" strokeLinejoin="round">
+                <path d="M-4 30 C -30 0 -46 -10 -52 -14 C -36 -12 -18 0 4 26 Z" />
+                <path d="M4 30 C 30 0 46 -10 52 -14 C 36 -12 18 0 -4 26 Z" />
+                <path d="M-6 30 C -18 -6 -20 -30 -18 -44 C -10 -30 -2 -6 4 28 Z" />
+                <path d="M6 30 C 18 -6 20 -30 18 -44 C 10 -30 2 -6 -4 28 Z" />
+                <path d="M-4 30 C -4 -10 -2 -36 0 -50 C 2 -36 4 -10 4 30 Z" />
+                <path d="M-6 30 C -26 18 -40 16 -48 16 C -36 24 -20 30 -6 34 Z" />
+                <path d="M6 30 C 26 18 40 16 48 16 C 36 24 20 30 6 34 Z" />
               </g>
               <path id="fpSpark" d="M0 -10 C 1.5 -2 2 -1.5 10 0 C 2 1.5 1.5 2 0 10 C -1.5 2 -2 1.5 -10 0 C -2 -1.5 -1.5 -2 0 -10 Z" />
             </defs>
@@ -258,15 +299,20 @@ export function ReelGame({ theme }) {
             <path className="cloud c-back" d="M250 230 C 262 206 290 204 302 216 C 314 200 344 200 356 214 C 370 204 392 206 410 216 C 430 200 460 202 470 218 C 480 210 500 212 506 230 Z" />
             <path className="cloud c-back" d="M532 230 C 540 200 572 196 584 210 C 598 184 640 186 650 206 C 664 190 700 192 708 210 C 724 196 760 196 790 210 L 790 230 Z" />
             <path className="cloud c-front" d="M600 230 C 612 210 640 210 650 222 C 662 206 696 206 704 222 C 716 212 744 212 790 220 L 790 230 Z" />
-            <use href="#fpBerry" transform="translate(44 152) rotate(-14) scale(.78)" />
-            <use href="#fpBerry" transform="translate(178 196) rotate(16) scale(.5)" />
-            <use href="#fpBerry" transform="translate(736 150) rotate(14) scale(.78)" />
-            <use href="#fpBerry" transform="translate(250 176) rotate(-12) scale(.42)" />
+            <use href="#fpAloe" transform="translate(736 182) scale(.85)" />
+            <use href="#fpHibiscus" transform="translate(664 206) rotate(-10) scale(.6)" />
+            <use href="#fpBean" transform="translate(744 96) rotate(-62) scale(.62)" />
+            <use href="#fpLilikoi" transform="translate(598 210) scale(.62)" />
+            <use href="#fpLilikoi" transform="translate(34 204) scale(.82)" />
+            <use href="#fpPapaya" transform="translate(110 206) rotate(64) scale(.72)" />
+            <use href="#fpMint" transform="translate(186 200) rotate(14) scale(.8)" />
+            <use href="#fpHibiscus" transform="translate(262 206) rotate(18) scale(.62)" />
+            <use href="#fpBean" transform="translate(340 214) rotate(-8) scale(.7)" />
             <g className="spark"><use href="#fpSpark" transform="translate(196 28) scale(1.1)" /><use href="#fpSpark" transform="translate(150 132) scale(.8)" /><use href="#fpSpark" transform="translate(16 108) scale(.7)" /><use href="#fpSpark" transform="translate(222 108) scale(.6)" /><use href="#fpSpark" transform="translate(92 120) scale(.55)" /><use href="#fpSpark" transform="translate(690 120) scale(1)" /><use href="#fpSpark" transform="translate(760 60) scale(.7)" /><use href="#fpSpark" transform="translate(580 150) scale(.6)" /></g>
             <g className="dots"><circle cx="120" cy="150" r="3" /><circle cx="210" cy="64" r="3.5" /><circle cx="14" cy="22" r="2.5" /><circle cx="600" cy="110" r="3" /><circle cx="710" cy="40" r="3" /></g>
           </svg>
           <img className="fp-ipo" src="/assets/cabinet/ipo-cap.webp" alt="Ipo" />
-          <h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1>
+          <div className="fp-lockup"><p className="fp-tag fp-tag-top">spin to win</p><h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1><p className="fp-tag fp-tag-bot">+ kudokens</p></div>
         </header>
 
         <div className="fp-body">
@@ -310,6 +356,7 @@ export function ReelGame({ theme }) {
 
         <section className="fp-pay" aria-labelledby="fp-pay-title">
           <h2 id="fp-pay-title" className="fp-pay-title">How to win</h2>
+          <p className="fp-jar-call">If you win a jar, screenshot it and send it to us!</p>
           <p className="fp-pay-rule">Match 3, 4 or 5 across, or 3 or 4 down. {wildSymbol?.name} is wild.{freeSpinSymbol && <span className="fp-rule-fs"> 4 {freeSpinSymbol.name} symbols anywhere = 6 spins, 5 = 10.</span>}</p>
           <div className="fp-pay-head" aria-hidden="true"><span /><span>3</span><span>4</span><span>5</span></div>
           <ul className="fp-pay-list">
