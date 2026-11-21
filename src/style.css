@@ -1466,3 +1466,27 @@ footer { color: #6e6880; letter-spacing: 0.14em; margin-top: 0; }
   .crt { --cell-size: inherit; }
   .logo-word { font-size: clamp(28px, min(12cqi, 20cqh), 48px); }
 }
+
+/* Phone: fill the tall marquee — big Ipo, big title words overlapping her sides */
+@media (max-width: 720px) {
+  .marquee-logo { align-items: flex-end; justify-content: center; gap: 0; }
+  .ipo-stage {
+    width: auto;
+    max-width: 62%;
+    height: 96cqh;
+    max-height: none;
+    margin: 0 -17cqi -10px;
+    z-index: 2;
+  }
+  .marquee-ipo { width: auto; height: 100%; max-height: 100%; }
+  .logo-word {
+    font-size: clamp(24px, 8.4cqi, 40px);
+    flex: 0 0 auto;
+    white-space: nowrap;
+    overflow: visible;
+    min-width: max-content;
+    align-self: center;
+    margin-top: 46cqh;
+    z-index: 4;
+  }
+}
