@@ -232,22 +232,44 @@ export function ReelGame({ theme }) {
       {showIntro && <VideoOverlay src="/assets/videos/intro.mp4" durationMs={12000} onClose={() => setShowIntro(false)} />}
       {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
     <main className={`fp ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
-      <div className="fp-scene" aria-hidden="true" />
+      <div className="fp-scene" aria-hidden="true">
+        <i className="fp-bg-cab c1" /><i className="fp-bg-cab c2" /><i className="fp-bg-cab c3" /><i className="fp-bg-cab c4" />
+        <i className="fp-floor" />
+      </div>
       <div className="fp-cab">
         <header className="fp-top">
-          <div className="fp-rays" aria-hidden="true" />
-          <div className="fp-glow" aria-hidden="true" />
-          <svg className="fp-art" viewBox="0 0 390 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-            <path className="hill h1" d="M-10 260 L-10 170 C 60 130 130 150 190 190 C 230 215 260 240 300 260 Z" />
-            <path className="hill h2" d="M-10 260 L-10 214 C 50 196 110 206 160 230 C 180 240 196 250 210 260 Z" />
-            <circle className="dot d1" cx="28" cy="150" r="5" />
-            <circle className="dot d2" cx="150" cy="168" r="3.5" />
-            <circle className="dot d3" cx="176" cy="40" r="4" />
+          <svg className="fp-art" viewBox="0 0 780 230" preserveAspectRatio="xMinYMax slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="fpSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff9fd0" /><stop offset=".62" stopColor="#ff6fb8" /><stop offset="1" stopColor="#ff58a8" /></linearGradient>
+              <pattern id="fpStripe" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><rect width="11" height="22" fill="rgba(255,255,255,.10)" /></pattern>
+              <g id="fpBerry">
+                <path d="M0 -26 C 18 -26 28 -14 26 4 C 23 22 10 34 0 38 C -10 34 -23 22 -26 4 C -28 -14 -18 -26 0 -26 Z" fill="#ff4f8f" stroke="#a3124f" strokeWidth="3" />
+                <path d="M-14 -16 C -8 -22 2 -22 8 -18" stroke="#ffd0e2" strokeWidth="4" fill="none" strokeLinecap="round" opacity=".8" />
+                <g fill="#a3124f"><ellipse cx="-11" cy="-4" rx="2.2" ry="3.2" /><ellipse cx="3" cy="-9" rx="2.2" ry="3.2" /><ellipse cx="13" cy="2" rx="2.2" ry="3.2" /><ellipse cx="-4" cy="8" rx="2.2" ry="3.2" /><ellipse cx="8" cy="17" rx="2.2" ry="3.2" /><ellipse cx="-13" cy="13" rx="2.2" ry="3.2" /><ellipse cx="0" cy="26" rx="2.2" ry="3.2" /></g>
+                <path d="M0 -24 L -16 -34 L -6 -24 L -14 -18 L 0 -22 L 12 -18 L 6 -26 L 18 -34 Z" fill="#46c46e" stroke="#1d7a43" strokeWidth="2.5" strokeLinejoin="round" />
+                <path d="M0 -26 L 1 -40" stroke="#1d7a43" strokeWidth="3.5" strokeLinecap="round" />
+              </g>
+              <path id="fpSpark" d="M0 -10 C 1.5 -2 2 -1.5 10 0 C 2 1.5 1.5 2 0 10 C -1.5 2 -2 1.5 -10 0 C -2 -1.5 -1.5 -2 0 -10 Z" />
+            </defs>
+            <rect width="780" height="230" fill="url(#fpSky)" />
+            <rect width="780" height="230" fill="url(#fpStripe)" />
+            <path className="cloud c-back" d="M-10 230 L-10 170 C 10 150 40 152 52 166 C 66 146 100 148 110 168 C 128 156 150 162 156 178 C 176 168 204 176 206 196 C 226 190 246 200 248 230 Z" />
+            <path className="cloud c-front" d="M-10 230 L-10 196 C 8 184 30 186 40 198 C 54 186 80 188 88 204 C 104 196 124 202 128 216 C 140 212 154 218 158 230 Z" />
+            <path className="cloud c-back" d="M250 230 C 262 206 290 204 302 216 C 314 200 344 200 356 214 C 370 204 392 206 410 216 C 430 200 460 202 470 218 C 480 210 500 212 506 230 Z" />
+            <path className="cloud c-back" d="M532 230 C 540 200 572 196 584 210 C 598 184 640 186 650 206 C 664 190 700 192 708 210 C 724 196 760 196 790 210 L 790 230 Z" />
+            <path className="cloud c-front" d="M600 230 C 612 210 640 210 650 222 C 662 206 696 206 704 222 C 716 212 744 212 790 220 L 790 230 Z" />
+            <use href="#fpBerry" transform="translate(44 152) rotate(-14) scale(.78)" />
+            <use href="#fpBerry" transform="translate(178 196) rotate(16) scale(.5)" />
+            <use href="#fpBerry" transform="translate(736 150) rotate(14) scale(.78)" />
+            <use href="#fpBerry" transform="translate(250 176) rotate(-12) scale(.42)" />
+            <g className="spark"><use href="#fpSpark" transform="translate(196 28) scale(1.1)" /><use href="#fpSpark" transform="translate(150 132) scale(.8)" /><use href="#fpSpark" transform="translate(16 108) scale(.7)" /><use href="#fpSpark" transform="translate(222 108) scale(.6)" /><use href="#fpSpark" transform="translate(92 120) scale(.55)" /><use href="#fpSpark" transform="translate(690 120) scale(1)" /><use href="#fpSpark" transform="translate(760 60) scale(.7)" /><use href="#fpSpark" transform="translate(580 150) scale(.6)" /></g>
+            <g className="dots"><circle cx="120" cy="150" r="3" /><circle cx="210" cy="64" r="3.5" /><circle cx="14" cy="22" r="2.5" /><circle cx="600" cy="110" r="3" /><circle cx="710" cy="40" r="3" /></g>
           </svg>
           <img className="fp-ipo" src="/assets/cabinet/ipo-cap.webp" alt="Ipo" />
           <h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1>
         </header>
 
+        <div className="fp-body">
         <section className="fp-screen">
           <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
             <div className="reel-grid" aria-label="Five reels, four rows">
@@ -308,6 +330,7 @@ export function ReelGame({ theme }) {
           </ul>
           <p className="fp-pay-foot">Payouts are demo {theme.currency}. 5 jars in a row wins a free jar of Fruity Puppy.</p>
         </section>
+        </div>
       </div>
     </main>
     </>
