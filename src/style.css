@@ -902,11 +902,16 @@ footer span { min-width: 0; flex: 0 1 auto; }
   .paw { width: 20px; height: 20px; font-size: 11px; }
   .cab-speaker-bar { height: 16px; padding: 0 10px; }
   .speaker { width: 54px; height: 7px; }
-  .bezel { margin: 4px 3px; padding: 4px; }
-  .crt { margin: 20px 8px 8px; justify-content: flex-start; }
-  .crt-game { flex: 0 0 auto; width: 100%; }
-  .cab-monitor { padding: 0 4px; }
-  .reel-grid { --cell-size: clamp(48px, 15.4vw, 68px); gap: 3px; }
+  .bezel { margin: 3px 0; padding: 3px; border-width: 3px; }
+  .crt { margin: 6px 0 4px; justify-content: center; border-radius: 16px 16px 12px 12px / 10px 10px 14px 14px; }
+  .crt-game { flex: 0 0 auto; width: 100%; container-type: inline-size; }
+  .cab-monitor { padding: 0; }
+  .reel-frame { width: 100%; padding: 0 4px; }
+  .reel-grid {
+    --cell-size: min(calc((100cqw - 8px - 12px) / 5), calc((100svh - 470px) / 4));
+    gap: 3px;
+    justify-content: center;
+  }
   .reel-column { height: calc(var(--cell-size) * 4 + 9px); }
   .reel-strip { gap: 3px; }
   .reel-strip .symbol-tile { flex-basis: var(--cell-size); }
