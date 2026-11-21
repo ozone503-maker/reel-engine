@@ -24,12 +24,16 @@ function VideoOverlay({ video, videoRef, onClose }) {
       safety = window.setTimeout(finish, left * 1000 + 4000);
     };
     const onPlaying = () => { window.clearTimeout(startTimer); setShown(true); armSafety(); };
+    // A stall (still downloading) must not count against the clock; give it time to resume.
+    const onWaiting = () => { window.clearTimeout(safety); safety = window.setTimeout(finish, 15000); };
     const startTimer = window.setTimeout(() => { if (v.paused || v.currentTime === 0) finish(); }, 12000);
     v.addEventListener("playing", onPlaying);
     v.addEventListener("ended", finish);
     v.addEventListener("error", finish);
+    v.addEventListener("waiting", onWaiting);
     v.muted = false;
-    v.src = video.src;
+    // If SPIN already started buffering this exact file, keep that download instead of restarting it.
+    if (v.src !== new URL(video.src, window.location.href).href) { v.preload = "auto"; v.src = video.src; }
     try { v.currentTime = 0; } catch { /* not seekable yet */ }
     const p = v.play();
     if (p && p.catch) p.catch((err) => {
@@ -42,12 +46,13 @@ function VideoOverlay({ video, videoRef, onClose }) {
       v.removeEventListener("playing", onPlaying);
       v.removeEventListener("ended", finish);
       v.removeEventListener("error", finish);
+      v.removeEventListener("waiting", onWaiting);
     };
   }, [video?.id]);
   const close = () => { videoRef.current?.pause(); setShown(false); closeRef.current?.(); };
   return (
     <div className={shown && video ? "win-video-overlay is-ready" : "win-video-overlay"} aria-hidden={!(shown && video)} onClick={close}>
-      <video ref={videoRef} playsInline webkit-playsinline="true" preload="metadata" disablePictureInPicture disableRemotePlayback />
+      <video ref={videoRef} playsInline webkit-playsinline="true" preload="auto" disablePictureInPicture disableRemotePlayback />
     </div>
   );
 }
@@ -99,16 +104,36 @@ export function ReelGame({ theme }) {
     if (winVideo && !prev) audioRef.current?.stop();
     else if (!winVideo && prev && soundOnRef.current) audioRef.current?.start();
   }, [winVideo]);
-  function unlockVideo() {
-    // Must run synchronously inside the SPIN tap, before any await.
+  // Runs synchronously inside the SPIN tap: loads the video this spin will need (or the
+  // no-win video on the first spin) and plays it muted for a moment. That unlocks the element
+  // for later playback and lets the file download while the reels spin, so it is ready to play.
+  function primeVideo(file) {
     const v = videoRef.current;
-    if (!v || videoUnlockedRef.current) return;
+    if (!v) return;
+    if (!file && videoUnlockedRef.current) return;
     videoUnlockedRef.current = true;
-    const src = videoUrl(VIDEOS.noWinStreak || VIDEOS.wild);
-    v.muted = true; v.src = src;
+    const src = videoUrl(file || VIDEOS.noWinStreak || VIDEOS.wild);
+    v.preload = "auto"; v.muted = true; v.src = src;
     const p = v.play();
-    const settle = () => { if (v.muted && v.src.endsWith(src.split("/").pop()) && !v.closest(".is-ready")) { v.pause(); try { v.currentTime = 0; } catch { /* ignore */ } } };
+    const settle = () => { if (v.muted && !v.closest(".is-ready")) { v.pause(); try { v.currentTime = 0; } catch { /* ignore */ } } };
     if (p && p.then) p.then(settle, () => {}); else settle();
+  }
+  // Same choice the reveal makes below, decided up front so the file can buffer during the spin.
+  function chooseVideo(finalGrid, noWinStreak) {
+    const result = evaluateDemo(finalGrid, symbols);
+    const wins = result.wins || [];
+    const free = result.freeSpinsAwarded || 0;
+    const freeJar = result.freeJar || false;
+    const hasWildInWin = wins.some((w) => w.positions?.some((p) => { const c = finalGrid?.[p.reel]?.[p.row]; return c?.role === "WILD" || c?.type === "wild"; }));
+    const symbolWins = wins.filter((w) => VIDEOS.symbols[w.symbol?.id]).sort((x, y) => y.reward - x.reward);
+    if (wins.length > 0 || free > 0 || freeJar) {
+      if (freeJar && VIDEOS.jar) return VIDEOS.jar;
+      if (hasWildInWin) return VIDEOS.wild;
+      if (free > 0) return VIDEOS.freeSpins;
+      if (symbolWins.length) return VIDEOS.symbols[symbolWins[0].symbol.id];
+      return null;
+    }
+    return noWinStreak + 1 >= NO_WIN_STREAK ? VIDEOS.noWinStreak : null;
   }
 
   useEffect(() => () => audioRef.current?.destroy(), []);
@@ -134,8 +159,11 @@ export function ReelGame({ theme }) {
 
   async function spin() {
     if (spinning || (spins + bonusSpins) <= 0) return;
-    unlockVideo();
     setWinVideo(null);
+    const hot = pickHot();
+    const finalGrid = Array.from({ length: 5 }, () => Array.from({ length: 4 }, () => randomSymbol(hot)));
+    // Before any await, so it stays inside the tap gesture.
+    primeVideo(chooseVideo(finalGrid, noWinStreakRef.current));
     // SPIN is a direct browser gesture: unlock audio and start the soundtrack.
     let playAudio = soundOn;
     if (!audioRef.current) audioRef.current = createGameAudio();
@@ -153,8 +181,6 @@ export function ReelGame({ theme }) {
 
     // Build long strips that end with the final 4 symbols.
     // Animation will scroll so those final symbols land in the viewport.
-    const hot = pickHot();
-    const finalGrid = Array.from({ length: 5 }, () => Array.from({ length: 4 }, () => randomSymbol(hot)));
     const leadCount = 36;
     const strips = finalGrid.map((finalReel) => {
       const lead = Array.from({ length: leadCount }, () => randomSymbol(hot));
