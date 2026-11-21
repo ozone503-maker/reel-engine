@@ -2,18 +2,52 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createGameAudio } from "./audio.js";
 import { SymbolTile } from "./SymbolTile.jsx";
 import { evaluateDemo, PAYTABLE } from "./evaluate.js";
+import { VIDEOS, NO_WIN_STREAK, videoUrl } from "../themes/fruity-puppy-videos.js";
 
-function VideoOverlay({ src, durationMs = 12000, onClose }) {
-  const [ready, setReady] = useState(false);
+// One persistent <video> element. SPIN (a real tap) "unlocks" it once, so later win videos
+// can play with sound on iOS Safari and Android Chrome. If the browser still refuses sound,
+// the video plays muted rather than freezing. The overlay closes when the video ends, on tap,
+// on error, or if it never starts.
+function VideoOverlay({ video, videoRef, onClose }) {
+  const [shown, setShown] = useState(false);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   useEffect(() => {
-    const watchdog = window.setTimeout(onClose, durationMs + 3500);
-    return () => window.clearTimeout(watchdog);
-  }, [src, durationMs, onClose]);
+    const v = videoRef.current;
+    if (!v) return undefined;
+    if (!video) { setShown(false); v.pause(); return undefined; }
+    let done = false; let safety = 0;
+    const finish = () => { if (done) return; done = true; window.clearTimeout(safety); window.clearTimeout(startTimer); v.pause(); setShown(false); closeRef.current?.(); };
+    const armSafety = () => {
+      window.clearTimeout(safety);
+      const left = Number.isFinite(v.duration) ? Math.max(0, v.duration - v.currentTime) : 15;
+      safety = window.setTimeout(finish, left * 1000 + 4000);
+    };
+    const onPlaying = () => { window.clearTimeout(startTimer); setShown(true); armSafety(); };
+    const startTimer = window.setTimeout(() => { if (v.paused || v.currentTime === 0) finish(); }, 12000);
+    v.addEventListener("playing", onPlaying);
+    v.addEventListener("ended", finish);
+    v.addEventListener("error", finish);
+    v.muted = false;
+    v.src = video.src;
+    try { v.currentTime = 0; } catch { /* not seekable yet */ }
+    const p = v.play();
+    if (p && p.catch) p.catch((err) => {
+      if (done) return;
+      if (err && err.name === "NotAllowedError") { v.muted = true; v.play().catch(finish); }
+      else if (!err || err.name !== "AbortError") finish();
+    });
+    return () => {
+      done = true; window.clearTimeout(safety); window.clearTimeout(startTimer);
+      v.removeEventListener("playing", onPlaying);
+      v.removeEventListener("ended", finish);
+      v.removeEventListener("error", finish);
+    };
+  }, [video?.id]);
+  const close = () => { videoRef.current?.pause(); setShown(false); closeRef.current?.(); };
   return (
-    <div className={ready ? "win-video-overlay is-ready" : "win-video-overlay"} aria-hidden={!ready}>
-      <video src={src} autoPlay playsInline preload="auto"
-        onCanPlay={() => setReady(true)} onPlaying={() => setReady(true)}
-        onEnded={onClose} onError={onClose} />
+    <div className={shown && video ? "win-video-overlay is-ready" : "win-video-overlay"} aria-hidden={!(shown && video)} onClick={close}>
+      <video ref={videoRef} playsInline webkit-playsinline="true" preload="metadata" disablePictureInPicture disableRemotePlayback />
     </div>
   );
 }
@@ -50,6 +84,32 @@ export function ReelGame({ theme }) {
   const [totalSpins, setTotalSpins] = useState(0);
   const [plate, setPlate] = useState(null);
   const wins = useMemo(() => lastWins, [lastWins]);
+  // ---- Video plumbing (UI layer only; scoring is untouched) ----
+  const videoRef = useRef(null);
+  const videoUnlockedRef = useRef(false);
+  const videoIdRef = useRef(0);
+  const noWinStreakRef = useRef(0);
+  const soundOnRef = useRef(false);
+  soundOnRef.current = soundOn;
+  const playVideo = (file) => { const src = videoUrl(file); if (src) setWinVideo({ src, id: ++videoIdRef.current }); };
+  // Music steps aside while a video plays its own soundtrack, then comes back.
+  const prevVideoRef = useRef(null);
+  useEffect(() => {
+    const prev = prevVideoRef.current; prevVideoRef.current = winVideo;
+    if (winVideo && !prev) audioRef.current?.stop();
+    else if (!winVideo && prev && soundOnRef.current) audioRef.current?.start();
+  }, [winVideo]);
+  function unlockVideo() {
+    // Must run synchronously inside the SPIN tap, before any await.
+    const v = videoRef.current;
+    if (!v || videoUnlockedRef.current) return;
+    videoUnlockedRef.current = true;
+    const src = videoUrl(VIDEOS.noWinStreak || VIDEOS.wild);
+    v.muted = true; v.src = src;
+    const p = v.play();
+    const settle = () => { if (v.muted && v.src.endsWith(src.split("/").pop()) && !v.closest(".is-ready")) { v.pause(); try { v.currentTime = 0; } catch { /* ignore */ } } };
+    if (p && p.then) p.then(settle, () => {}); else settle();
+  }
 
   useEffect(() => () => audioRef.current?.destroy(), []);
 
@@ -74,6 +134,8 @@ export function ReelGame({ theme }) {
 
   async function spin() {
     if (spinning || (spins + bonusSpins) <= 0) return;
+    unlockVideo();
+    setWinVideo(null);
     // SPIN is a direct browser gesture: unlock audio and start the soundtrack.
     let playAudio = soundOn;
     if (!audioRef.current) audioRef.current = createGameAudio();
@@ -113,30 +175,21 @@ export function ReelGame({ theme }) {
         const cell = finalGrid?.[p.reel]?.[p.row];
         return cell?.role === "WILD" || cell?.type === "wild";
       }));
-      const videoFor = {
-        ruch: [`${import.meta.env.BASE_URL}assets/videos/ruch-win.mp4`, 6000],
-        fonk: [`${import.meta.env.BASE_URL}assets/videos/fonk-win.mp4`, 8000],
-        dinny: [`${import.meta.env.BASE_URL}assets/videos/dinny-win.mp4`, 6000],
-        nonna: [`${import.meta.env.BASE_URL}assets/videos/nonna-win.mp4`, 8000],
-        erv: [`${import.meta.env.BASE_URL}assets/videos/erv-win.mp4`, 8000],
-        ipo: [`${import.meta.env.BASE_URL}assets/videos/ipo-win.mp4`, 10000],
-        "cranberry-hibiscus": [`${import.meta.env.BASE_URL}assets/videos/cranberry-hibiscus-win.mp4`, 10000],
-        papaya: [`${import.meta.env.BASE_URL}assets/videos/papaya-win.mp4`, 10000],
-        lilikoi: [`${import.meta.env.BASE_URL}assets/videos/lilikoi-win.mp4`, 10000],
-        "aloe-vera": [`${import.meta.env.BASE_URL}assets/videos/aloe-vera-win.mp4`, 10000],
-        spearmint: [`${import.meta.env.BASE_URL}assets/videos/spearmint-win.mp4`, 10000],
-        "ice-cream-bean": [`${import.meta.env.BASE_URL}assets/videos/ice-cream-bean-win.mp4`, 10000],
-      };
-      const charWin = wins.find((w) => videoFor[w.symbol?.id]);
-      const charVideo = charWin ? videoFor[charWin.symbol.id] : null;
-      if (hasWildInWin) {
-        setWinVideo({ src: `${import.meta.env.BASE_URL}assets/videos/wild-win.mp4`, durationMs: 9000 });
-      } else if (result.freeSpinsAwarded > 0) {
-        setWinVideo({ src: `${import.meta.env.BASE_URL}assets/videos/freespins-win.mp4`, durationMs: 11000 });
-      } else if (charVideo) {
-        setWinVideo({ src: charVideo[0], durationMs: charVideo[1] });
-      } else if (wins.length === 0 && !result.freeSpinsAwarded && Math.random() < 0.3) {
-        setWinVideo({ src: `${import.meta.env.BASE_URL}assets/videos/dontbesad-win.mp4`, durationMs: 9000 });
+      // Pick the video for this result (view layer only).
+      const isAnyWin = wins.length > 0 || free > 0 || freeJar;
+      const symbolWins = wins.filter((w) => VIDEOS.symbols[w.symbol?.id]).sort((a, b) => b.reward - a.reward);
+      if (isAnyWin) {
+        noWinStreakRef.current = 0;
+        if (freeJar && VIDEOS.jar) playVideo(VIDEOS.jar);
+        else if (hasWildInWin) playVideo(VIDEOS.wild);
+        else if (free > 0) playVideo(VIDEOS.freeSpins);
+        else if (symbolWins.length) playVideo(VIDEOS.symbols[symbolWins[0].symbol.id]);
+      } else {
+        noWinStreakRef.current += 1;
+        if (noWinStreakRef.current >= NO_WIN_STREAK) {
+          noWinStreakRef.current = 0;
+          playVideo(VIDEOS.noWinStreak);
+        }
       }
       setCredits((n) => n + payout);
       if (free > 0) setBonusSpins((n) => n + free);
@@ -229,14 +282,14 @@ export function ReelGame({ theme }) {
 
   return (
     <>
-      {showIntro && <VideoOverlay src={`${import.meta.env.BASE_URL}assets/videos/intro.mp4`} durationMs={12000} onClose={() => setShowIntro(false)} />}
-      {winVideo && <VideoOverlay src={winVideo.src} durationMs={winVideo.durationMs} onClose={() => setWinVideo(null)} />}
+      <VideoOverlay video={winVideo || (showIntro ? { src: videoUrl(VIDEOS.intro), id: "intro" } : null)} videoRef={videoRef} onClose={() => { setWinVideo(null); setShowIntro(false); }} />
     <main className={`fp ${isWin ? "is-win" : ""} ${spinning ? "is-spinning" : ""}`}>
       <div className="fp-scene" aria-hidden="true">
         <i className="fp-bg-cab c1" /><i className="fp-bg-cab c2" /><i className="fp-bg-cab c3" /><i className="fp-bg-cab c4" />
         <i className="fp-floor" />
       </div>
       <div className="fp-cab">
+        <div className="fp-game">
         <header className="fp-top">
           <svg className="fp-art" viewBox="0 0 780 230" preserveAspectRatio="xMinYMax slice" aria-hidden="true">
             <defs>
@@ -353,9 +406,11 @@ export function ReelGame({ theme }) {
             <div className="fp-stat fp-right"><strong>{credits.toLocaleString()}</strong><span>{theme.currency} Won</span></div>
           </div>
         </footer>
+        </div>
+        </div>
 
         <section className="fp-pay" aria-labelledby="fp-pay-title">
-          <h2 id="fp-pay-title" className="fp-pay-title">How to win</h2>
+          <h2 id="fp-pay-title" className="fp-pay-title">Prizes &amp; payouts</h2>
           <p className="fp-jar-call">If you win a jar, screenshot it and send it to us!</p>
           <p className="fp-pay-rule">Match 3, 4 or 5 across, or 3 or 4 down. {wildSymbol?.name} is wild.{freeSpinSymbol && <span className="fp-rule-fs"> 4 {freeSpinSymbol.name} symbols anywhere = 6 spins, 5 = 10.</span>}</p>
           <div className="fp-pay-head" aria-hidden="true"><span /><span>3</span><span>4</span><span>5</span></div>
@@ -377,7 +432,6 @@ export function ReelGame({ theme }) {
           </ul>
           <p className="fp-pay-foot">Payouts are demo {theme.currency}. 5 jars in a row wins a free jar of Fruity Puppy.</p>
         </section>
-        </div>
       </div>
     </main>
     </>
