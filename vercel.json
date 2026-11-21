@@ -1,5 +1,7 @@
 {
   "rewrites": [
-    { "source": "/spin_to_win/:path*", "destination": "/:path*" }
+    { "source": "/spin_to_win", "destination": "/index.html" },
+    { "source": "/spin_to_win/", "destination": "/index.html" },
+    { "source": "/spin_to_win/:path+", "destination": "/:path+" }
   ]
 }
