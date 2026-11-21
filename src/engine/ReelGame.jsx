@@ -299,15 +299,15 @@ export function ReelGame({ theme }) {
             <path className="cloud c-back" d="M250 230 C 262 206 290 204 302 216 C 314 200 344 200 356 214 C 370 204 392 206 410 216 C 430 200 460 202 470 218 C 480 210 500 212 506 230 Z" />
             <path className="cloud c-back" d="M532 230 C 540 200 572 196 584 210 C 598 184 640 186 650 206 C 664 190 700 192 708 210 C 724 196 760 196 790 210 L 790 230 Z" />
             <path className="cloud c-front" d="M600 230 C 612 210 640 210 650 222 C 662 206 696 206 704 222 C 716 212 744 212 790 220 L 790 230 Z" />
-            <use href="#fpAloe" transform="translate(736 182) scale(.85)" />
-            <use href="#fpHibiscus" transform="translate(664 206) rotate(-10) scale(.6)" />
+            <use href="#fpAloe" transform="translate(744 184) scale(.8)" />
+            <use href="#fpHibiscus" transform="translate(690 208) rotate(-10) scale(.55)" />
             <use href="#fpBean" transform="translate(744 96) rotate(-62) scale(.62)" />
-            <use href="#fpLilikoi" transform="translate(598 210) scale(.62)" />
-            <use href="#fpLilikoi" transform="translate(34 204) scale(.82)" />
-            <use href="#fpPapaya" transform="translate(110 206) rotate(64) scale(.72)" />
-            <use href="#fpMint" transform="translate(186 200) rotate(14) scale(.8)" />
-            <use href="#fpHibiscus" transform="translate(262 206) rotate(18) scale(.62)" />
-            <use href="#fpBean" transform="translate(340 214) rotate(-8) scale(.7)" />
+            <use href="#fpLilikoi" transform="translate(640 212) scale(.6)" />
+            <use href="#fpLilikoi" transform="translate(26 214) scale(.6)" />
+            <use href="#fpPapaya" transform="translate(585 214) rotate(64) scale(.6)" />
+            <use href="#fpMint" transform="translate(222 206) rotate(14) scale(.62)" />
+            <use href="#fpHibiscus" transform="translate(268 212) rotate(18) scale(.5)" />
+            <use href="#fpBean" transform="translate(522 220) rotate(-8) scale(.56)" />
             <g className="spark"><use href="#fpSpark" transform="translate(196 28) scale(1.1)" /><use href="#fpSpark" transform="translate(150 132) scale(.8)" /><use href="#fpSpark" transform="translate(16 108) scale(.7)" /><use href="#fpSpark" transform="translate(222 108) scale(.6)" /><use href="#fpSpark" transform="translate(92 120) scale(.55)" /><use href="#fpSpark" transform="translate(690 120) scale(1)" /><use href="#fpSpark" transform="translate(760 60) scale(.7)" /><use href="#fpSpark" transform="translate(580 150) scale(.6)" /></g>
             <g className="dots"><circle cx="120" cy="150" r="3" /><circle cx="210" cy="64" r="3.5" /><circle cx="14" cy="22" r="2.5" /><circle cx="600" cy="110" r="3" /><circle cx="710" cy="40" r="3" /></g>
           </svg>
