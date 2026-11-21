@@ -231,11 +231,6 @@ export function ReelGame({ theme }) {
           <h1 className="fp-logo"><span>Fruity</span> <span>Puppy</span></h1>
         </header>
         <section className="fp-screen">
-          <div className="fp-hud">
-            <div className="fp-stat fp-credits"><span>Demo {theme.currency}</span><strong>{credits.toLocaleString()}</strong></div>
-            <div className="fp-stat"><span>Spins</span><strong>{spins}</strong></div>
-            <div className="fp-stat"><span>Bonus</span><strong>{bonusSpins}</strong></div>
-          </div>
           <div className={`reel-frame ${spinning ? "is-spinning" : ""}`}>
             <div className="reel-grid" aria-label="Five reels, four rows">
               {grid.map((reel, reelIndex) => (
@@ -267,9 +262,13 @@ export function ReelGame({ theme }) {
             {Array.from({ length: 11 }, (_, i) => <line key={`v${i}`} x1={195 + (i - 5) * 22} y1="0" x2={195 + (i - 5) * 90} y2="120" />)}
             {[14, 34, 60, 94].map((y) => <line key={`h${y}`} x1="0" y1={y} x2="390" y2={y} />)}
           </svg>
-          <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
-            <span>{spinning ? "Spinning" : "Spin"}</span>
-          </button>
+          <div className="fp-row">
+            <div className="fp-stat fp-left"><strong>{spins + bonusSpins}</strong><span>Spins</span></div>
+            <button className="spin-button" onClick={spin} disabled={spinning || spins + bonusSpins <= 0}>
+              <span>{spinning ? "Spinning" : "Spin"}</span>
+            </button>
+            <div className="fp-stat fp-right"><strong>{credits.toLocaleString()}</strong><span>{theme.currency} Won</span></div>
+          </div>
         </footer>
       </div>
     </main>
